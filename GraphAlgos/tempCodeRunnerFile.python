@@ -1,0 +1,77 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+
+v = 8
+edges = [(0, 1), (1, 2), (2, 0), (2, 3), (3, 4), (4, 7), (4, 5), (5, 6), (6, 4), (4, 7), (6, 7)]
+
+# Create the directed graph
+G = nx.DiGraph()
+G.add_edges_from(edges)
+
+# Kosaraju's algorithm
+adj = [[] for _ in range(v)]
+for i, j in edges:
+    adj[i].append(j)
+
+visited = [0] * v
+stack = []
+
+# Step 1: DFS and fill the stack
+def sort(node):
+    visited[node] = 1
+    for i in adj[node]:
+        if not visited[i]:
+            sort(i)
+    stack.append(node)
+
+for i in range(v):
+    if not visited[i]:
+        sort(i)
+
+stack.reverse()
+
+visited = [0] * v
+
+# Step 2: Reverse the graph
+rev_adj = [[] for _ in range(v)]
+for i, j in edges:
+    rev_adj[j].append(i)
+
+# Step 3: DFS and count the number of strongly connected components
+def dfs(node):
+    visited[node] = 1
+    print(node)
+    for i in rev_adj[node]:
+        if not visited[i]:
+            dfs(i)
+
+count = 0
+for i in stack:
+    if not visited[i]:
+        dfs(i)
+        print("--------")
+        count += 1
+
+print("Strongly connected components:", count)
+
+# Visualization
+pos = nx.spring_layout(G)
+plt.figure(figsize=(8, 6))
+
+# Assign a unique color to each strongly connected component
+colors = ['skyblue', 'salmon', 'lightgreen', 'orange', 'lightpink', 'lightblue', 'yellow', 'purple', 'lightgrey']
+
+for component, color in zip(nx.strongly_connected_components(G), colors):
+    nx.draw(
+        G.subgraph(component), pos,
+        with_labels=True,
+        node_color=color,
+        node_size=500,
+        font_size=12,
+        font_color='black',
+        edge_color='grey',
+        width=2,
+    )
+
+plt.title("Strongly Connected Components")
+plt.show()
