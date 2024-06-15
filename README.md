@@ -7,19 +7,20 @@ Graph Algorithms:
 
 1) Depth First Search (DFS)
 2) Breadth First Search (BFS)
-Topological Sorting
-Dijkstra's Algorithm (Shortest Path)
-Bellman-Ford Algorithm (Shortest Path)
-Prim's Algorithm (Minimum Spanning Tree)
-Kruskal's Algorithm (Minimum Spanning Tree)
-Kosaraju's Algorithm (Strongly Connected Components)
+3) Topological Sorting
+4) Dijkstra's Algorithm (Shortest Path)
+4) Bellman-Ford Algorithm (Shortest Path)
+5) Prim's Algorithm (Minimum Spanning Tree)
+6) Kruskal's Algorithm (Minimum Spanning Tree)
+7) Kosaraju's Algorithm (Strongly Connected Components)
+
 Sorting Algorithms:
 
-Bubble Sort
-Insertion Sort
-Merge Sort
-Quick Sort
-Selection Sort
+1) Bubble Sort
+2) Insertion Sort
+3) Merge Sort
+4) Quick Sort
+5) Selection Sort
 
 
 
