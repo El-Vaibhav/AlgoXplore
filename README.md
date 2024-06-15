@@ -5,8 +5,8 @@ These algorithms given below are  visualized and interactively demonstrated thro
 
 Graph Algorithms:
 
-Depth First Search (DFS)
-Breadth First Search (BFS)
+1) Depth First Search (DFS)
+2) Breadth First Search (BFS)
 Topological Sorting
 Dijkstra's Algorithm (Shortest Path)
 Bellman-Ford Algorithm (Shortest Path)
