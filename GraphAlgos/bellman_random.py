@@ -3,23 +3,13 @@ import matplotlib.pyplot as plt
 import random
 import argparse
 
-def create_random_G(n, e):
-    G = nx.Graph()
-
-    # Add nodes to the graph
-    G.add_nodes_from(range(n))
-
-    # Add edges with random weights
-    for i in range(n):
-        # Connect node `i` with `e` random nodes
-        for _ in range(e):
-            if i == n - 1:  # Ensure last node doesn't exceed index
-                break
-            rand_node = random.randint(i + 1, n - 1)  # Ensure edge goes forward
-            if rand_node not in G[i]:
-                weight = random.randint(-10, 10)  # Assign random weight to edge
-                G.add_edge(i, rand_node, weight=weight)
-
+def create_barabasi_albert_weighted_graph(num_nodes, num_edges_per_node, weight_range=(-10, 10)):
+    G = nx.barabasi_albert_graph(num_nodes, num_edges_per_node)
+    edges = []
+    for (u, v) in G.edges():
+        weight = random.randint(*weight_range)
+        G[u][v]['weight'] = weight
+        edges.append((u, v, weight))
     return G
 
 def bellmann_ford(G, v,s,e):
@@ -119,10 +109,10 @@ if args.vertices is not None and args.edges is not None:
     e= args.end
 
 else:
- v = 5  # Number of nodes
- m = 15  # Number of edges
+ v = 15  # Number of nodes
+ m = 2  # Number of edges per node
  s=0
  e=2
 
-G = create_random_G(v, m)
+G = create_barabasi_albert_weighted_graph(v, m)
 visualize_bellmann(G, v,s,e)
