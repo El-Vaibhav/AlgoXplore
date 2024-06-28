@@ -1,6 +1,15 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import argparse
+import tkinter as tk
+from tkinter import messagebox
+
+
+def show_error(message):
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    messagebox.showerror("Input Error", message)
+    root.destroy()
 
 def create_random_graph( v, m):
  
@@ -46,8 +55,10 @@ def visualize_dfs(graph, start):
         )
         
         plt.draw()
+        plt.title("DFS Algorithm Visualization")
         plt.pause(1.7)
-    
+
+  
     plt.close(fig)  # Close the plot window after the loop completes
 
 # Parameters for random graph
@@ -66,8 +77,16 @@ else:
  v = 12
  m= 2  # Change parameters as needed
 
-# Create random graph
-G = create_random_graph(v, m)
+if v <= 0:
+    show_error("The number of vertices must be a positive integer.")
+elif m < 1 or m >= v:
+    show_error("The number of edges must be at least 1 and less than the number of vertices.")
+else:
+    # Create random graph
+    G = create_random_graph(v, m)
 
-# Visualize DFS on random graph
-visualize_dfs(G, 0)
+    # Visualize DFS on random graph
+    try:
+        visualize_dfs(G, 0)
+    except ValueError as e:
+        show_error(str(e))

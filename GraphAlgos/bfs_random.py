@@ -2,6 +2,8 @@ import argparse
 import networkx as nx
 import matplotlib.pyplot as plt
 from queue import Queue
+import tkinter as tk
+from tkinter import messagebox
 
 def create_random_graph(v, m):
     return nx.barabasi_albert_graph(v, m)
@@ -50,10 +52,16 @@ def visualize_bfs(graph, start):
             ax=ax
         )
         plt.draw()
+        plt.title("BFS Algorithm Visualization")
         plt.pause(1.7)
     
     plt.close(fig)
 
+def show_error(message):
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    messagebox.showerror("Input Error", message)
+    root.destroy()
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="BFS")
@@ -61,7 +69,7 @@ parser.add_argument('--vertices', type=int, help='Number of vertices in the grap
 parser.add_argument('--edges', type=int, help='Number of edges to attach from a new node to existing nodes (m)')
 args = parser.parse_args()
 
-    # Check if arguments are provided
+# Check if arguments are provided
 if args.vertices is not None and args.edges is not None:
     v = args.vertices
     m = args.edges
@@ -69,9 +77,18 @@ else:
     # Default values if arguments are not provided
     v = 15
     m = 2
-    
-# Create random graph
-G = create_random_graph(v, m)
 
-# Visualize BFS on random graph
-visualize_bfs(G, 0)
+# Check for input errors
+if v <= 0:
+    show_error("The number of vertices must be a positive integer.")
+elif m < 1 or m >= v:
+    show_error("The number of edges must be at least 1 and less than the number of vertices.")
+else:
+    # Create random graph
+    G = create_random_graph(v, m)
+    
+    # Visualize BFS on random graph
+    try:
+        visualize_bfs(G, 0)
+    except ValueError as e:
+        show_error(str(e))

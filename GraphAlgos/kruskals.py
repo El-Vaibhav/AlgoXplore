@@ -97,7 +97,6 @@ def visualize_kruskals(graph):
                     edge_color[(i[0],i[1])]="red"
                     edge_color[(i[1],i[0])]="red"
             
-
         nx.draw(
             graph, pos, 
             with_labels=True, 

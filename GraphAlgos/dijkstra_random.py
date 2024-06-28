@@ -2,6 +2,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 import argparse
+import tkinter as tk
+from tkinter import messagebox
 
 # Function to create a random weighted graph using Barabási-Albert model
 def create_barabasi_albert_weighted_graph(num_nodes, num_edges_per_node, weight_range=(1, 10)):
@@ -29,7 +31,7 @@ def dijkstra(G, num_nodes, start_node, end_node):
     visited[start_node] = 1
     visited[end_node] = 1
 
-    ans=[]
+    ans = []
 
     while len(q) > 0:
         node = min(q)[1]
@@ -42,19 +44,16 @@ def dijkstra(G, num_nodes, start_node, end_node):
                     if i == search:
                         visited[my_dict[i]] = 1
                         ans.append((my_dict[i], search))
-                        yield node_colors , i , edge_colors , ans
+                        yield node_colors, i, edge_colors, ans
                         search = my_dict[i]
             
         for neighbor in G.neighbors(node):
-
             weight = G[node][neighbor]['weight']
-
             if dist[neighbor] == min(dist[neighbor], dist[node] + weight):
                 continue
             else:
                 if (dist[neighbor], neighbor) in q:
                     q.remove((dist[neighbor], neighbor))
-
                 dist[neighbor] = min(dist[neighbor], dist[node] + weight)
                 my_dict[neighbor] = node
                 node_colors[node_list.index(neighbor)] = 'yellow'
@@ -68,9 +67,8 @@ def dijkstra(G, num_nodes, start_node, end_node):
     yield node_colors, i, edge_colors, ans
 
 # Function to visualize Dijkstra's algorithm
-def visualize_dijkstra(graph,s,e):
+def visualize_dijkstra(graph, s, e):
     pos = nx.spring_layout(graph)
-
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
 
@@ -81,7 +79,6 @@ def visualize_dijkstra(graph,s,e):
     fig.canvas.mpl_connect('close_event', on_close)
 
     for node_colors, current_node, edge_colors, path_edges in dijkstra(graph, len(graph.nodes()), s, e):
-        
         if stop_animation:
             break
 
@@ -97,7 +94,7 @@ def visualize_dijkstra(graph,s,e):
             with_labels=True,
             node_color=node_colors,
             node_size=500,
-            font_size=14,
+            font_size=12,
             font_color='black',
             edge_color=[edge_colors[edge] for edge in graph.edges()],
             width=2  # Edge width
@@ -109,35 +106,53 @@ def visualize_dijkstra(graph,s,e):
             font_size=12,
             font_color='blue'
         )
+        plt.title(f"Dijkstra's Algorithm Visualization\nFrom Node {s} to Node {e}", fontsize=18)
         plt.draw()
-        plt.pause(0.6)  # Pause to visually show the traversal process
+        plt.pause(0.8)  # Pause to visually show the traversal process
 
-# Create a random weighted graph using Barabási-Albert model
+def show_error(message):
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    messagebox.showerror("Input Error", message)
+    root.destroy()
 
-parser = argparse.ArgumentParser(description="BFS")
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description="Dijkstra's Algorithm Visualization")
 parser.add_argument('--vertices', type=int, help='Number of vertices in the graph')
 parser.add_argument('--edges', type=int, help='Number of edges to attach from a new node to existing nodes (m)')
-parser.add_argument('--start', type=int, help='Start vextex')
+parser.add_argument('--start', type=int, help='Start vertex')
 parser.add_argument('--end', type=int, help='End vertex')
 
 args = parser.parse_args()
 
-    # Check if arguments are provided
-if args.vertices is not None and args.edges is not None:
+# Check if arguments are provided
+if args.vertices is not None and args.edges is not None and args.start is not None and args.end is not None:
     v = args.vertices
     m = args.edges
-    s= args.start
-    e= args.end
+    s = args.start
+    e = args.end
 else:
- v = 9
- m = 2
- s=0
- e=8
+    v = 9
+    m = 2
+    s = 0
+    e = 8
 
-G, edges = create_barabasi_albert_weighted_graph(v,m)
+# Check for input errors
+if v <= 0:
+    show_error("The number of vertices must be a positive integer.")
+elif m < 1 or m >= v:
+    show_error("The number of edges per node must be at least 1 and less than the number of vertices.")
+elif s < 0 or s >= v or e < 0 or e >= v:
+    show_error("Start and end vertices must be valid node indices within the graph.")
+else:
+    # Create a random weighted graph
+    G, edges = create_barabasi_albert_weighted_graph(v, m)
 
-# Visualize Dijkstra's algorithm on the random graph
-visualize_dijkstra(G,s,e)
+    # Visualize Dijkstra's algorithm on the random graph
+    try:
+        visualize_dijkstra(G, s, e)
+    except ValueError as e:
+        show_error(str(e))
 
 # Keep the plot open until the user closes it
 plt.show()

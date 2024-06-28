@@ -2,6 +2,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 import argparse
+import tkinter as tk
+from tkinter import messagebox
 
 # Function to create a random graph with random edge weights
 def create_random_graph(v, m):
@@ -67,6 +69,12 @@ def kruskals(G):
     print("Total weight:", total_weight)
     yield "red", None, edge_colors, mst
 
+def show_error(message):
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    messagebox.showerror("Input Error", message)
+    root.destroy()
+    
 # Function to visualize Kruskal's algorithm
 def visualize_kruskals(graph):
     pos = nx.spring_layout(graph)
@@ -110,6 +118,7 @@ def visualize_kruskals(graph):
             font_size=12,
             font_color='blue'
         )
+        plt.title("Kruskal's Algorithm Visualization")
 
         plt.draw()
         plt.pause(1.5)
@@ -131,11 +140,20 @@ else:
     v = 12
     m = 2  # Default to 2 edges per vertex
 
-parent = [i for i in range(v)]  # Initialize parent array
-rank = [0] * v  # Initialize rank array
+if v <= 0:
+    show_error("The number of vertices must be a positive integer.")
+elif m < 1 or m >= v:
+    show_error("The number of edges per vertex must be at least 1 and less than the number of vertices.")
+else:
+    # Initialize parent and rank arrays for Union-Find
+    parent = [i for i in range(v)]
+    rank = [0] * v
 
-# Create a random graph
-G = create_random_graph(v, m)
+    # Create a random graph
+    random_graph = create_random_graph(v, m)
 
-# Visualize Kruskal's algorithm on the random graph
-visualize_kruskals(G)
+    # Visualize Kruskal's algorithm on the random graph
+    try:
+        visualize_kruskals(random_graph)
+    except ValueError as e:
+        show_error(str(e))
