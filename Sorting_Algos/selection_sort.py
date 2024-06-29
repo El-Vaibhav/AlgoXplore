@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import random
 import argparse
+import tkinter as tk
+from tkinter import messagebox
+import sys
 
 # Selection sort algorithm
 # Selection sort is a straightforward sorting algorithm that operates by repeatedly finding the minimum 
@@ -27,7 +30,12 @@ def selection_sort(data):
             data[i], data[min_index] = data[min_index], data[i]
             yield data.copy()  # Yield a copy of the data after each swap
 
-
+# Function to display an error message using tkinter
+def show_error(message):
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    messagebox.showerror("Input Error", message)
+    root.destroy()
 
 def update_plot(frame, bars):
     data = frame
@@ -39,10 +47,20 @@ parser.add_argument('--size', type=int, help='Size of the array to generate')
 parser.add_argument('--range', type=int, help='Range of values for the random array')
 args = parser.parse_args()
 
-if args.size and args.range:
-    data = [random.randint(1, args.range) for _ in range(args.size)]
+# Validate and process arguments
+if args.size is not None and args.range is not None:
+    if args.size <= 0:
+        show_error("The size of the array must be a positive integer.")
+        sys.exit(1)  # Exit the script
+    elif args.range <= 0:
+        show_error("The range of values must be a positive integer.")
+        sys.exit(1)  # Exit the script
+    else:
+        data = [random.randint(1, args.range) for _ in range(args.size)]
 else:
-    data = [random.randint(1, 100) for _ in range(40)]
+    show_error("Both --size and --range arguments must be provided.")
+    sys.exit(1)  # Exit the script
+
 
 
 

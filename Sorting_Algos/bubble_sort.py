@@ -2,6 +2,9 @@ import argparse
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import random
+import tkinter as tk
+from tkinter import messagebox
+import sys
 
 # Bubble sort algorithm
 def bubble_sort(data):
@@ -12,16 +15,32 @@ def bubble_sort(data):
                 data[j], data[j+1] = data[j+1], data[j]
                 yield data.copy()
 
+# Function to display an error message using tkinter
+def show_error(message):
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    messagebox.showerror("Input Error", message)
+    root.destroy()
+
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Visualize Bubble Sort Algorithm")
 parser.add_argument('--size', type=int, help='Size of the array to generate')
 parser.add_argument('--range', type=int, help='Range of values for the random array')
 args = parser.parse_args()
 
-if args.size and args.range:
-    data = [random.randint(1, args.range) for _ in range(args.size)]
+# Validate and process arguments
+if args.size is not None and args.range is not None:
+    if args.size <= 0:
+        show_error("The size of the array must be a positive integer.")
+        sys.exit(1)  # Exit the script
+    elif args.range <= 0:
+        show_error("The range of values must be a positive integer.")
+        sys.exit(1)  # Exit the script
+    else:
+        data = [random.randint(1, args.range) for _ in range(args.size)]
 else:
-    data = [random.randint(1, 100) for _ in range(40)]
+    show_error("Both --size and --range arguments must be provided.")
+    sys.exit(1)  # Exit the script
 
 # Function to update the plot
 def update_plot(frame, bars):
@@ -40,5 +59,5 @@ bars = ax.bar(range(len(data)), data, align='edge')
 frames = bubble_sort(data)
 
 # Create animation
-ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=1)
+ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=100)
 plt.show()

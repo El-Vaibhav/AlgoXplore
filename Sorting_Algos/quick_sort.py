@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import random
 import argparse
+import sys
+import tkinter as tk
+from tkinter import messagebox
+
 
 # devide and conquer algo
 # Choose a Pivot:
@@ -40,15 +44,31 @@ def quicksort(l, low, high):
         yield from quicksort(l, low, pi - 1)
         yield from quicksort(l, pi + 1, high)
 
+# Function to display an error message using tkinter
+def show_error(message):
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    messagebox.showerror("Input Error", message)
+    root.destroy()
+
 parser = argparse.ArgumentParser(description="Visualize Bubble Sort Algorithm")
 parser.add_argument('--size', type=int, help='Size of the array to generate')
 parser.add_argument('--range', type=int, help='Range of values for the random array')
 args = parser.parse_args()
 
-if args.size and args.range:
-    data = [random.randint(1, args.range) for _ in range(args.size)]
+
+if args.size is not None and args.range is not None:
+    if args.size <= 0:
+        show_error("The size of the array must be a positive integer.")
+        sys.exit(1)  # Exit the script
+    elif args.range <= 0:
+        show_error("The range of values must be a positive integer.")
+        sys.exit(1)  # Exit the script
+    else:
+        data = [random.randint(1, args.range) for _ in range(args.size)]
 else:
-    data = [random.randint(1, 100) for _ in range(40)]
+    show_error("Both --size and --range arguments must be provided.")
+    sys.exit(1)  # Exit the script
 
 def update_plot(frame, bars):
     data = frame
