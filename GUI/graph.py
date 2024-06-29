@@ -32,7 +32,7 @@ def open_input_dialog(script_path, algorithm_name):
     
     dialog = tk.Toplevel(root)
     dialog.title("Input Options")
-    dialog.geometry("470x470")  # Default size
+    dialog.geometry("470x470+220+100")  # Set position to open the dialog on the right side
     
     if script_path.endswith("dijkstra_random.py") or script_path.endswith("bellman_random.py"):
         dialog.geometry("600x600")  # Larger size for Dijkstra's and Bellman-Ford
@@ -100,16 +100,13 @@ def display_algorithm_explanation(algorithm_name):
     }
 
     explanation = explanations.get(algorithm_name, "No explanation available for this algorithm.")
-    
     explanation_dialog = tk.Toplevel(root)
     explanation_dialog.title(f"{algorithm_name} Explanation")
-    explanation_dialog.geometry("470x470+850+100")  # Set position to open the dialog on the far right side
-    explanation_dialog.configure(bg="red")  # Set the background color to red
+    explanation_dialog.geometry("440x440+850+100")  # Set position to open the dialog on the far right side
+    explanation_dialog.configure(bg="red")  # Set the background color to black
     explanation_dialog.resizable(False, False)  # Disable maximizing
-
-    font_style = ("Helvetica", 15, "bold")
-
-    explanation_label = tk.Label(explanation_dialog, text=explanation, font=font_style, fg="white", bg="red", wraplength=440, justify=tk.LEFT)
+    font_style=("Helvetica", 15,"bold")
+    explanation_label = tk.Label(explanation_dialog, text=explanation, font=font_style, fg="white", bg="red", wraplength=400, justify=tk.LEFT)
     explanation_label.pack(padx=20, pady=20)
 # Create the root window
 root = tk.Tk()
