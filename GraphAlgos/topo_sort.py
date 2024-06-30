@@ -1,17 +1,16 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from queue import Queue
+import argparse
 
-# Given edges of the DAG
-edges = [(5, 0), (4, 0), (5, 2), (2, 3), (3, 1), (4, 1)]
+# Function to create a graph from edges
+def create_graph_from_edges(edges):
+    G = nx.DiGraph()
+    for edge in edges:
+        G.add_edge(edge[0], edge[1])
+    return G
 
-# Function to create DAG
-def create_dag(edges):
-    DAG = nx.DiGraph()
-    DAG.add_edges_from(edges)
-    return DAG
-
-# Kahn's algorithm for topological sort using BFS
+# Topological sort function using Kahn's algorithm
 def kahns_topological_sort(graph):
     in_deg = {node: 0 for node in graph.nodes()}
     for u, v in graph.edges():
@@ -44,20 +43,30 @@ def kahns_topological_sort(graph):
         node_colors[node_list.index(i)] = 'cyan'
         yield node_colors, i
 
-# Function to visualize topological sort using Kahn's algorithm
-def visualize_kahns_toposort(graph):
+# Function to visualize topological sort
+def visualize_toposort(graph):
     pos = nx.spring_layout(graph)
-    plt.figure(figsize=(12, 8))  # Adjust figure size as needed
-    plt.title("Topological Sort of a DAG using Kahn's Algorithm", fontsize=20)
+    stop_animation = False
+    fig, ax = plt.subplots(figsize=(8, 8))
+    
+    def on_close(event):
+        nonlocal stop_animation
+        stop_animation = True
 
+    fig.canvas.mpl_connect('close_event', on_close)
+    
     for node_colors, current_node in kahns_topological_sort(graph):
-        plt.clf()
+        if stop_animation:
+            break
+
+        ax.clear()
+
         nx.draw(
             graph, pos,
             with_labels=True,
             node_color=node_colors,
-            node_size=1000,
-            font_size=14,
+            node_size=500,
+            font_size=12,
             font_color='black',
             edge_color='purple',
             arrows=True,  # Display directed edges with arrows
@@ -65,14 +74,27 @@ def visualize_kahns_toposort(graph):
             arrowsize=10,  # Arrow size
             width=2  # Edge width
         )
-        plt.title(f"Current Node: {current_node}", fontsize=20)
+        plt.title(f"Kahn's Algorithm Visualization\nCurrent Node: {current_node}", fontsize=20)
         plt.draw()
-        plt.pause(2)  # Pause to visually show the traversal process
+        plt.pause(1.5)  # Pause to visually show the traversal process
 
-    plt.show()
 
-# Create a DAG
-DAG = create_dag(edges)
+def main():
+    parser = argparse.ArgumentParser(description="Topological Sort using Kahn's Algorithm")
+    parser.add_argument('--edges', type=str, required=True, help='List of edges in the format [(0, 1), (1, 2), ...]')
+    args = parser.parse_args()
 
-# Visualize topological sort
-visualize_kahns_toposort(DAG)
+    try:
+        edges = eval(args.edges)  # Convert string input to a Python list of tuples
+
+        # Create custom graph
+        G = create_graph_from_edges(edges)
+
+        # Visualize topological sort on custom graph
+        visualize_toposort(G)
+
+    except Exception as e:
+        print(f"Error processing input: {str(e)}")
+
+if __name__ == '__main__':
+    main()

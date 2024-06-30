@@ -1,14 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import argparse
 from queue import Queue
-
-v = 9
-edges = [(0, 1), (1, 2), (1, 6), (2, 3), (2, 4), (6, 7), (6, 8), (4, 5), (7, 5)]
-
-adj = [[] for _ in range(v)]
-for i, j in edges:
-    adj[i].append(j)
-    adj[j].append(i)
 
 def create_graph(edges):
     G = nx.Graph()
@@ -16,7 +9,8 @@ def create_graph(edges):
         G.add_edge(i, j)
     return G
 
-def bfs(start):
+def bfs(graph, start):
+    adj = nx.to_dict_of_lists(graph)
     visited = set()
 
     q = Queue()
@@ -34,8 +28,7 @@ def bfs(start):
                 visited.add(i)
 
 def visualize_bfs(graph, start):
-    pos = nx.spring_layout(graph)  
-    screen_width, screen_height = plt.figaspect(0.75)  
+    pos = nx.spring_layout(graph)
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
 
@@ -45,13 +38,11 @@ def visualize_bfs(graph, start):
 
     fig.canvas.mpl_connect('close_event', on_close)
 
-    for visited, _ in bfs(start):
+    for visited, _ in bfs(graph, start):
         if stop_animation:
             break
 
         ax.clear()
-        plt.clf()
-        
         nx.draw(
             graph, pos, 
             with_labels=True, 
@@ -61,13 +52,31 @@ def visualize_bfs(graph, start):
             font_color='white',  
             edge_color='cyan',  
             linewidths=1,  
-            width=2  
+            width=2,
+            ax=ax  
         )
-        
+        plt.title("BFS Algorithm Visualization")
         plt.draw()
-        plt.pause(1.7)  
-        
-    
+        plt.pause(2.0)
 
-G = create_graph(edges)
-visualize_bfs(G, 0)
+    plt.show()  # Show the plot window after the loop completes
+
+def main():
+    parser = argparse.ArgumentParser(description="BFS Visualization")
+    parser.add_argument('--edges', type=str, required=True, help='List of edges in the format [(0, 1), (1, 2), ...]')
+    args = parser.parse_args()
+
+    try:
+        edges = eval(args.edges)  # Convert string input to a Python list of tuples
+
+        # Create custom graph
+        G = create_graph(edges)
+
+        # Visualize BFS on custom graph
+        visualize_bfs(G, 0)  # Start BFS from node 0 (you can change as needed)
+
+    except Exception as e:
+        print(f"Error processing input: {str(e)}")
+
+if __name__ == '__main__':
+    main()

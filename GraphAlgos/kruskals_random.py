@@ -115,7 +115,7 @@ def visualize_kruskals(graph):
         nx.draw_networkx_edge_labels(
             graph, pos,
             edge_labels=edge_labels,
-            font_size=12,
+            font_size=9,
             font_color='blue'
         )
         plt.title("Kruskal's Algorithm Visualization")
