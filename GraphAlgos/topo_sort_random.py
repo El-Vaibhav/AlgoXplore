@@ -84,7 +84,7 @@ def visualize_toposort(graph):
         plt.draw()
         plt.pause(1.5)  # Pause to visually show the traversal process
 
-    plt.close(fig)
+    plt.show()
 
 def show_error(message):
     root = tk.Tk()

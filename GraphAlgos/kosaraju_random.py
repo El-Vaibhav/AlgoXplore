@@ -98,7 +98,7 @@ def visualize_kosaraju(graph):
         plt.title("Kosaraju's Algorithm Visualization")
         plt.pause(1.5)
 
-    plt.close(fig)
+    plt.show()
 
 def show_error(message):
     root = tk.Tk()

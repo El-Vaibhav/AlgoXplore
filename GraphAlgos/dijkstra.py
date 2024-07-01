@@ -106,6 +106,8 @@ def visualize_dijkstra(graph, s, e):
         plt.draw()
         plt.pause(0.8)  # Pause to visually show the traversal process
 
+    plt.show()
+
 def show_error(message):
     root = tk.Tk()
     root.withdraw()  # Hide the root window

@@ -91,39 +91,42 @@ def show_error(message):
     messagebox.showerror("Input Error", message)
     root.destroy()
 
-parser = argparse.ArgumentParser(description="Bellman-Ford Algorithm Visualization")
-parser.add_argument('--vertices', type=int, help='Number of vertices in the graph')
-parser.add_argument('--edges', type=int, help='Number of edges to attach from a new node to existing nodes (m)')
-parser.add_argument('--start', type=int, help='Start vertex')
-parser.add_argument('--end', type=int, help='End vertex')
+def main():
+    parser = argparse.ArgumentParser(description="Bellman-Ford Algorithm Visualization")
+    parser.add_argument('--vertices', type=int, help='Number of vertices in the graph')
+    parser.add_argument('--edges', type=int, help='Number of edges to attach from a new node to existing nodes (m)')
+    parser.add_argument('--start', type=int, help='Start vertex')
+    parser.add_argument('--end', type=int, help='End vertex')
+    args = parser.parse_args()
 
-args = parser.parse_args()
+    # Check if arguments are provided
+    if args.vertices is not None and args.edges is not None and args.start is not None and args.end is not None:
+        v = args.vertices
+        m = args.edges
+        s = args.start
+        e = args.end
+    else:
+        v = 5  # Number of nodes
+        m = 2  # Number of edges per node
+        s = 0   # Start vertex
+        e = 2   # End vertex
 
-# Check if arguments are provided
-if args.vertices is not None and args.edges is not None and args.start is not None and args.end is not None:
-    v = args.vertices
-    m = args.edges
-    s = args.start
-    e = args.end
-else:
-    v = 15  # Number of nodes
-    m = 2  # Number of edges per node
-    s = 0   # Start vertex
-    e = 2   # End vertex
+    # Check for input errors
+    if v <= 0:
+        show_error("The number of vertices must be a positive integer.")
+    elif m < 1 or m >= v:
+        show_error("The number of edges per node must be at least 1 and less than the number of vertices.")
+    elif s < 0 or s >= v or e < 0 or e >= v:
+        show_error("Start and end vertices must be valid node indices within the graph.")
+    else:
+        # Create a random weighted graph using Barabási-Albert model
+        G = create_barabasi_albert_weighted_graph(v, m)
 
-# Check for input errors
-if v <= 0:
-    show_error("The number of vertices must be a positive integer.")
-elif m < 1 or m >= v:
-    show_error("The number of edges per node must be at least 1 and less than the number of vertices.")
-elif s < 0 or s >= v or e < 0 or e >= v:
-    show_error("Start and end vertices must be valid node indices within the graph.")
-else:
-    # Create a random weighted graph using Barabási-Albert model
-    G = create_barabasi_albert_weighted_graph(v, m)
+        # Visualize Bellman-Ford algorithm on the random graph
+        try:
+            visualize_bellman(G, v, s, e)
+        except ValueError as e:
+            show_error(str(e))
 
-    # Visualize Bellman-Ford algorithm on the random graph
-    try:
-        visualize_bellman(G, v, s, e)
-    except ValueError as e:
-        show_error(str(e))
+if __name__ == "__main__":
+    main()

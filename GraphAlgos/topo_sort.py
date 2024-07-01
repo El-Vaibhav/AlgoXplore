@@ -77,7 +77,8 @@ def visualize_toposort(graph):
         plt.title(f"Kahn's Algorithm Visualization\nCurrent Node: {current_node}", fontsize=20)
         plt.draw()
         plt.pause(1.5)  # Pause to visually show the traversal process
-
+    
+    plt.show()
 
 def main():
     parser = argparse.ArgumentParser(description="Topological Sort using Kahn's Algorithm")

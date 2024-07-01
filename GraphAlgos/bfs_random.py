@@ -55,7 +55,7 @@ def visualize_bfs(graph, start):
         plt.title("BFS Algorithm Visualization")
         plt.pause(1.7)
     
-    plt.close(fig)
+    plt.show()
 
 def show_error(message):
     root = tk.Tk()

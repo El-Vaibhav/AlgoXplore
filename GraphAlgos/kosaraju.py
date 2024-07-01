@@ -10,16 +10,16 @@ def create_graph(edges):
     G.add_edges_from(edges)
     return G
 
-def kosaraju(G):
-    node_colors = ['skyblue'] * len(G.nodes())
+def kosaraju(G, V):
+    node_colors = ['skyblue'] * (V + 1)
     node_list = list(G.nodes())
 
-    adj = [[] for _ in range(len(G))]
+    adj = [[] for _ in range(V + 1)]
     for u, v in G.edges():
         adj[u].append(v)
 
     stack = []
-    visited = [0] * len(G)
+    visited = [0] * (V + 1)
 
     def sort(node):
         visited[node] = 1
@@ -28,15 +28,15 @@ def kosaraju(G):
                 sort(i)
         stack.append(node)
 
-    for i in range(len(G)):
+    for i in range(V + 1):
         if not visited[i]:
             sort(i)
 
     stack.reverse()
 
-    visited = [0] * len(G)
+    visited = [0] * (V + 1)
 
-    rev_adj = [[] for _ in range(len(G))]
+    rev_adj = [[] for _ in range(V + 1)]
     for u, v in G.edges():
         rev_adj[v].append(u)
 
@@ -48,7 +48,7 @@ def kosaraju(G):
                 dfs(i, l)
 
     count = 0
-    colors = ['#%06x' % random.randint(0, 0xFFFFFF) for _ in range(len(G))]
+    colors = ['#%06x' % random.randint(0, 0xFFFFFF) for _ in range(V + 1)]
 
     k = 0
 
@@ -57,13 +57,14 @@ def kosaraju(G):
         if not visited[i]:
             dfs(i, l)
             for m in l:
-                node_colors[node_list.index(m)] = colors[k]
-                yield node_colors
+                if m in node_list:
+                    node_colors[node_list.index(m)] = colors[k]
+            yield node_colors
             count += 1
             k += 1
 
-def visualize_kosaraju(graph):
-    pos = nx.spring_layout(graph)
+def visualize_kosaraju(graph, V):
+    pos = nx.circular_layout(graph)  # Default layout to circular
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
 
@@ -73,7 +74,7 @@ def visualize_kosaraju(graph):
 
     fig.canvas.mpl_connect('close_event', on_close)
 
-    for node_colors in kosaraju(graph):
+    for node_colors in kosaraju(graph, V):
         if stop_animation:
             break
 
@@ -93,7 +94,7 @@ def visualize_kosaraju(graph):
         plt.title("Kosaraju's Algorithm Visualization")
         plt.pause(1.5)
 
-    plt.close(fig)
+    plt.show()
 
 def show_error(message):
     root = tk.Tk()
@@ -103,14 +104,17 @@ def show_error(message):
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Kosaraju's Algorithm")
-parser.add_argument('--vertices', type=int, help='Number of vertices in the graph')
 parser.add_argument('--edges', type=str, help='List of edges in the format [(u, v), (u, v), ...]')
 args = parser.parse_args()
 
 # Check if arguments are provided
-if args.vertices is not None and args.edges is not None:
-    v = args.vertices
+if args.edges is not None:
     edges = eval(args.edges)  # Convert string input to a Python list of tuples
+    v = 0
+    for i, j in edges:
+        v = max(v, i)
+        v = max(v, j)
+
     if not isinstance(edges, list):
         show_error("Edges must be provided as a list of tuples.")
         exit()
@@ -131,6 +135,6 @@ else:
 
     # Visualize Kosaraju's algorithm on the created graph
     try:
-        visualize_kosaraju(G)
+        visualize_kosaraju(G, v)
     except ValueError as e:
         show_error(str(e))

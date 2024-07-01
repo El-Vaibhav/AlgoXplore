@@ -107,15 +107,21 @@ try:
 
     # Create custom graph
     G = create_custom_graph(edges)
+    
+    v = 0
+    for i, j, k in edges:
+        v = max(v, i)
+        v = max(v, j)
 
-    v = len(G.nodes())
-    adj = [[] for _ in range(v)]
+    # `v` is the maximum node index, so we need `v+1` for the adjacency list
+    adj = [[] for _ in range(v + 1)]
+
     for i, j, k in edges:
         adj[i].append((j, k))
         adj[j].append((i, k))
 
     # Visualize Prim's algorithm on the custom graph
-    visualize_prims(G, adj, v)
+    visualize_prims(G, adj, v + 1)
 
 except Exception as e:
     show_error(f"Error processing input: {str(e)}")

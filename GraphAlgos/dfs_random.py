@@ -58,9 +58,7 @@ def visualize_dfs(graph, start):
         plt.title("DFS Algorithm Visualization")
         plt.pause(1.7)
 
-  
-    plt.close(fig)  # Close the plot window after the loop completes
-
+    plt.show()
 # Parameters for random graph
 
 parser = argparse.ArgumentParser(description="BFS")
