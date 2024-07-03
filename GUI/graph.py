@@ -89,7 +89,7 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
         
         if custom_graph:
             tk.Label(dialog, text="Enter the edges list:", fg="yellow", bg="brown", font=font_style).pack(anchor=tk.W, padx=20, pady=50)
-
+            
             tk.Label(dialog, text="Edges (e.g., [(v1,v2,wt)]):", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
             edges_entry = tk.Entry(dialog, width=30, bg="white", font=font_style)
             edges_entry.pack(anchor=tk.W, padx=20, pady=15)
@@ -133,11 +133,18 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
         font_style = ("Helvetica", 14, "bold")
 
         if custom_graph:
+
             tk.Label(dialog, text="Enter the edges list:", fg="yellow", bg="brown", font=font_style).pack(anchor=tk.W, padx=20, pady=50)
 
-            tk.Label(dialog, text="Edges (e.g., [(v1,v2,wt)]):", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
-            edges_entry = tk.Entry(dialog, width=30, bg="white", font=font_style)
-            edges_entry.pack(anchor=tk.W, padx=20, pady=15)
+            if script_path.endswith("prims_random.py") or script_path.endswith("kruskals_random.py"):
+                tk.Label(dialog, text="Edges (e.g., [(v1,v2,wt)]):", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
+                edges_entry = tk.Entry(dialog, width=30, bg="white", font=font_style)
+                edges_entry.pack(anchor=tk.W, padx=20, pady=15)
+
+            else:
+             tk.Label(dialog, text="Edges (e.g., [(v1,v2)]):", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
+             edges_entry = tk.Entry(dialog, width=30, bg="white", font=font_style)
+             edges_entry.pack(anchor=tk.W, padx=20, pady=15)
 
         else:
             tk.Label(dialog, text="Enter number of vertices and edges per vertex:", fg="yellow", bg="brown", font=font_style).pack(anchor=tk.W, padx=20, pady=50)
