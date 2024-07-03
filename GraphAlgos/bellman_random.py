@@ -56,7 +56,9 @@ def visualize_bellman(graph, v, start, end):
             break
 
         ax.clear()
-
+        
+        print(path_edges)
+        # Highlight edges in the shortest path
         for u, v in path_edges:
             edge_colors[(u, v)] = 'red'
             edge_colors[(v, u)] = 'red'
@@ -65,8 +67,8 @@ def visualize_bellman(graph, v, start, end):
             graph, pos,
             with_labels=True,
             node_color=node_colors,
-            node_size=700,
-            font_size=14,
+            node_size=500,
+            font_size=12,
             font_color='black',
             edge_color=[edge_colors[edge] for edge in graph.edges()],
             width=2  # Edge width
@@ -83,7 +85,12 @@ def visualize_bellman(graph, v, start, end):
         plt.draw()
         plt.pause(0.1)  # Pause to visually show the traversal process
 
+    for u, v in path_edges:
+            edge_colors[(u, v)] = 'red'
+            edge_colors[(v, u)] = 'red'
+
     plt.show()
+
 
 def show_error(message):
     root = tk.Tk()
@@ -93,10 +100,10 @@ def show_error(message):
 
 def main():
     parser = argparse.ArgumentParser(description="Bellman-Ford Algorithm Visualization")
-    parser.add_argument('--vertices', type=int, help='Number of vertices in the graph')
     parser.add_argument('--edges', type=int, help='Number of edges to attach from a new node to existing nodes (m)')
     parser.add_argument('--start', type=int, help='Start vertex')
     parser.add_argument('--end', type=int, help='End vertex')
+    parser.add_argument('--vertices', type=int, help='Number of vertices in the graph')
     args = parser.parse_args()
 
     # Check if arguments are provided
@@ -106,7 +113,7 @@ def main():
         s = args.start
         e = args.end
     else:
-        v = 5  # Number of nodes
+        v = 9  # Number of nodes
         m = 2  # Number of edges per node
         s = 0   # Start vertex
         e = 2   # End vertex
