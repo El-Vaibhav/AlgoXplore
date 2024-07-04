@@ -93,7 +93,7 @@ def visualize_dijkstra(graph, s, e):
             graph, pos,
             with_labels=True,
             node_color=node_colors,
-            node_size=500,
+            node_size=400,
             font_size=12,
             font_color='black',
             edge_color=[edge_colors[edge] for edge in graph.edges()],
@@ -103,7 +103,7 @@ def visualize_dijkstra(graph, s, e):
         nx.draw_networkx_edge_labels(
             graph, pos,
             edge_labels=edge_labels,
-            font_size=12,
+            font_size=10,
             font_color='blue'
         )
         plt.title(f"Dijkstra's Algorithm Visualization\nFrom Node {s} to Node {e}", fontsize=18)
