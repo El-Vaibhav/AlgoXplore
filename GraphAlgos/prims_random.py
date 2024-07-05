@@ -40,17 +40,16 @@ def prims(G, adj, v):
             if not visited[neighbour]:
                 heapq.heappush(q, (weight, neighbour, node))  # wt, node, parent
 
-    print(mst)
-
     for i in range(v):
         node_colors[i] = 'red'
 
-    yield node_colors, i, edge_colors, []
+    yield node_colors, i, edge_colors, mst
 
 def visualize_prims(graph, adj, v):
     pos = nx.spring_layout(graph)
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
+    mst_edges = []
 
     def on_close(event):
         nonlocal stop_animation
@@ -65,10 +64,11 @@ def visualize_prims(graph, adj, v):
         ax.clear()
 
         if path_edge:
+            mst_edges = path_edge  # Update mst_edges to include the latest MST edges
             for i, j, k in path_edge:
-                if (i, j, k) in edges:
+                if (i, j) in edge_color:
                     edge_color[(i, j)] = "red"
-                elif (j, i, k) in edges:
+                elif (j, i) in edge_color:
                     edge_color[(j, i)] = "red"
 
         nx.draw(
@@ -94,6 +94,32 @@ def visualize_prims(graph, adj, v):
         plt.draw()
         plt.pause(1.5)
 
+    # Remove edges that are not in MST
+    mst_set = set((u, v) for u, v, _ in mst_edges) | set((v, u) for u, v, _ in mst_edges)
+    edges_to_remove = [(u, v) for u, v in graph.edges() if (u, v) not in mst_set and (v, u) not in mst_set]
+    graph.remove_edges_from(edges_to_remove)
+
+    # Final visualization without the non-MST edges
+    ax.clear()
+    nx.draw(
+        graph, pos,
+        with_labels=True,
+        node_color='red',
+        node_size=500,
+        font_size=10,
+        font_color='black',
+        edge_color='red',
+        linewidths=1,
+        width=2
+    )
+    edge_labels = {(u, v): f"{d['weight']}" for u, v, d in graph.edges(data=True)}
+    nx.draw_networkx_edge_labels(
+        graph, pos,
+        edge_labels=edge_labels,
+        font_size=12,
+        font_color='blue'
+    )
+    plt.title("Prim's Algorithm")
     plt.show()
 
 def show_error(message):
