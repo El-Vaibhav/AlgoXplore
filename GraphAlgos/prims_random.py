@@ -31,7 +31,7 @@ def prims(G, adj, v):
 
         if parent != -1 and not visited[node]:
             mst.append((parent, node, wt))
-            yield node_colors, parent, edge_colors, mst
+            yield node_colors, parent, edge_colors, mst, ans
             ans += wt
 
         visited[node] = 1
@@ -43,13 +43,14 @@ def prims(G, adj, v):
     for i in range(v):
         node_colors[i] = 'red'
 
-    yield node_colors, i, edge_colors, mst
+    yield node_colors, i, edge_colors, mst, ans
 
 def visualize_prims(graph, adj, v):
     pos = nx.spring_layout(graph)
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
     mst_edges = []
+    total_weight = 0
 
     def on_close(event):
         nonlocal stop_animation
@@ -57,7 +58,7 @@ def visualize_prims(graph, adj, v):
 
     fig.canvas.mpl_connect('close_event', on_close)
 
-    for node_colors, current_node, edge_color, path_edge in prims(graph, adj, v):
+    for node_colors, current_node, edge_color, path_edge, ans in prims(graph, adj, v):
         if stop_animation:
             break
 
@@ -65,6 +66,7 @@ def visualize_prims(graph, adj, v):
 
         if path_edge:
             mst_edges = path_edge  # Update mst_edges to include the latest MST edges
+            total_weight = ans  # Update total weight
             for i, j, k in path_edge:
                 if (i, j) in edge_color:
                     edge_color[(i, j)] = "red"
@@ -88,8 +90,7 @@ def visualize_prims(graph, adj, v):
             edge_labels=edge_labels,
             font_size=12,
             font_color='blue'
-        )
-
+        )   
         plt.title("Prim's Algorithm Visualization")
         plt.draw()
         plt.pause(1.5)
@@ -119,7 +120,8 @@ def visualize_prims(graph, adj, v):
         font_size=12,
         font_color='blue'
     )
-    plt.title("Prim's Algorithm")
+    plt.title(f"Prim's Algorithm - MST Total Weight: {total_weight}")
+    
     plt.show()
 
 def show_error(message):

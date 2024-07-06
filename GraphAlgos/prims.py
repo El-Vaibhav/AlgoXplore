@@ -20,15 +20,15 @@ def prims(G, adj, v):
 
     visited = [0] * v
     mst = []
-    ans = 0
+    total_weight = 0
 
     while q and len(mst) != v - 1:
         wt, node, parent = heapq.heappop(q)
 
         if parent != -1 and not visited[node]:
             mst.append((parent, node, wt))
-            yield node_colors, parent, edge_colors, mst
-            ans += wt
+            total_weight += wt
+            yield node_colors, parent, edge_colors, mst, total_weight
 
         visited[node] = 1
 
@@ -39,13 +39,14 @@ def prims(G, adj, v):
     for i in range(v):
         node_colors[i] = 'red'
 
-    yield node_colors, i, edge_colors, []
+    yield node_colors, i, edge_colors, [], total_weight
 
 def visualize_prims(graph, adj, v, edges):
     pos = nx.spring_layout(graph)
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
     mst_edges = []
+    total_weight = 0
 
     def on_close(event):
         nonlocal stop_animation
@@ -53,7 +54,7 @@ def visualize_prims(graph, adj, v, edges):
 
     fig.canvas.mpl_connect('close_event', on_close)
 
-    for node_colors, current_node, edge_color, path_edge in prims(graph, adj, v):
+    for node_colors, current_node, edge_color, path_edge, total_weight in prims(graph, adj, v):
         if stop_animation:
             break
 
@@ -115,7 +116,8 @@ def visualize_prims(graph, adj, v, edges):
         font_size=12,
         font_color='blue'
     )
-    plt.title("Prim's Algorithm ")
+    plt.title(f"Prim's Algorithm - MST Total Weight: {total_weight}")
+    
     plt.show()
 
 def show_error(message):

@@ -48,17 +48,19 @@ def kruskals(G):
             union(u, v)
             mst.append((u, v))
             total_weight += weight
-            yield node_colors, u, edge_colors, mst
+            yield node_colors, u, edge_colors, mst, total_weight
 
     print("Minimum Spanning Tree:", mst)
     print("Total Weight:", total_weight)
-    yield "red", None, edge_colors, mst
+    yield "red", None, edge_colors, mst, total_weight
 
 # Function to visualize Kruskal's algorithm
 def visualize_kruskals(graph):
     pos = nx.spring_layout(graph)
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
+    mst_edges = []
+    mst_weight = 0
 
     def on_close(event):
         nonlocal stop_animation
@@ -66,13 +68,15 @@ def visualize_kruskals(graph):
 
     fig.canvas.mpl_connect('close_event', on_close)
 
-    for node_colors, current_node, edge_colors, path_edge in kruskals(graph):
+    for node_colors, current_node, edge_colors, path_edge, total_weight in kruskals(graph):
         if stop_animation:
             break
 
         ax.clear()
 
         if path_edge:
+            mst_edges = path_edge  # Update mst_edges to include the latest MST edges
+            mst_weight = total_weight  # Update mst_weight with the latest total weight
             for u, v in path_edge:
                 edge_colors[(u, v)] = "red"
                 edge_colors[(v, u)] = "red"
@@ -101,6 +105,36 @@ def visualize_kruskals(graph):
         plt.draw()
         plt.pause(1.5)
 
+    # Remove edges that are not in MST
+    mst_set = set(mst_edges) | set((v, u) for u, v in mst_edges)
+    edges_to_remove = [(u, v) for u, v in graph.edges() if (u, v) not in mst_set and (v, u) not in mst_set]
+    graph.remove_edges_from(edges_to_remove)
+
+    # Final visualization without the non-MST edges
+    ax.clear()
+    nx.draw(
+        graph, pos,
+        with_labels=True,
+        node_color='red',
+        node_size=500,
+        font_size=10,
+        font_color='black',
+        edge_color='red',
+        linewidths=1,
+        width=2
+    )
+    edge_labels = {(u, v): f"{graph[u][v]['weight']}" for u, v in graph.edges()}
+    nx.draw_networkx_edge_labels(
+        graph, pos,
+        edge_labels=edge_labels,
+        font_size=12,
+        font_color='blue'
+    )
+
+    # Annotate the total weight of the MST
+    plt.annotate(f"MST Total Weight: {mst_weight}", xy=(0.5, 0.95), xycoords='axes fraction', fontsize=12, ha='center', va='top')
+
+    plt.title("Kruskal's Algorithm - MST Only")
     plt.show()
 
 # Function to show error messages in GUI
