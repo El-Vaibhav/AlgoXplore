@@ -5,7 +5,7 @@ import argparse
 import tkinter as tk
 from tkinter import messagebox
 
-def create_barabasi_albert_weighted_graph(num_nodes, num_edges_per_node, weight_range=(-10, 10)):
+def create_barabasi_albert_weighted_graph(num_nodes, num_edges_per_node, weight_range=(-1, 10)):
     G = nx.barabasi_albert_graph(num_nodes, num_edges_per_node)
     for (u, v) in G.edges():
         weight = random.randint(*weight_range)
@@ -13,7 +13,7 @@ def create_barabasi_albert_weighted_graph(num_nodes, num_edges_per_node, weight_
     return G
 
 def bellman_ford(G, v, start, end):
-    node_colors = ['skyblue'] * len(G.nodes())
+    node_colors = ['red'] * len(G.nodes())
     edge_colors = {edge: 'purple' for edge in G.edges()}
 
     dist = [float('inf')] * v
