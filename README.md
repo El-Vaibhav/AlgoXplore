@@ -30,7 +30,7 @@ These algorithms given below are  visualized and interactively demonstrated thro
 ![Screenshot (52)](https://github.com/El-Vaibhav/AlgoXplore/assets/135622906/2996932c-ccb2-40bb-b49e-a79fcc92a48a)
 
 
-![Screenshot (53)](https://github.com/El-Vaibhav/AlgoXplore/assets/135622906/bda0adcc-ad46-45e6-a319-ed48bd95d97e)
+![image](https://github.com/El-Vaibhav/AlgoXplore/assets/135622906/f7b7534d-ff88-46e6-929d-b6a95bee847e)
 
 
 ![Screenshot (54)](https://github.com/El-Vaibhav/AlgoXplore/assets/135622906/a6751999-dc95-4a13-a15d-7df65430b067)
