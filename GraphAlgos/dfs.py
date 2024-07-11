@@ -4,7 +4,6 @@ import argparse
 import tkinter as tk
 from tkinter import messagebox
 
-
 def show_error(message):
     root = tk.Tk()
     root.withdraw()  # Hide the root window
@@ -17,15 +16,20 @@ def create_custom_graph(edges):
         G.add_edge(edge[0], edge[1])
     return G
 
-def dfs(graph, node, visited, stop_animation):
+def dfs(graph, node, visited, depth, stop_animation):
     visited.add(node)
-    yield visited, node  # Yield visited set and current node
+    yield visited, node, depth, ""  # Yield visited set, current node, current depth, and status (empty for normal traversal)
     
     for neighbor in graph.neighbors(node):
         if stop_animation[0]:
             return
         if neighbor not in visited:
-            yield from dfs(graph, neighbor, visited, stop_animation)  # Recursive call with updated visited set
+            yield from dfs(graph, neighbor, visited, depth + 1, stop_animation)  # Recursive call with increased depth
+            if stop_animation[0]:
+                return
+            if len(visited) == len(graph.nodes):
+                return  # Stop further backtracking if all nodes are visited
+            yield visited, node, depth, "backtracking"  # Yield backtracking status
 
 def visualize_dfs(graph):
     pos = nx.spring_layout(graph)
@@ -38,17 +42,24 @@ def visualize_dfs(graph):
     fig.canvas.mpl_connect('close_event', on_close)
 
     visited = set()
+    current_depth = 0
+
     for node in graph.nodes():
         if node not in visited:
-            for visited_nodes, current_node in dfs(graph, node, visited, stop_animation):
+            for visited_nodes, current_node, depth, status in dfs(graph, node, visited, 0, stop_animation):
                 if stop_animation[0]:
                     break
 
                 ax.clear()
+                if status == "backtracking":
+                    node_colors = ['magenta' if n == current_node else ('yellow' if n in visited_nodes else 'skyblue') for n in graph.nodes()]
+                else:
+                    node_colors = ['yellow' if n in visited_nodes else 'skyblue' for n in graph.nodes()]
+                
                 nx.draw(
                     graph, pos, 
                     with_labels=True, 
-                    node_color=['yellow' if n in visited_nodes else 'skyblue' for n in graph.nodes()],
+                    node_color=node_colors,
                     node_size=500,  
                     font_size=10,  
                     font_color='black',  
@@ -59,11 +70,39 @@ def visualize_dfs(graph):
                 )
                 
                 plt.draw()
-                plt.title("DFS Algorithm Visualization")
+                current_depth = depth
+                if status == "backtracking":
+                    plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {current_depth} - Backtracking", weight='bold')
+                else:
+                    plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {current_depth}", weight='bold')
                 plt.pause(1.7)
 
-            if stop_animation[0]:
+                if len(visited_nodes) == len(graph.nodes):
+                    break
+
+            if stop_animation[0] or len(visited_nodes) == len(graph.nodes):
                 break
+
+    # After all nodes are visited
+    ax.clear()
+    node_colors = ['red' for _ in graph.nodes()]
+    nx.draw(
+        graph, pos, 
+        with_labels=True, 
+        node_color=node_colors,
+        node_size=500,  
+        font_size=10,  
+        font_color='black',  
+        edge_color='maroon',  
+        linewidths=1,  
+        width=2,
+        ax=ax
+    )
+    plt.title("DFS Algorithm Visualization - All Nodes Visited", weight='bold')
+    plt.draw()
+    plt.pause(3)  # Show the final state for a moment before closing
+
+    plt.show()
 
 def main():
     parser = argparse.ArgumentParser(description="DFS Visualization")

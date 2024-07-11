@@ -11,17 +11,23 @@ def create_random_graph(v, m):
 def bfs(graph, start):
     visited = set()
     q = Queue()
-    q.put(start)
+    q.put((start, 0))  # Queue will store nodes along with their level
     visited.add(start)
+    levels = {start: 0}
     
+    for node in graph.nodes():
+        if node != start:
+            levels[node] = -1  # Initialize all nodes with level -1
+
     while not q.empty():
-        node = q.get()
-        yield visited, list(q.queue)
+        node, level = q.get()
+        yield visited, list(q.queue), levels, node, level  # Yield current state along with node and level
         
         for neighbor in graph.neighbors(node):
             if neighbor not in visited:
-                q.put(neighbor)
+                q.put((neighbor, level + 1))
                 visited.add(neighbor)
+                levels[neighbor] = level + 1
 
 def visualize_bfs(graph, start):
     pos = nx.spring_layout(graph)
@@ -34,29 +40,52 @@ def visualize_bfs(graph, start):
 
     fig.canvas.mpl_connect('close_event', on_close)
     
-    for visited, _ in bfs(graph, start):
+    level_colors = ['blue', 'cyan', 'orange', 'magenta', 'purple']  # Different colors for different levels
+    
+    for visited, _, levels, current_node, current_level in bfs(graph, start):
         if stop_animation:
             break
 
         ax.clear()
+        node_colors = [level_colors[levels[node] % len(level_colors)] if node == current_node else 'yellow' for node in graph.nodes()]
+        
         nx.draw(
             graph, pos,
             with_labels=True,
-            node_color=['red' if n in visited else 'purple' for n in graph.nodes()],
+            node_color=node_colors,
             node_size=500,
             font_size=10,
-            font_color='white',
+            font_color='black',
             edge_color='cyan',
             linewidths=1,
             width=2,
             ax=ax
         )
+        
+        nodes_at_current_level = [node for node, lvl in levels.items() if lvl == current_level]
+        plt.title(f"BFS Algorithm Visualization - Level {current_level}\nCurrent Node: {current_node}\nNodes at this level: {nodes_at_current_level}")
         plt.draw()
-        plt.title("BFS Algorithm Visualization")
         plt.pause(1.7)
     
+    plt.pause(1.7)
+    ax.clear()
+    node_colors = ['red' for _ in graph.nodes()]
+    nx.draw(
+        graph, pos, 
+        with_labels=True, 
+        node_color=node_colors,
+        node_size=500,  
+        font_size=10,  
+        font_color='black',  
+        edge_color='maroon',  
+        linewidths=1,  
+        width=2,
+        ax=ax
+    )
+    plt.title("BFS Algorithm Visualization - All Nodes Visited", weight='bold')
+    plt.pause(1.7)
     plt.show()
-
+    
 def show_error(message):
     root = tk.Tk()
     root.withdraw()  # Hide the root window
@@ -75,7 +104,7 @@ if args.vertices is not None and args.edges is not None:
     m = args.edges
 else:
     # Default values if arguments are not provided
-    v = 15
+    v = 10
     m = 2
 
 # Check for input errors

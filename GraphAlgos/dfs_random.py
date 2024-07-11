@@ -4,25 +4,25 @@ import argparse
 import tkinter as tk
 from tkinter import messagebox
 
-
 def show_error(message):
     root = tk.Tk()
     root.withdraw()  # Hide the root window
     messagebox.showerror("Input Error", message)
     root.destroy()
 
-def create_random_graph( v, m):
- 
+def create_random_graph(v, m):
     return nx.barabasi_albert_graph(v, m)
-    
 
-def dfs(graph, node, visited):
+def dfs(graph, node, visited, depth):
     visited.add(node)
-    yield visited, node  # Yield visited set and current node
+    yield visited, node, depth, ""  # Yield visited set, current node, current depth, and status (empty for normal traversal)
     
     for i in graph.neighbors(node):
         if i not in visited:
-            yield from dfs(graph, i, visited)  # Recursive call with updated visited set
+            yield from dfs(graph, i, visited, depth + 1)  # Recursive call with increased depth
+            if len(visited) == len(graph.nodes):
+                return
+            yield visited, node, depth, "backtracking"  # Yield backtracking status
 
 def visualize_dfs(graph, start):
     pos = nx.spring_layout(graph)
@@ -36,15 +36,20 @@ def visualize_dfs(graph, start):
     fig.canvas.mpl_connect('close_event', on_close)
 
     visited = set()
-    for visited_nodes, current_node in dfs(graph, start, visited):
+    for visited_nodes, current_node, depth, status in dfs(graph, start, visited, 0):
         if stop_animation:
             break
 
         ax.clear()
+        if status == "backtracking":
+            node_colors = ['magenta' if n == current_node else ('yellow' if n in visited_nodes else 'skyblue') for n in graph.nodes()]
+        else:
+            node_colors = ['yellow' if n in visited_nodes else 'skyblue' for n in graph.nodes()]
+        
         nx.draw(
             graph, pos, 
             with_labels=True, 
-            node_color=['yellow' if n in visited_nodes else 'skyblue' for n in graph.nodes()],
+            node_color=node_colors,
             node_size=500,  
             font_size=10,  
             font_color='black',  
@@ -55,25 +60,44 @@ def visualize_dfs(graph, start):
         )
         
         plt.draw()
-        plt.title("DFS Algorithm Visualization")
+        if status == "backtracking":
+            plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {depth} - Backtracking", weight='bold')
+        else:
+            plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {depth}", weight='bold')
         plt.pause(1.7)
 
+    # After all nodes are visited
+    ax.clear()
+    node_colors = ['red' for _ in graph.nodes()]
+    nx.draw(
+        graph, pos, 
+        with_labels=True, 
+        node_color=node_colors,
+        node_size=500,  
+        font_size=10,  
+        font_color='black',  
+        edge_color='maroon',  
+        linewidths=1,  
+        width=2,
+        ax=ax
+    )
+    plt.title("DFS Algorithm Visualization - All Nodes Visited", weight='bold')
     plt.show()
-# Parameters for random graph
+    
 
-parser = argparse.ArgumentParser(description="BFS")
+# Parameters for random graph
+parser = argparse.ArgumentParser(description="DFS")
 parser.add_argument('--vertices', type=int, help='Number of vertices in the graph')
 parser.add_argument('--edges', type=int, help='Number of edges to attach from a new node to existing nodes (m)')
 args = parser.parse_args()
 
-    # Check if arguments are provided
+# Check if arguments are provided
 if args.vertices is not None and args.edges is not None:
     v = args.vertices
     m = args.edges
-
 else:
- v = 12
- m= 2  # Change parameters as needed
+    v = 4
+    m = 2  # Default parameters if not provided
 
 if v <= 0:
     show_error("The number of vertices must be a positive integer.")
@@ -84,7 +108,4 @@ else:
     G = create_random_graph(v, m)
 
     # Visualize DFS on random graph
-    try:
-        visualize_dfs(G, 0)
-    except ValueError as e:
-        show_error(str(e))
+    visualize_dfs(G, 0)
