@@ -44,7 +44,7 @@ def dijkstra(G, num_nodes, start_node, end_node):
                     if i == search:
                         visited[my_dict[i]] = 1
                         ans.append((my_dict[i], search))
-                        yield node_colors, i, edge_colors, ans
+                        yield node_colors, i, edge_colors, ans, dist[end_node]
                         search = my_dict[i]
             
         for neighbor in G.neighbors(node):
@@ -58,13 +58,13 @@ def dijkstra(G, num_nodes, start_node, end_node):
                 my_dict[neighbor] = node
                 node_colors[node_list.index(neighbor)] = 'yellow'
                 q.add((dist[neighbor], neighbor))
-                yield node_colors, neighbor, edge_colors, ans
+                yield node_colors, neighbor, edge_colors, ans, dist[end_node]
 
     for i in range(len(visited)):
         if visited[i] == 1:
             node_colors[node_list.index(i)] = 'red'
             
-    yield node_colors, i, edge_colors, ans
+    yield node_colors, i, edge_colors, ans, dist[end_node]
 
 # Function to visualize Dijkstra's algorithm
 def visualize_dijkstra(graph, s, e):
@@ -78,7 +78,8 @@ def visualize_dijkstra(graph, s, e):
 
     fig.canvas.mpl_connect('close_event', on_close)
 
-    for node_colors, current_node, edge_colors, path_edges in dijkstra(graph, len(graph.nodes()), s, e):
+    initial = True
+    for node_colors, current_node, edge_colors, path_edges, path_cost in dijkstra(graph, len(graph.nodes()), s, e):
         if stop_animation:
             break
 
@@ -106,9 +107,34 @@ def visualize_dijkstra(graph, s, e):
             font_size=10,
             font_color='blue'
         )
-        plt.title(f"Dijkstra's Algorithm Visualization\nFrom Node {s} to Node {e}", fontsize=18)
+   
+        plt.title(f"Dijkstra's Algorithm Visualization - Node {s} to Node {e}\n\n Exploring Nodes", fontsize=13)
+
         plt.draw()
         plt.pause(0.8)  # Pause to visually show the traversal process
+
+    if path_edges:
+        ax.clear()
+        nx.draw(
+            graph, pos,
+            with_labels=True,
+            node_color=node_colors,
+            node_size=400,
+            font_size=12,
+            font_color='black',
+            edge_color=[edge_colors[edge] for edge in graph.edges()],
+            width=2  # Edge width
+        )
+        edge_labels = {(u, v): f"{d['weight']}" for u, v, d in graph.edges(data=True)}
+        nx.draw_networkx_edge_labels(
+            graph, pos,
+            edge_labels=edge_labels,
+            font_size=10,
+            font_color='blue'
+        )
+        plt.title(f"Dijkstra's Algorithm Visualization\nPath Cost: {path_cost}\nNodes in Path: {[s] + [edge[1] for edge in path_edges]}", fontsize=13)
+        plt.draw()
+        plt.pause(2.5)  # Pause to show the final result
 
     plt.show()
 
@@ -134,10 +160,10 @@ if args.vertices is not None and args.edges is not None and args.start is not No
     s = args.start
     e = args.end
 else:
-    v = 9
+    v = 14
     m = 2
-    s = 0
-    e = 8
+    s = 13
+    e = 12
 
 # Check for input errors
 if v <= 0:
