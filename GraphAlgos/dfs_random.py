@@ -61,27 +61,30 @@ def visualize_dfs(graph, start):
         
         plt.draw()
         if status == "backtracking":
-            plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {depth} - Backtracking", weight='bold')
+            plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {depth} - Backtracking", fontsize=14.2, weight='bold')
         else:
-            plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {depth}", weight='bold')
+            plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {depth}", fontsize=14.2, weight='bold')
         plt.pause(1.7)
 
-    # After all nodes are visited
-    ax.clear()
-    node_colors = ['red' for _ in graph.nodes()]
-    nx.draw(
-        graph, pos, 
-        with_labels=True, 
-        node_color=node_colors,
-        node_size=500,  
-        font_size=10,  
-        font_color='black',  
-        edge_color='maroon',  
-        linewidths=1,  
-        width=2,
-        ax=ax
-    )
-    plt.title("DFS Algorithm Visualization - All Nodes Visited", weight='bold')
+    if not stop_animation:
+        plt.pause(1.7)
+        ax.clear()
+        node_colors = ['red' for _ in graph.nodes()]
+        nx.draw(
+            graph, pos, 
+            with_labels=True, 
+            node_color=node_colors,
+            node_size=500,  
+            font_size=10,  
+            font_color='black',  
+            edge_color='maroon',  
+            linewidths=1,  
+            width=2,
+            ax=ax
+        )
+        plt.title("DFS Algorithm Visualization - All Nodes Visited",fontsize=14.2, weight='bold')
+        plt.pause(1.7)
+    
     plt.show()
     
 
@@ -96,7 +99,7 @@ if args.vertices is not None and args.edges is not None:
     v = args.vertices
     m = args.edges
 else:
-    v = 4
+    v = 8
     m = 2  # Default parameters if not provided
 
 if v <= 0:

@@ -63,27 +63,29 @@ def visualize_bfs(graph, start):
         )
         
         nodes_at_current_level = [node for node, lvl in levels.items() if lvl == current_level]
-        plt.title(f"BFS Algorithm Visualization - Level {current_level}\nCurrent Node: {current_node}\nNodes at this level: {nodes_at_current_level}")
+        plt.title(f"BFS Algorithm Visualization - Level {current_level}\n\nCurrent Node: {current_node}\nNodes at this level: {nodes_at_current_level}")
         plt.draw()
         plt.pause(1.7)
     
-    plt.pause(1.7)
-    ax.clear()
-    node_colors = ['red' for _ in graph.nodes()]
-    nx.draw(
-        graph, pos, 
-        with_labels=True, 
-        node_color=node_colors,
-        node_size=500,  
-        font_size=10,  
-        font_color='black',  
-        edge_color='maroon',  
-        linewidths=1,  
-        width=2,
-        ax=ax
-    )
-    plt.title("BFS Algorithm Visualization - All Nodes Visited", weight='bold')
-    plt.pause(1.7)
+    if not stop_animation:
+        plt.pause(1.7)
+        ax.clear()
+        node_colors = ['red' for _ in graph.nodes()]
+        nx.draw(
+            graph, pos, 
+            with_labels=True, 
+            node_color=node_colors,
+            node_size=500,  
+            font_size=10,  
+            font_color='black',  
+            edge_color='maroon',  
+            linewidths=1,  
+            width=2,
+            ax=ax
+        )
+        plt.title("BFS Algorithm Visualization - All Nodes Visited", weight='bold')
+        plt.pause(1.7)
+    
     plt.show()
     
 def show_error(message):

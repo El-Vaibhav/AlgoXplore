@@ -77,31 +77,30 @@ def visualize_dfs(graph):
                     plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {current_depth}", weight='bold')
                 plt.pause(1.7)
 
-                if len(visited_nodes) == len(graph.nodes):
-                    break
-
-            if stop_animation[0] or len(visited_nodes) == len(graph.nodes):
+            # Check if all nodes are visited
+            if len(visited_nodes) == len(graph.nodes()):
                 break
 
     # After all nodes are visited
-    ax.clear()
-    node_colors = ['red' for _ in graph.nodes()]
-    nx.draw(
-        graph, pos, 
-        with_labels=True, 
-        node_color=node_colors,
-        node_size=500,  
-        font_size=10,  
-        font_color='black',  
-        edge_color='maroon',  
-        linewidths=1,  
-        width=2,
-        ax=ax
-    )
-    plt.title("DFS Algorithm Visualization - All Nodes Visited", weight='bold')
-    plt.draw()
-    plt.pause(3)  # Show the final state for a moment before closing
-
+    if not stop_animation[0]:
+        ax.clear()
+        node_colors = ['red' for _ in graph.nodes()]
+        nx.draw(
+            graph, pos, 
+            with_labels=True, 
+            node_color=node_colors,
+            node_size=500,  
+            font_size=10,  
+            font_color='black',  
+            edge_color='maroon',  
+            linewidths=1,  
+            width=2,
+            ax=ax
+        )
+        plt.title("DFS Algorithm Visualization - All Nodes Visited", fontsize=14.2, weight='bold')
+        plt.draw()  # Make sure the final plot is drawn
+        plt.pause(1.7)
+    
     plt.show()
 
 def main():

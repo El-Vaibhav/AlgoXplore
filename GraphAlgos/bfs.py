@@ -68,22 +68,25 @@ def visualize_bfs(graph, start):
         plt.draw()
         plt.pause(1.7)
 
-    ax.clear()
-    node_colors = ['red' for _ in graph.nodes()]
-    nx.draw(
-        graph, pos, 
-        with_labels=True, 
-        node_color=node_colors,
-        node_size=500,  
-        font_size=10,  
-        font_color='black',  
-        edge_color='maroon',  
-        linewidths=1,  
-        width=2,
-        ax=ax
-    )
-    plt.title("BFS Algorithm Visualization - All Nodes Visited", weight='bold')
-    plt.pause(1.7)
+    if not stop_animation:
+        plt.pause(1.7)
+        ax.clear()
+        node_colors = ['red' for _ in graph.nodes()]
+        nx.draw(
+            graph, pos, 
+            with_labels=True, 
+            node_color=node_colors,
+            node_size=500,  
+            font_size=10,  
+            font_color='black',  
+            edge_color='maroon',  
+            linewidths=1,  
+            width=2,
+            ax=ax
+        )
+        plt.title("BFS Algorithm Visualization - All Nodes Visited", weight='bold')
+        plt.pause(1.7)
+    
     plt.show()
 
     
