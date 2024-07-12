@@ -30,8 +30,8 @@ def kahns_topological_sort(graph):
         node = q.get()
         traversal.append(node)
         visited.add(node)
-        node_colors[node_list.index(node)] = 'yellow'
-        yield node_colors, node  # Yield current node colors and node
+        # node_colors[node_list.index(node)] = 'yellow'
+        # # yield node_colors, node  # Yield current node colors and node
         
         for neighbor in graph.neighbors(node):
             in_deg[neighbor] -= 1
@@ -40,8 +40,8 @@ def kahns_topological_sort(graph):
 
     # Coloring nodes according to traversal order
     for i in traversal:
-        node_colors[node_list.index(i)] = 'cyan'
-        yield node_colors, i
+        node_colors[node_list.index(i)] = 'yellow'
+        yield node_colors, i,traversal
 
 # Function to visualize topological sort
 def visualize_toposort(graph):
@@ -55,7 +55,7 @@ def visualize_toposort(graph):
 
     fig.canvas.mpl_connect('close_event', on_close)
     
-    for node_colors, current_node in kahns_topological_sort(graph):
+    for node_colors, current_node,traversal in kahns_topological_sort(graph):
         if stop_animation:
             break
 
@@ -79,6 +79,10 @@ def visualize_toposort(graph):
         fontweight='bold')
         plt.draw()
         plt.pause(1.5)  # Pause to visually show the traversal process
+
+        plt.title(f"Kahn's Algorithm Visualization\n\nTopo Sort Order: {traversal}",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
     
     plt.show()
 

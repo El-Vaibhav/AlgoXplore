@@ -63,6 +63,8 @@ def kosaraju(G, V):
             count += 1
             k += 1
 
+    yield count  # Yield the count of connected components at the end
+
 def visualize_kosaraju(graph, V):
     pos = nx.circular_layout(graph)  # Default layout to circular
     fig, ax = plt.subplots(figsize=(8, 8))
@@ -74,9 +76,16 @@ def visualize_kosaraju(graph, V):
 
     fig.canvas.mpl_connect('close_event', on_close)
 
-    for node_colors in kosaraju(graph, V):
+    generator = kosaraju(graph, V)
+    total_components = None
+
+    for node_colors in generator:
         if stop_animation:
             break
+
+        if isinstance(node_colors, int):
+            total_components = node_colors
+            continue
 
         ax.clear()
         nx.draw(
@@ -92,6 +101,12 @@ def visualize_kosaraju(graph, V):
             width=2
         )
         plt.title("Kosaraju's Algorithm Visualization",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
+        plt.pause(1.5)
+
+    if total_components is not None:
+        plt.title(f"Kosaraju's Algorithm Visualization\nTotal Number of Connected Components: {total_components}",fontsize=16,
         fontname='Times New Roman',
         fontweight='bold')
         plt.pause(1.5)
@@ -113,9 +128,8 @@ args = parser.parse_args()
 if args.edges is not None:
     edges = eval(args.edges)  # Convert string input to a Python list of tuples
     v = 0
-    for i, j in edges:
-        v = max(v, i)
-        v = max(v, j)
+    for u, v in edges:
+        v = max(v, u, v)
 
     if not isinstance(edges, list):
         show_error("Edges must be provided as a list of tuples.")

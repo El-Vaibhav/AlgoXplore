@@ -44,14 +44,15 @@ def kosaraju(G):
     for i, j in G.edges():
         rev_adj[j].append(i)
     l = []
-
+    
     def dfs(node, l):
+
         visited[node] = 1
         l.append(node)
         for i in rev_adj[node]:
             if not visited[i]:
                 dfs(i, l)
-
+                
     count = 0
     colors = ['#%06x' % random.randint(0, 0xFFFFFF) for _ in range(len(G))]
 
@@ -67,6 +68,8 @@ def kosaraju(G):
             count += 1
             k += 1
 
+    yield count  # Yield the count of connected components at the end
+
 def visualize_kosaraju(graph):
     pos = nx.spring_layout(graph)
     fig, ax = plt.subplots(figsize=(8, 8))
@@ -78,9 +81,14 @@ def visualize_kosaraju(graph):
 
     fig.canvas.mpl_connect('close_event', on_close)
 
-    for node_colors in kosaraju(graph):
+    generator = kosaraju(graph)
+    for node_colors in generator:
         if stop_animation:
             break
+
+        if isinstance(node_colors, int):
+            total_components = node_colors
+            continue
 
         ax.clear()
         nx.draw(
@@ -99,6 +107,11 @@ def visualize_kosaraju(graph):
         fontname='Times New Roman',
         fontweight='bold')
         plt.pause(1.5)
+    
+    plt.title(f"Kosaraju's Algorithm Visualization\n\nTotal Number of Connected Components: {total_components}",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
+    plt.pause(1.5)
 
     plt.show()
 
@@ -119,7 +132,7 @@ if args.vertices is not None and args.edges is not None:
     v = args.vertices
     m = args.edges
 else:
-    v = 11  # Default number of nodes
+    v = 13  # Default number of nodes
     m = 2  # Default number of edges per node
 
 # Check for input errors
