@@ -107,7 +107,7 @@ def visualize_dijkstra(graph, s, e):
             font_color='blue'
         )
 
-        plt.title(f"Dijkstra's Algorithm Visualization\n Node {s} to Node {e}\nExploring Nodes", fontsize=13)
+        plt.title(f"Dijkstra's Algorithm Visualization - Node {s} to Node {e}\nExploring Nodes", fontsize=13)
 
         plt.draw()
         plt.pause(0.8)  # Pause to visually show the traversal process
