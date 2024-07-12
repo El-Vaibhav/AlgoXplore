@@ -152,10 +152,7 @@ def visualize_kruskals(graph):
         font_color='blue'
     )
 
-    # Annotate the total weight of the MST
-    plt.annotate(f"MST Total Weight: {mst_weight}", xy=(0.5, 0.95), xycoords='axes fraction', fontsize=12, ha='center', va='top')
-
-    plt.title("Kruskal's Algorithm")
+    plt.title(f"Kruskal's Algorithm - MST Total Weight: {mst_weight}" )
     plt.show()
 
 
