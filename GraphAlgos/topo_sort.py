@@ -74,7 +74,9 @@ def visualize_toposort(graph):
             arrowsize=10,  # Arrow size
             width=2  # Edge width
         )
-        plt.title(f"Kahn's Algorithm Visualization\nCurrent Node: {current_node}", fontsize=20)
+        plt.title(f"Kahn's Algorithm Visualization\nCurrent Node: {current_node}",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
         plt.draw()
         plt.pause(1.5)  # Pause to visually show the traversal process
     

@@ -63,7 +63,9 @@ def visualize_bfs(graph, start):
         )
         
         nodes_at_current_level = [node for node, lvl in levels.items() if lvl == current_level]
-        plt.title(f"BFS Algorithm Visualization - Level {current_level}\n\nCurrent Node: {current_node}\nNodes at this level: {nodes_at_current_level}")
+        plt.title(f"BFS Algorithm Visualization - Level {current_level}\n\nCurrent Node: {current_node}\nNodes at this level: {nodes_at_current_level}" ,fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
         plt.draw()
         plt.pause(1.7)
     
@@ -83,7 +85,9 @@ def visualize_bfs(graph, start):
             width=2,
             ax=ax
         )
-        plt.title("BFS Algorithm Visualization - All Nodes Visited", weight='bold')
+        plt.title("BFS Algorithm Visualization - All Nodes Visited", fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
         plt.pause(1.7)
     
     plt.show()

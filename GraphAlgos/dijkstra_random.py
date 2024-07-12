@@ -108,7 +108,11 @@ def visualize_dijkstra(graph, s, e):
             font_color='blue'
         )
    
-        plt.title(f"Dijkstra's Algorithm Visualization - Node {s} to Node {e}\n\n Exploring Nodes", fontsize=13)
+        plt.title(
+            f"Dijkstra's Algorithm Visualization - Node {s} to Node {e}\n\n 'Exploring Nodes'", 
+            fontsize=15,
+            fontname='Times New Roman',
+            fontweight='bold')
 
         plt.draw()
         plt.pause(0.8)  # Pause to visually show the traversal process
@@ -132,7 +136,13 @@ def visualize_dijkstra(graph, s, e):
             font_size=10,
             font_color='blue'
         )
-        plt.title(f"Dijkstra's Algorithm Visualization\nPath Cost: {path_cost}\nNodes in Path: {[s] + [edge[1] for edge in path_edges]}", fontsize=13)
+        plt.title(
+        f"Dijkstra's Algorithm Visualization\n\nPath Cost: {path_cost}\nNodes in Path: {[s] + [edge[1] for edge in path_edges]}",
+        fontsize=15,
+        fontname='Times New Roman',
+        fontweight='bold'
+        )
+
         plt.draw()
         plt.pause(2.5)  # Pause to show the final result
 

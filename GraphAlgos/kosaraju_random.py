@@ -95,7 +95,9 @@ def visualize_kosaraju(graph):
             arrowsize=20,  # Arrow size
             width=2
         )
-        plt.title("Kosaraju's Algorithm Visualization")
+        plt.title("Kosaraju's Algorithm Visualization",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
         plt.pause(1.5)
 
     plt.show()

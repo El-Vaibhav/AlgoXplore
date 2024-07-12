@@ -87,7 +87,9 @@ def visualize_prims(graph, adj, v, edges):
             font_color='blue'
         )
 
-        plt.title("Prim's Algorithm Visualization")
+        plt.title("Prim's Algorithm Visualization",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
         plt.draw()
         plt.pause(1.5)
 
@@ -116,7 +118,9 @@ def visualize_prims(graph, adj, v, edges):
         font_size=12,
         font_color='blue'
     )
-    plt.title(f"Prim's Algorithm - MST Total Weight: {total_weight}")
+    plt.title(f"Prim's Algorithm - MST Total Weight: {total_weight}",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
     
     plt.show()
 

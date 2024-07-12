@@ -72,9 +72,13 @@ def visualize_dfs(graph):
                 plt.draw()
                 current_depth = depth
                 if status == "backtracking":
-                    plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {current_depth} - Backtracking", weight='bold')
+                    plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {current_depth} - Backtracking", fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
                 else:
-                    plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {current_depth}", weight='bold')
+                    plt.title(f"DFS Algorithm Visualization\n\nCurrent Node: {current_node}         Current Depth: {current_depth}", fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
                 plt.pause(1.7)
 
             # Check if all nodes are visited
@@ -97,7 +101,9 @@ def visualize_dfs(graph):
             width=2,
             ax=ax
         )
-        plt.title("DFS Algorithm Visualization - All Nodes Visited", fontsize=14.2, weight='bold')
+        plt.title("DFS Algorithm Visualization - All Nodes Visited", fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
         plt.draw()  # Make sure the final plot is drawn
         plt.pause(1.7)
     

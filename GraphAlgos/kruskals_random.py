@@ -121,7 +121,9 @@ def visualize_kruskals(graph):
             font_size=9,
             font_color='blue'
         )
-        plt.title("Kruskal's Algorithm Visualization")
+        plt.title("Kruskal's Algorithm Visualization",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
 
         plt.draw()
         plt.pause(1.5)
@@ -152,7 +154,9 @@ def visualize_kruskals(graph):
         font_color='blue'
     )
 
-    plt.title(f"Kruskal's Algorithm - MST Total Weight: {mst_weight}" )
+    plt.title(f"Kruskal's Algorithm - MST Total Weight: {mst_weight}",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
     plt.show()
 
 
