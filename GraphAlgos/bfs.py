@@ -41,19 +41,26 @@ def visualize_bfs(graph, start):
 
     fig.canvas.mpl_connect('close_event', on_close)
     
-    level_colors = ['blue', 'cyan', 'orange', 'magenta', 'purple']  # Different colors for different levels
-    
-    for visited, _, levels, current_node, current_level in bfs(graph, start):
+    level_colors = ['blue', 'cyan', 'orange', 'magenta', 'purple',"red"]  # Different colors for different levels
+    node_colors = {node: 'yellow' for node in graph.nodes()}
+    current_level = -1
+
+    for visited, queue, levels, current_node, level in bfs(graph, start):
         if stop_animation:
             break
 
-        ax.clear()
-        node_colors = [level_colors[levels[node] % len(level_colors)] if node == current_node else 'yellow' for node in graph.nodes()]
-        
+        if level != current_level:
+            current_level = level
+            for node, lvl in levels.items():
+                if lvl >= 0:
+                    node_colors[node] = level_colors[lvl % len(level_colors)]
+
+        # Temporarily color the current node as magenta
+        colors = [node_colors[node] if node != current_node else 'magenta' for node in graph.nodes()]
         nx.draw(
             graph, pos,
             with_labels=True,
-            node_color=node_colors,
+            node_color=colors,
             node_size=500,
             font_size=10,
             font_color='black',
@@ -62,22 +69,39 @@ def visualize_bfs(graph, start):
             width=2,
             ax=ax
         )
-        
-        nodes_at_current_level = [node for node, lvl in levels.items() if lvl == current_level]
-        plt.title(f"BFS Algorithm Visualization - Level {current_level}\nCurrent Node: {current_node}\nNodes at this level: {nodes_at_current_level}" , fontsize=15,
-        fontname='Times New Roman',
-        fontweight='bold')
-        plt.draw()
-        plt.pause(1.7)
 
+        nodes_at_current_level = [node for node, lvl in levels.items() if lvl == current_level]
+        ax.set_title(f"BFS Algorithm Visualization - Level {current_level}\n\nCurrent Node: {current_node}\nNodes at this level: {nodes_at_current_level}", fontsize=16,
+                     fontname='Times New Roman', fontweight='bold')
+        plt.draw()
+        plt.pause(1.0)  # Short pause to highlight the current node
+
+        # Restore the current node to its original color
+        colors = [node_colors[node] for node in graph.nodes()]
+        nx.draw(
+            graph, pos,
+            with_labels=True,
+            node_color=colors,
+            node_size=500,
+            font_size=10,
+            font_color='black',
+            edge_color='cyan',
+            linewidths=1,
+            width=2,
+            ax=ax
+        )
+        ax.set_title(f"BFS Algorithm Visualization - Level {current_level}\n\nCurrent Node: {current_node}\nNodes at this level: {nodes_at_current_level}", fontsize=16,
+                     fontname='Times New Roman', fontweight='bold')
+        plt.draw()
+        plt.pause(0.7)  # Continue with the normal pause duration
+    
     if not stop_animation:
         plt.pause(1.7)
-        ax.clear()
-        node_colors = ['red' for _ in graph.nodes()]
+        colors = [node_colors[node] for node in graph.nodes()]
         nx.draw(
             graph, pos, 
             with_labels=True, 
-            node_color=node_colors,
+            node_color=colors,
             node_size=500,  
             font_size=10,  
             font_color='black',  
@@ -86,12 +110,12 @@ def visualize_bfs(graph, start):
             width=2,
             ax=ax
         )
-        plt.title("BFS Algorithm Visualization - All Nodes Visited", fontsize=15,
-        fontname='Times New Roman',
-        fontweight='bold')
+        ax.set_title("BFS Algorithm Visualization - All Nodes Visited", fontsize=16,
+                     fontname='Times New Roman', fontweight='bold')
         plt.pause(1.7)
     
     plt.show()
+    
 
     
 def main():
