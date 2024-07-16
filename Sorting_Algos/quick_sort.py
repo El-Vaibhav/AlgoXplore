@@ -52,8 +52,8 @@ def show_error(message):
     root.destroy()
 
 parser = argparse.ArgumentParser(description="Visualize Bubble Sort Algorithm")
-parser.add_argument('--size', type=int, help='Size of the array to generate')
-parser.add_argument('--range', type=int, help='Range of values for the random array')
+parser.add_argument('--size', type=int, default=200, help='Size of the array to generate')
+parser.add_argument('--range', type=int, default=100, help='Range of values for the random array')
 args = parser.parse_args()
 
 
