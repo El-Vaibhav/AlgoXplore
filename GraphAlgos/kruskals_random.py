@@ -88,9 +88,10 @@ def visualize_kruskals(graph):
         stop_animation = True
 
     fig.canvas.mpl_connect('close_event', on_close)
-
+    check=1
     for node_colors, current_node, edge_colors, path_edge, total_weight in kruskals(graph):
         if stop_animation:
+            check=0
             break
 
         ax.clear()
@@ -134,8 +135,9 @@ def visualize_kruskals(graph):
     graph.remove_edges_from(edges_to_remove)
 
     # Final visualization without the non-MST edges
-    ax.clear()
-    nx.draw(
+    if check:
+     ax.clear()
+     nx.draw(
         graph, pos,
         with_labels=True,
         node_color='red',
@@ -145,19 +147,19 @@ def visualize_kruskals(graph):
         edge_color='red',
         linewidths=1,
         width=2
-    )
-    edge_labels = {(u, v): f"{graph[u][v]['weight']}" for u, v in graph.edges()}
-    nx.draw_networkx_edge_labels(
+     )
+     edge_labels = {(u, v): f"{graph[u][v]['weight']}" for u, v in graph.edges()}
+     nx.draw_networkx_edge_labels(
         graph, pos,
         edge_labels=edge_labels,
         font_size=9,
         font_color='blue'
-    )
+     )
 
-    plt.title(f"Kruskal's Algorithm - MST Total Weight: {mst_weight}",fontsize=16,
+     plt.title(f"Kruskal's Algorithm - MST Total Weight: {mst_weight}",fontsize=16,
         fontname='Times New Roman',
         fontweight='bold')
-    plt.show()
+     plt.show()
 
 
 # Number of nodes in the random graph

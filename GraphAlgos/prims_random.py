@@ -57,9 +57,12 @@ def visualize_prims(graph, adj, v):
         stop_animation = True
 
     fig.canvas.mpl_connect('close_event', on_close)
-
+    
+    check=1
     for node_colors, current_node, edge_color, path_edge, ans in prims(graph, adj, v):
+        
         if stop_animation:
+            check = 0
             break
 
         ax.clear()
@@ -103,8 +106,10 @@ def visualize_prims(graph, adj, v):
     graph.remove_edges_from(edges_to_remove)
 
     # Final visualization without the non-MST edges
-    ax.clear()
-    nx.draw(
+
+    if check:
+     ax.clear()
+     nx.draw(
         graph, pos,
         with_labels=True,
         node_color='red',
@@ -114,19 +119,20 @@ def visualize_prims(graph, adj, v):
         edge_color='red',
         linewidths=1,
         width=2
-    )
-    edge_labels = {(u, v): f"{d['weight']}" for u, v, d in graph.edges(data=True)}
-    nx.draw_networkx_edge_labels(
+     )
+     edge_labels = {(u, v): f"{d['weight']}" for u, v, d in graph.edges(data=True)}
+     nx.draw_networkx_edge_labels(
         graph, pos,
         edge_labels=edge_labels,
         font_size=12,
         font_color='blue'
-    )
-    plt.title(f"Prim's Algorithm - MST Total Weight: {total_weight}",fontsize=16,
+     )
+
+     plt.title(f"Prim's Algorithm - MST Total Weight: {total_weight}",fontsize=16,
         fontname='Times New Roman',
         fontweight='bold')
     
-    plt.show()
+     plt.show()
 
 def show_error(message):
     root = tk.Tk()
