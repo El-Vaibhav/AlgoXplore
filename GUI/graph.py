@@ -164,10 +164,10 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
     submit_button.pack(pady=20)
 
     # Display algorithm explanation
-    display_algorithm_explanation(algorithm_name)
+    display_algorithm_explanation(algorithm_name,dialog)
 
 # Function to display algorithm explanation
-def display_algorithm_explanation(algorithm_name):
+def display_algorithm_explanation(algorithm_name,dialog):
     # Mapping from algorithm name to explanation
     explanations = {
         "DFS": "Depth First Search (DFS) is a graph traversal algorithm that starts at the root node and explores as far as possible along each branch before backtracking.",
@@ -189,6 +189,19 @@ def display_algorithm_explanation(algorithm_name):
     font_style=("Helvetica", 15,"bold")
     explanation_label = tk.Label(explanation_dialog, text=explanation, font=font_style, fg="white", bg="red", wraplength=400, justify=tk.LEFT)
     explanation_label.pack(padx=20, pady=20)
+
+    def close_dialogs():
+        explanation_dialog.destroy()
+        dialog.destroy()
+
+    # Bind closing of dialogs to the close button
+    close_button = tk.Button(explanation_dialog, text="Close", command=close_dialogs, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    close_button.pack(pady=20)
+
+    # Bind the window close event (the "X" button) to close both dialogs
+    explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+    dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+
 
 # Create the root window
 root = tk.Tk()
