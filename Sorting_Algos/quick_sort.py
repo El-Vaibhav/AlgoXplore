@@ -6,43 +6,63 @@ import sys
 import tkinter as tk
 from tkinter import messagebox
 
-
-# devide and conquer algo
+# Quick Sort Algorithm
 # Choose a Pivot:
 # Select an element from the array to act as a pivot.
 # Partitioning:
-# Rearrange the array such that all elements less than the pivot come before it, and all elements greater than the pivot come after it. The pivot is now in its correct position in the sorted array.
-# recursively this is done for all left and right subarrays wrt to that pivot element
-# in quick sort all work is done in devide step
+# Rearrange the array such that all elements less than the pivot come before it,
+# and all elements greater than the pivot come after it. The pivot is now in its
+# correct position in the sorted array.
+# Recursively apply Quick Sort to the left and right subarrays around the pivot.
 
-# tc : bc = ac = o(nlogn) partitioning in n/2 and n/2 (balanced partition)
-#      wc = o(n^2) partitioning in n-1 and 1 ( unbalanced partition)
+# Time Complexity:
+#   - Best Case (Balanced Partition): O(n log n)
+#   - Average Case: O(n log n)
+#   - Worst Case (Unbalanced Partition): O(n^2)
 
+# Function to partition the array
+def partition(l, low, high, color_data):
+    pivot = l[high]
+    color_data[high] = 'red'  # Mark pivot as red
+    i = low - 1
 
-def partition(l, low, high):
-    pivot = l[low]
-    i = low + 1
-    j = high
+    yield l.copy(), color_data.copy()  # Show initial pivot selection
 
-    while True:
-        while i <= j and l[i] <= pivot:
+    for j in range(low, high):
+        color_data[j] = 'yellow'  # Mark elements being compared
+        yield l.copy(), color_data.copy()
+
+        if l[j] < pivot:
             i += 1
-        while i <= j and l[j] > pivot:
-            j -= 1
-        if i <= j:
             l[i], l[j] = l[j], l[i]
-        else:
-            break
+            color_data[i] = 'cyan'  # Elements that are moved correctly
+            yield l.copy(), color_data.copy()
 
-    l[low], l[j] = l[j], l[low]
-    return j
+        color_data[j] = 'blue'  # Reset color after comparison
 
-def quicksort(l, low, high):
+    l[i + 1], l[high] = l[high], l[i + 1]
+    color_data[i + 1] = 'green'  # Mark pivot's final position as green
+    yield l.copy(), color_data.copy()
+
+    # Reset pivot color if it's not at the final position
+    for k in range(low, high + 1):
+        if color_data[k] != 'green':
+            color_data[k] = 'blue'
+
+    return i + 1
+
+# Quick Sort recursive function
+def quicksort(l, low, high, color_data):
     if low < high:
-        pi = partition(l, low, high)
-        yield l.copy()  # Yield a copy of the list after each partition
-        yield from quicksort(l, low, pi - 1)
-        yield from quicksort(l, pi + 1, high)
+        pi = yield from partition(l, low, high, color_data)
+        yield from quicksort(l, low, pi - 1, color_data)
+        yield from quicksort(l, pi + 1, high, color_data)
+
+    # Mark entire array as sorted (green) after sorting is complete
+    if low == 0 and high == len(l) - 1:
+        for i in range(len(l)):
+            color_data[i] = 'green'
+            yield l.copy(), color_data.copy()
 
 # Function to display an error message using tkinter
 def show_error(message):
@@ -51,40 +71,55 @@ def show_error(message):
     messagebox.showerror("Input Error", message)
     root.destroy()
 
-parser = argparse.ArgumentParser(description="Visualize Bubble Sort Algorithm")
-parser.add_argument('--size', type=int, default=200, help='Size of the array to generate')
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description="Visualize Quick Sort Algorithm")
+parser.add_argument('--size', type=int, default=20, help='Size of the array to generate')
 parser.add_argument('--range', type=int, default=100, help='Range of values for the random array')
 args = parser.parse_args()
 
-
-if args.size is not None and args.range is not None:
-    if args.size <= 0:
-        show_error("The size of the array must be a positive integer.")
-        sys.exit(1)  # Exit the script
-    elif args.range <= 0:
-        show_error("The range of values must be a positive integer.")
-        sys.exit(1)  # Exit the script
-    else:
-        data = [random.randint(1, args.range) for _ in range(args.size)]
-else:
-    show_error("Both --size and --range arguments must be provided.")
+# Validate and process arguments
+if args.size <= 0:
+    show_error("The size of the array must be a positive integer.")
     sys.exit(1)  # Exit the script
+elif args.range <= 0:
+    show_error("The range of values must be a positive integer.")
+    sys.exit(1)  # Exit the script
+else:
+    data = [random.randint(1, args.range) for _ in range(args.size)]
 
-def update_plot(frame, bars):
-    data = frame
-    for bar, val in zip(bars, data):          
-        bar.set_height(val)
+# Initialize color data for the bars
+color_data = ['blue'] * len(data)
 
-
+# Initialize the plot
 fig, ax = plt.subplots()
-ax.set_title('Quick Sort')
+ax.set_title('Quick Sort Visualization')
 ax.set_xlabel('Index')
 ax.set_ylabel('Value')
 ax.set_ylim(0, max(data) + 10)
-bars = ax.bar(range(len(data)), data, align='edge')
+bars = ax.bar(range(len(data)), data, align='edge', color=color_data)
+
+# Define color legend annotations
+legend_handles = [
+    plt.Rectangle((1, 1), 0, 1, color='yellow', label='Comparing'),
+    plt.Rectangle((0, 0), 1, 1, color='red', label='Pivot'),
+    plt.Rectangle((0, 0), 1, 1, color='cyan', label='Correct Partition'),
+    plt.Rectangle((0, 0), 1, 1, color='green', label='Sorted'),
+    plt.Rectangle((0, 0), 1, 1, color='blue', label='Unsorted')
+]
+
+# Add legend to the plot
+ax.legend(handles=legend_handles, loc='upper left')
+
+# Function to update the plot with each frame
+def update_plot(frame, bars):
+    data, color_data = frame
+    for bar, val, color in zip(bars, data, color_data):
+        bar.set_height(val)
+        bar.set_color(color)
 
 # Generate frames for animation
-frames = quicksort(data, 0, len(data) - 1)
+frames = quicksort(data, 0, len(data) - 1, color_data)
 
-ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=10)
+# Create animation
+ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=300)
 plt.show()

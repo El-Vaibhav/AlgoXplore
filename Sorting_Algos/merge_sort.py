@@ -10,9 +10,10 @@ from tkinter import messagebox
 # Divide: Split the array into two halves.
 # Conquer: Recursively sort each half.
 # Combine: Merge the two sorted halves to produce a single sorted array.
-# recursively devide the array into subarrays until a single element is left in each subarray
-# sort these subarrays from bottom to top and keep on comibining the sorted subarrays to reach towards the root of the final sorted array
-# tc : bc , wc , ac : O(nlogn)
+# Recursively divide the array into subarrays until a single element is left in each subarray
+# Sort these subarrays from bottom to top and keep on combining the sorted subarrays to reach toward the root of the final sorted array
+# Time Complexity: O(n log n) for the best, average, and worst case
+
 def merge(l, low, mid, high, color_data):
     i = low
     j = mid + 1
@@ -20,7 +21,7 @@ def merge(l, low, mid, high, color_data):
     temp = [0] * len(l)
 
     while i <= mid and j <= high:
-        color_data[i], color_data[j] = 'yellow', 'yellow'  # Mark elements being compared
+        color_data[i], color_data[j] = 'purple', 'purple'  # Mark elements being compared
         yield l.copy(), color_data.copy()
         if l[i] <= l[j]:
             temp[k] = l[i]
@@ -76,7 +77,7 @@ def show_error(message):
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Visualize Merge Sort Algorithm")
-parser.add_argument('--size', type=int, default=70, help='Size of the array to generate')
+parser.add_argument('--size', type=int, default=20, help='Size of the array to generate')
 parser.add_argument('--range', type=int, default=100, help='Range of values for the random array')
 args = parser.parse_args()
 
@@ -99,11 +100,22 @@ ax.set_title('Merge Sort Visualization')
 ax.set_xlabel('Index')
 ax.set_ylabel('Value')
 ax.set_ylim(0, max(data) + 10)
-bars = ax.bar(range(len(data)), data, align='edge', color='blue')
+bars = ax.bar(range(len(data)), data, align='edge', color='blue', width=0.6)
+
+# Define color legend annotations
+legend_handles = [
+    plt.Rectangle((0, 0), 1, 1, color='purple', label='Comparing'),
+    plt.Rectangle((0, 0), 1, 1, color='red', label='Merging'),
+    plt.Rectangle((0, 0), 1, 1, color='green', label='Sorted'),
+    plt.Rectangle((0, 0), 1, 1, color='blue', label='Unsorted')
+]
+
+# Add legend to the plot
+ax.legend(handles=legend_handles, loc='upper left')
 
 # Generate frames for animation
 frames = merge_sort(data, 0, len(data) - 1, color_data)
 
 # Create animation
-ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=0)
+ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=400)
 plt.show()

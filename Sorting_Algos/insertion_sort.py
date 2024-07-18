@@ -6,7 +6,6 @@ import sys
 import tkinter as tk
 from tkinter import messagebox
 
-# Insertion sort algorithm with color updates
 # Insertion sort is a simple and intuitive sorting algorithm. It builds the final sorted array one element at a time. Here’s a step-by-step explanation of how it works:
 # Start with the Second Element:
 # The first element of the array is considered sorted. The sorting process begins with the second element.
@@ -15,10 +14,10 @@ from tkinter import messagebox
 # This involves comparing the element to the elements in the sorted portion and shifting elements to the right to make room for the inserted element.
 # Repeat the process for each subsequent element until the entire array is sorted.
 
-# we one by one make the sorted array from left , start from 2nd element insert it to its sorted pos in left , then go to 3 rd element insert it in its sorted position in left ( with 1st and 2nd element) and go on doing this ....
+# Time complexity: 
+# Best case: O(n) - the array is already sorted.
+# Worst case and average case: O(n^2) - the array is sorted in reverse order.
 
-# tc: bc : O(n) , array is sorted
-#     wc , ac : O(n^2) wc when array is sorted in reverse order
 def insertion_sort(data, color_data):
     for i in range(1, len(data)):
         key = data[i]
@@ -33,7 +32,7 @@ def insertion_sort(data, color_data):
         color_data[j + 1] = 'green'  # Mark as sorted
         yield data.copy(), color_data.copy()
     for i in range(len(data)):
-        color_data[i] = 'brown'  # Ensure all elements are green at the end
+        color_data[i] = 'brown'  # Ensure all elements are brown at the end
         yield data.copy(), color_data.copy()
 
 # Function to display an error message using tkinter
@@ -43,6 +42,7 @@ def show_error(message):
     messagebox.showerror("Input Error", message)
     root.destroy()
 
+# Function to update the plot
 def update_plot(frame, bars):
     data, color_data = frame
     for bar, val, color in zip(bars, data, color_data):
@@ -51,7 +51,7 @@ def update_plot(frame, bars):
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Visualize Insertion Sort Algorithm")
-parser.add_argument('--size', type=int, default=200, help='Size of the array to generate')
+parser.add_argument('--size', type=int, default=15, help='Size of the array to generate')
 parser.add_argument('--range', type=int, default=100, help='Range of values for the random array')
 args = parser.parse_args()
 
@@ -68,15 +68,23 @@ else:
 color_data = ['blue'] * len(data)
 
 fig, ax = plt.subplots()
-ax.set_title('Insertion Sort')
-ax.set_xlabel('Index')
-ax.set_ylabel('Value')
 ax.set_ylim(0, max(data) + 10)
-bar_width = 0.6
-bars = ax.bar(range(len(data)), data, align='edge', color='blue' , width = bar_width)
+ax.set_title("Insertion Sort Visualization")
+bars = ax.bar(range(len(data)), data, align='edge', color='blue', width=0.6)
+
+# Define color legend annotations using handles
+legend_handles = [
+    plt.Rectangle((0, 0), 1, 1, color='red', label='Comparing'),
+    plt.Rectangle((0, 0), 1, 1, color='green', label='Inserted'),
+    plt.Rectangle((0, 0), 1, 1, color='blue', label='Unsorted'),
+    plt.Rectangle((0, 0), 1, 1, color='brown', label='Sorted')
+]
+
+# Add legend to the plot
+ax.legend(handles=legend_handles, loc='upper left')
 
 # Generate frames for animation
 frames = insertion_sort(data, color_data)
 
-ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=30)
+ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=300)
 plt.show()

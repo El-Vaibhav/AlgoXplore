@@ -11,12 +11,13 @@ def bubble_sort(data, color_data):
     n = len(data)
     for i in range(n):
         for j in range(n - 1 - i):
-            color_data[j] = 'yellow'  # Mark the elements being compared
+            color_data[j] = 'purple'  # Mark the elements being compared
+            yield data.copy(), color_data.copy()
             if data[j] > data[j + 1]:
                 data[j], data[j + 1] = data[j + 1], data[j]
-                color_data[j], color_data[j + 1] = 'red', 'red'
+                color_data[j], color_data[j + 1] = 'red', 'red'  # Mark swapped elements
                 yield data.copy(), color_data.copy()
-            color_data[j], color_data[j + 1] = 'blue', 'blue'
+            color_data[j], color_data[j + 1] = 'blue', 'blue'  # Reset to default color
         color_data[n - 1 - i] = 'green'  # Mark the last sorted element
         yield data.copy(), color_data.copy()  # Yield to update the visualization
     for k in range(n):
@@ -32,7 +33,7 @@ def show_error(message):
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Visualize Bubble Sort Algorithm")
-parser.add_argument('--size', type=int, default=30, help='Size of the array to generate')
+parser.add_argument('--size', type=int, default=10, help='Size of the array to generate')
 parser.add_argument('--range', type=int, default=100, help='Range of values for the random array')
 args = parser.parse_args()
 
@@ -58,15 +59,24 @@ def update_plot(frame, bars):
 
 # Initialize the plot
 fig, ax = plt.subplots()
-ax.set_title('Bubble Sort Visualization')
-ax.set_xlabel('Index')
-ax.set_ylabel('Value')
 ax.set_ylim(0, max(data) + 10)
+ax.set_title("Bubble Sort Visualization")
 bars = ax.bar(range(len(data)), data, align='edge', color='blue')
+
+# Define color legend annotations using handles
+legend_handles = [
+    plt.Rectangle((0, 0), 1, 1, color='purple', label='Comparing'),
+    plt.Rectangle((0, 0), 1, 1, color='red', label='Swapped'),
+    plt.Rectangle((0, 0), 1, 1, color='blue', label='Unsorted'),
+    plt.Rectangle((0, 0), 1, 1, color='green', label='Sorted')
+]
+
+# Add legend to the plot
+ax.legend(handles=legend_handles, loc='upper left')
 
 # Generate frames for animation
 frames = bubble_sort(data, color_data)
 
 # Create animation
-ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=0)
+ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=900)
 plt.show()
