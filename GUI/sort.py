@@ -18,11 +18,15 @@ def open_input_dialog(file_path, algorithm_name):
         try:
             size = int(size_entry.get())
             value_range = int(range_entry.get())
-            dialog.destroy()
+            close_dialogs()
             execute_sorting_algorithm(file_path, size=size, value_range=value_range)
         except ValueError:
             messagebox.showerror("Invalid input", "Please enter valid numbers for size and range.")
     
+    def close_dialogs():
+        dialog.destroy()
+        explanation_dialog.destroy()
+
     dialog = tk.Toplevel(root)
     dialog.title("Input Options")
     dialog.geometry("440x440+400+100")  # Set position to open the dialog on the right side
@@ -34,7 +38,7 @@ def open_input_dialog(file_path, algorithm_name):
 
     tk.Label(dialog, text="Enter size and range for the random array:", fg="Yellow", bg="brown", font=font_style).pack(anchor=tk.W, padx=20, pady=50)
     
-    tk.Label(dialog, text="Size:", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
+    tk.Label(dialog, text="Size (Upto 30):", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
     size_entry = tk.Entry(dialog, width=30, bg="white", font=font_style)
     size_entry.pack(anchor=tk.W, padx=20, pady=15)
     
@@ -46,7 +50,11 @@ def open_input_dialog(file_path, algorithm_name):
     submit_button.pack(pady=20)
 
     # Display algorithm explanation
-    display_algorithm_explanation(algorithm_name)
+    explanation_dialog = display_algorithm_explanation(algorithm_name)
+
+    # Bind close events to close both dialogs
+    dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+    explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
 
 # Function to display algorithm explanation
 def display_algorithm_explanation(algorithm_name):
@@ -65,9 +73,11 @@ def display_algorithm_explanation(algorithm_name):
     explanation_dialog.geometry("440x440+850+100")  # Set position to open the dialog on the far right side
     explanation_dialog.configure(bg="red")  # Set the background color to black
     explanation_dialog.resizable(False, False)  # Disable maximizing
-    font_style=("Helvetica", 15,"bold")
+    font_style = ("Helvetica", 15, "bold")
     explanation_label = tk.Label(explanation_dialog, text=explanation, font=font_style, fg="white", bg="red", wraplength=400, justify=tk.LEFT)
     explanation_label.pack(padx=20, pady=20)
+
+    return explanation_dialog
 
 # Create the root window
 root = tk.Tk()
