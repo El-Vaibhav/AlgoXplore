@@ -78,9 +78,10 @@ def visualize_kosaraju(graph, V):
 
     generator = kosaraju(graph, V)
     total_components = None
-
+    check=1
     for node_colors in generator:
         if stop_animation:
+            check=0
             break
 
         if isinstance(node_colors, int):
@@ -105,7 +106,7 @@ def visualize_kosaraju(graph, V):
         fontweight='bold')
         plt.pause(1.5)
 
-    if total_components is not None:
+    if total_components is not None and check:
         plt.title(f"Kosaraju's Algorithm Visualization\nTotal Number of Connected Components: {total_components}",fontsize=16,
         fontname='Times New Roman',
         fontweight='bold')

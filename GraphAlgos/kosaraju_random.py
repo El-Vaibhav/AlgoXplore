@@ -82,8 +82,10 @@ def visualize_kosaraju(graph):
     fig.canvas.mpl_connect('close_event', on_close)
 
     generator = kosaraju(graph)
+    check=1
     for node_colors in generator:
         if stop_animation:
+            check=0
             break
 
         if isinstance(node_colors, int):
@@ -108,12 +110,13 @@ def visualize_kosaraju(graph):
         fontweight='bold')
         plt.pause(1.5)
     
-    plt.title(f"Kosaraju's Algorithm Visualization\n\nTotal Number of Connected Components: {total_components}",fontsize=16,
+    if check:
+     plt.title(f"Kosaraju's Algorithm Visualization\n\nTotal Number of Connected Components: {total_components}",fontsize=16,
         fontname='Times New Roman',
         fontweight='bold')
-    plt.pause(1.5)
+     plt.pause(1.5)
 
-    plt.show()
+     plt.show()
 
 def show_error(message):
     root = tk.Tk()

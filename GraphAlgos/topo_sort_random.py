@@ -61,8 +61,11 @@ def visualize_toposort(graph):
 
     fig.canvas.mpl_connect('close_event', on_close)
     
+    check=1
     for node_colors, current_node ,traversal in kahns_topological_sort(graph):
+
         if stop_animation:
+            check=0
             break
 
         ax.clear()
@@ -86,6 +89,7 @@ def visualize_toposort(graph):
         plt.draw()
         plt.pause(1.5)  # Pause to visually show the traversal process
         
+    if check:
         plt.title(f"Kahn's Algorithm Visualization\n\nTopo Sort Order: {traversal}",fontsize=16,
         fontname='Times New Roman',
         fontweight='bold')

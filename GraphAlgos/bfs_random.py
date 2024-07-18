@@ -40,12 +40,14 @@ def visualize_bfs(graph, start):
 
     fig.canvas.mpl_connect('close_event', on_close)
     
-    level_colors = ['blue', 'cyan', 'orange', 'magenta', 'purple',"red"]  # Different colors for different levels
+    level_colors = ['blue', 'brown', 'orange', 'magenta', 'purple',"red"]  # Different colors for different levels
     node_colors = {node: 'yellow' for node in graph.nodes()}
     current_level = -1
-
+     
+    check = 1
     for visited, queue, levels, current_node, level in bfs(graph, start):
         if stop_animation:
+            check=0
             break
 
         if level != current_level:
@@ -94,7 +96,7 @@ def visualize_bfs(graph, start):
         plt.draw()
         plt.pause(0.7)  # Continue with the normal pause duration
     
-    if not stop_animation:
+    if check:
         plt.pause(1.7)
         colors = [node_colors[node] for node in graph.nodes()]
         nx.draw(

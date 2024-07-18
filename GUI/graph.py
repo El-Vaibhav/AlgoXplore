@@ -47,7 +47,7 @@ def open_initial_dialog(script_path, algorithm_name):
 # Function to open the input dialog
 def open_input_dialog(script_path, algorithm_name, custom_graph=False):
     def submit():
-        nonlocal vertices_entry, edges_entry, start_entry, end_entry
+        nonlocal vertices_entry, edges_entry, start_entry, end_entry, explanation_dialog
         try:
             if not custom_graph:
                 vertices = int(vertices_entry.get())
@@ -70,6 +70,8 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
                 execute_graph_algorithm(custom_script_path, edges,start,end)
             else:
                 execute_graph_algorithm(script_path, edges, start, end,vertices)
+
+            explanation_dialog.destroy()
 
         except ValueError:
             messagebox.showerror("Invalid input", "Please enter valid numbers for vertices, edges, start, and end nodes.")
@@ -164,7 +166,8 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
     submit_button.pack(pady=20)
 
     # Display algorithm explanation
-    display_algorithm_explanation(algorithm_name,dialog)
+    
+    explanation_dialog =  display_algorithm_explanation(algorithm_name,dialog)
 
 # Function to display algorithm explanation
 def display_algorithm_explanation(algorithm_name,dialog):
@@ -201,6 +204,8 @@ def display_algorithm_explanation(algorithm_name,dialog):
     # Bind the window close event (the "X" button) to close both dialogs
     explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
     dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+
+    return explanation_dialog
 
 
 # Create the root window
