@@ -75,7 +75,7 @@ bars = ax.bar(range(len(data)), data, align='edge', color='blue', width=0.6)
 # Define color legend annotations using handles
 legend_handles = [
     plt.Rectangle((0, 0), 1, 1, color='red', label='Comparing with sorted array'),
-    plt.Rectangle((0, 0), 1, 1, color='green', label='Inserted'),
+    plt.Rectangle((0, 0), 1, 1, color='green', label='Inserted at correct position'),
     plt.Rectangle((0, 0), 1, 1, color='blue', label='Unsorted'),
     plt.Rectangle((0, 0), 1, 1, color='brown', label='Sorted')
 ]

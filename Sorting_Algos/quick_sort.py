@@ -102,7 +102,7 @@ bars = ax.bar(range(len(data)), data, align='edge', color=color_data)
 legend_handles = [
     plt.Rectangle((1, 1), 0, 1, color='yellow', label='Comparing with pivot'),
     plt.Rectangle((0, 0), 1, 1, color='red', label='Pivot'),
-    plt.Rectangle((0, 0), 1, 1, color='cyan', label='Correct Partition'),
+    plt.Rectangle((0, 0), 1, 1, color='cyan', label='Correct Partition relative to pivot'),
     plt.Rectangle((0, 0), 1, 1, color='green', label='Sorted'),
     plt.Rectangle((0, 0), 1, 1, color='blue', label='Unsorted')
 ]
