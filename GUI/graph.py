@@ -64,6 +64,8 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
 
             dialog.destroy()
 
+            explanation_dialog.destroy()
+
             if custom_graph:
                 custom_script_name = f"{algorithm_name.lower().replace(' ', '_')}.py"
                 custom_script_path = os.path.join("C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos", custom_script_name)
@@ -71,7 +73,7 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
             else:
                 execute_graph_algorithm(script_path, edges, start, end,vertices)
 
-            explanation_dialog.destroy()
+            
 
         except ValueError:
             messagebox.showerror("Invalid input", "Please enter valid numbers for vertices, edges, start, and end nodes.")
