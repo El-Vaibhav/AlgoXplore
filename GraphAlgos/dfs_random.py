@@ -58,6 +58,9 @@ def visualize_dfs(graph, start):
             width=2,
             ax=ax
         )
+
+        legend_entries = [plt.Rectangle((0, 0), 1, 1, color= 'yellow', label='Current Node') , plt.Rectangle((0, 0), 1, 1, color= 'magenta', label='Backtracking')]
+        ax.legend(handles=legend_entries, loc='upper right', fontsize=12)
         
         plt.draw()
         if status == "backtracking":
@@ -69,6 +72,7 @@ def visualize_dfs(graph, start):
         fontname='Times New Roman',
         fontweight='bold')
         plt.pause(1.7)
+
 
     if not stop_animation:
         plt.pause(1.7)

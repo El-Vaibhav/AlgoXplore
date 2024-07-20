@@ -64,7 +64,7 @@ def kosaraju(G):
             dfs(i, l)
             for m in l:
                 node_colors[node_list.index(m)] = colors[k]
-                yield node_colors
+                yield node_colors 
             count += 1
             k += 1
 
@@ -82,6 +82,7 @@ def visualize_kosaraju(graph):
     fig.canvas.mpl_connect('close_event', on_close)
 
     generator = kosaraju(graph)
+    unique_colors = {}
     check=1
     for node_colors in generator:
         if stop_animation:
@@ -93,6 +94,14 @@ def visualize_kosaraju(graph):
             continue
 
         ax.clear()
+        for color in node_colors:
+            if color !="skyblue" and color not in unique_colors:
+                unique_colors[color] = f'Component {len(unique_colors) + 1}'
+
+        legend_entries = [plt.Rectangle((0, 0), 1, 1, color = color, label=label)
+                          for color, label in unique_colors.items()]
+        ax.legend(handles=legend_entries, loc='upper left', fontsize=11)
+
         nx.draw(
             graph, pos,
             with_labels=True,

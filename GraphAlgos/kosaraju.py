@@ -78,6 +78,7 @@ def visualize_kosaraju(graph, V):
 
     generator = kosaraju(graph, V)
     total_components = None
+    unique_colors = {}
     check=1
     for node_colors in generator:
         if stop_animation:
@@ -89,6 +90,13 @@ def visualize_kosaraju(graph, V):
             continue
 
         ax.clear()
+        for color in node_colors:
+            if color !="skyblue" and color not in unique_colors:
+                unique_colors[color] = f'Component {len(unique_colors) + 1}'
+
+        legend_entries = [plt.Rectangle((0, 0), 1, 1, color = color, label=label)
+                          for color, label in unique_colors.items()]
+        ax.legend(handles=legend_entries, loc='upper left', fontsize=11)
         nx.draw(
             graph, pos,
             with_labels=True,

@@ -62,6 +62,10 @@ def visualize_toposort(graph):
 
         ax.clear()
 
+        legend_entries = [plt.Rectangle((0, 0), 1, 1, color= 'Yellow', label='Current Node')]
+        ax.legend(handles=legend_entries, loc='upper left', fontsize=12)
+
+
         nx.draw(
             graph, pos,
             with_labels=True,

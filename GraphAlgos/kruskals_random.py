@@ -96,6 +96,9 @@ def visualize_kruskals(graph):
 
         ax.clear()
 
+        legend_entries = [plt.Rectangle((0, 0), 1, 1, color= 'red', label='Edges in MST')]
+        ax.legend(handles=legend_entries, loc='upper left', fontsize=12)
+        
         if path_edge:
             mst_edges = path_edge  # Update mst_edges to include the latest MST edges
             mst_weight = total_weight  # Update mst_weight with the latest total weight

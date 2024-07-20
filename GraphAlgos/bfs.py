@@ -2,6 +2,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import argparse
 from queue import Queue
+import tkinter as tk
+from tkinter import messagebox
 
 def create_graph(edges):
     G = nx.Graph()
@@ -41,21 +43,27 @@ def visualize_bfs(graph, start):
 
     fig.canvas.mpl_connect('close_event', on_close)
     
-    level_colors = ['blue', 'brown', 'orange', 'magenta', 'purple',"red"]  # Different colors for different levels
+    level_colors = ['blue', 'brown', 'orange', 'magenta', 'purple', 'red']  # Different colors for different levels
     node_colors = {node: 'yellow' for node in graph.nodes()}
     current_level = -1
     
+    unique_levels = set()  # To track unique levels encountered
     check = 1
     for visited, queue, levels, current_node, level in bfs(graph, start):
         if stop_animation:
-            check=0
+            check = 0
             break
+
+        unique_levels.add(level)  # Add current level to unique levels
 
         if level != current_level:
             current_level = level
             for node, lvl in levels.items():
                 if lvl >= 0:
                     node_colors[node] = level_colors[lvl % len(level_colors)]
+
+        legend_handles = [plt.Rectangle((1, 1), 1, 1, color='magenta', label='Current node')] 
+        ax.legend(handles=legend_handles, loc='upper left',fontsize=12)
 
         # Temporarily color the current node as magenta
         colors = [node_colors[node] if node != current_node else 'magenta' for node in graph.nodes()]
@@ -75,6 +83,13 @@ def visualize_bfs(graph, start):
         nodes_at_current_level = [node for node, lvl in levels.items() if lvl == current_level]
         ax.set_title(f"BFS Algorithm Visualization - Level {current_level}\n\nCurrent Node: {current_node}\nNodes at this level: {nodes_at_current_level}", fontsize=16,
                      fontname='Times New Roman', fontweight='bold')
+        
+        legend_entries = [plt.Rectangle((0, 0), 1, 1, color='magenta', label='Current Node')]
+        for lvl in sorted(unique_levels):
+            legend_entries.append(plt.Rectangle((0, 0), 1, 1, color=level_colors[lvl % len(level_colors)], label=f'Level {lvl}'))
+
+        ax.legend(handles=legend_entries, loc='upper left', fontsize=12)
+        
         plt.draw()
         plt.pause(1.0)  # Short pause to highlight the current node
 
@@ -115,11 +130,22 @@ def visualize_bfs(graph, start):
         ax.set_title("BFS Algorithm Visualization - All Nodes Visited", fontsize=16,
                      fontname='Times New Roman', fontweight='bold')
         plt.pause(1.7)
+
+    # Create legend entries
+    legend_entries = []
+    for lvl in sorted(unique_levels):
+        legend_entries.append(plt.Rectangle((0, 0), 1, 1, color=level_colors[lvl % len(level_colors)], label=f'Level {lvl}'))
+
+    plt.legend(handles=legend_entries, loc='upper left', fontsize=12)
     
     plt.show()
-    
 
-    
+def show_error(message):
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    messagebox.showerror("Input Error", message)
+    root.destroy()
+
 def main():
     parser = argparse.ArgumentParser(description="BFS Visualization")
     parser.add_argument('--edges', type=str, required=True, help='List of edges in the format [(0, 1), (1, 2), ...]')
@@ -127,6 +153,8 @@ def main():
 
     try:
         edges = eval(args.edges)  # Convert string input to a Python list of tuples
+        if not isinstance(edges, list) or not all(isinstance(edge, tuple) and len(edge) == 2 for edge in edges):
+            raise ValueError("Edges must be a list of tuples with exactly two elements each.")
 
         # Create custom graph
         G = create_graph(edges)
@@ -135,7 +163,7 @@ def main():
         visualize_bfs(G, 0)  # Start BFS from node 0 (you can change as needed)
 
     except Exception as e:
-        print(f"Error processing input: {str(e)}")
+        show_error(f"Error processing input: {str(e)}")
 
 if __name__ == '__main__':
     main()

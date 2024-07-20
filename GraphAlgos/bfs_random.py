@@ -40,21 +40,27 @@ def visualize_bfs(graph, start):
 
     fig.canvas.mpl_connect('close_event', on_close)
     
-    level_colors = ['blue', 'brown', 'orange', 'magenta', 'purple',"red"]  # Different colors for different levels
+    level_colors = ['blue', 'brown', 'orange', 'green', 'purple', 'red',"yellow","grey"]  # Different colors for different levels
     node_colors = {node: 'yellow' for node in graph.nodes()}
     current_level = -1
      
     check = 1
+    unique_levels = set()  # To track unique levels encountered
     for visited, queue, levels, current_node, level in bfs(graph, start):
         if stop_animation:
-            check=0
+            check = 0
             break
+
+        unique_levels.add(level)  # Add current level to unique levels
 
         if level != current_level:
             current_level = level
             for node, lvl in levels.items():
                 if lvl >= 0:
                     node_colors[node] = level_colors[lvl % len(level_colors)]
+
+        legend_handles = [plt.Rectangle((1, 1), 1, 1, color='magenta', label='Current node')] 
+        ax.legend(handles=legend_handles, loc='upper left',fontsize=12)
 
         # Temporarily color the current node as magenta
         colors = [node_colors[node] if node != current_node else 'magenta' for node in graph.nodes()]
@@ -74,9 +80,16 @@ def visualize_bfs(graph, start):
         nodes_at_current_level = [node for node, lvl in levels.items() if lvl == current_level]
         ax.set_title(f"BFS Algorithm Visualization - Level {current_level}\n\nCurrent Node: {current_node}\nNodes at this level: {nodes_at_current_level}", fontsize=16,
                      fontname='Times New Roman', fontweight='bold')
+        
+        legend_entries = [plt.Rectangle((0, 0), 1, 1, color='magenta', label='Current Node')]
+        for lvl in sorted(unique_levels):
+            legend_entries.append(plt.Rectangle((0, 0), 1, 1, color=level_colors[lvl % len(level_colors)], label=f'Level {lvl}'))
+
+        ax.legend(handles=legend_entries, loc='upper left', fontsize=12)
+        
         plt.draw()
         plt.pause(1.0)  # Short pause to highlight the current node
-
+        
         # Restore the current node to its original color
         colors = [node_colors[node] for node in graph.nodes()]
         nx.draw(
@@ -114,6 +127,13 @@ def visualize_bfs(graph, start):
         ax.set_title("BFS Algorithm Visualization - All Nodes Visited", fontsize=16,
                      fontname='Times New Roman', fontweight='bold')
         plt.pause(1.7)
+
+    # Create legend entries
+    legend_entries = []
+    for lvl in sorted(unique_levels):
+        legend_entries.append(plt.Rectangle((0, 0), 1, 1, color=level_colors[lvl % len(level_colors)], label=f'Level {lvl}'))
+
+    plt.legend(handles=legend_entries, loc='upper left',fontsize=12)
     
     plt.show()
     
@@ -135,7 +155,7 @@ if args.vertices is not None and args.edges is not None:
     m = args.edges
 else:
     # Default values if arguments are not provided
-    v = 11
+    v = 18
     m = 2
 
 # Check for input errors
@@ -152,3 +172,6 @@ else:
         visualize_bfs(G, 0)
     except ValueError as e:
         show_error(str(e))
+
+# Keep the plot open until the user closes it
+plt.show()

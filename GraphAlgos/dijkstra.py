@@ -107,6 +107,9 @@ def visualize_dijkstra(graph, s, e):
             font_color='blue'
         )
 
+        legend_entries = [plt.Rectangle((0, 0), 1, 1, color= 'yellow', label='Current Node')]
+        ax.legend(handles=legend_entries, loc='upper left', fontsize=12)
+
         plt.title(f"Dijkstra's Algorithm Visualization - Node {s} to Node {e}\nExploring Nodes", fontsize=15,
         fontname='Times New Roman',
         fontweight='bold')
@@ -140,6 +143,8 @@ def visualize_dijkstra(graph, s, e):
         plt.title(f"Dijkstra's Algorithm Visualization\n\nPath Cost: {path_cost}\nNodes in Path: {path_nodes}", fontsize=15,
         fontname='Times New Roman',
         fontweight='bold')
+        legend_entries = [plt.Rectangle((0, 0), 1, 1, color= 'red', label='Nodes in shortest path')]
+        ax.legend(handles=legend_entries, loc='upper left', fontsize=12)
         plt.draw()
         plt.pause(2.5)  # Pause to show the final result
 

@@ -68,7 +68,8 @@ def visualize_dfs(graph):
                     width=2,
                     ax=ax
                 )
-                
+                legend_entries = [plt.Rectangle((0, 0), 1, 1, color= 'yellow', label='Current Node') , plt.Rectangle((0, 0), 1, 1, color= 'magenta', label='Backtracking')]
+                ax.legend(handles=legend_entries, loc='upper right', fontsize=12)
                 plt.draw()
                 current_depth = depth
                 if status == "backtracking":
