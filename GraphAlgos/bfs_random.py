@@ -127,14 +127,8 @@ def visualize_bfs(graph, start):
         ax.set_title("BFS Algorithm Visualization - All Nodes Visited", fontsize=16,
                      fontname='Times New Roman', fontweight='bold')
         plt.pause(1.7)
-
-        legend_entries = []
-        for lvl in sorted(unique_levels):
-            legend_entries.append(plt.Rectangle((0, 0), 1, 1, color=level_colors[lvl % len(level_colors)], label=f'Level {lvl}'))
-
-        plt.legend(handles=legend_entries, loc='upper right',fontsize=12,bbox_to_anchor=(1.05, 1))
     
-        plt.show()
+    plt.show()
     
 def show_error(message):
     root = tk.Tk()
