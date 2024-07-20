@@ -96,7 +96,7 @@ def visualize_kosaraju(graph, V):
 
         legend_entries = [plt.Rectangle((0, 0), 1, 1, color = color, label=label)
                           for color, label in unique_colors.items()]
-        ax.legend(handles=legend_entries, loc='upper left', fontsize=11)
+        ax.legend(handles=legend_entries, loc='upper right', fontsize=11,bbox_to_anchor=(1.05, 1))
         nx.draw(
             graph, pos,
             with_labels=True,

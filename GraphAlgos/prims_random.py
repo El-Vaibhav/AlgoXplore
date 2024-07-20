@@ -68,7 +68,7 @@ def visualize_prims(graph, adj, v):
         ax.clear()
 
         legend_entries = [plt.Rectangle((0, 0), 1, 1, color= 'red', label='Edges in MST')]
-        ax.legend(handles=legend_entries, loc='upper left', fontsize=12)
+        ax.legend(handles=legend_entries, loc='upper right', fontsize=12,bbox_to_anchor=(1.05, 1))
 
         if path_edge:
             mst_edges = path_edge  # Update mst_edges to include the latest MST edges

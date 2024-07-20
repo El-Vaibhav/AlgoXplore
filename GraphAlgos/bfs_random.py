@@ -85,7 +85,7 @@ def visualize_bfs(graph, start):
         for lvl in sorted(unique_levels):
             legend_entries.append(plt.Rectangle((0, 0), 1, 1, color=level_colors[lvl % len(level_colors)], label=f'Level {lvl}'))
 
-        ax.legend(handles=legend_entries, loc='upper left', fontsize=12)
+        ax.legend(handles=legend_entries, loc='upper right', fontsize=12, bbox_to_anchor=(1.05, 1))
         
         plt.draw()
         plt.pause(1.0)  # Short pause to highlight the current node
@@ -128,14 +128,13 @@ def visualize_bfs(graph, start):
                      fontname='Times New Roman', fontweight='bold')
         plt.pause(1.7)
 
-    # Create legend entries
-    legend_entries = []
-    for lvl in sorted(unique_levels):
-        legend_entries.append(plt.Rectangle((0, 0), 1, 1, color=level_colors[lvl % len(level_colors)], label=f'Level {lvl}'))
+        legend_entries = []
+        for lvl in sorted(unique_levels):
+            legend_entries.append(plt.Rectangle((0, 0), 1, 1, color=level_colors[lvl % len(level_colors)], label=f'Level {lvl}'))
 
-    plt.legend(handles=legend_entries, loc='upper left',fontsize=12)
+        plt.legend(handles=legend_entries, loc='upper right',fontsize=12,bbox_to_anchor=(1.05, 1))
     
-    plt.show()
+        plt.show()
     
 def show_error(message):
     root = tk.Tk()
@@ -155,7 +154,7 @@ if args.vertices is not None and args.edges is not None:
     m = args.edges
 else:
     # Default values if arguments are not provided
-    v = 18
+    v = 23
     m = 2
 
 # Check for input errors
