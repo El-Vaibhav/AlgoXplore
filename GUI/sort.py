@@ -35,10 +35,13 @@ def open_input_dialog(file_path, algorithm_name):
 
     # Configure the font
     font_style = ("Helvetica", 15, "bold")
+    font_style2 = ("Helvetica", 13, "bold")
 
-    tk.Label(dialog, text="Enter size and range for the random array:", fg="Yellow", bg="brown", font=font_style).pack(anchor=tk.W, padx=20, pady=50)
+    tk.Label(dialog, text="Enter size and range for the random array:", fg="Yellow", bg="brown", font=font_style).pack(anchor=tk.W, padx=20, pady=(40,0))
+    tk.Label(dialog, text="(enter upto 30 elements for better understanding)", fg="Yellow", bg="brown", font=font_style2).pack(anchor=tk.W, padx=(15,5) , pady=20)
+
     
-    tk.Label(dialog, text="Size (Upto 30):", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
+    tk.Label(dialog, text="Size:", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
     size_entry = tk.Entry(dialog, width=30, bg="white", font=font_style)
     size_entry.pack(anchor=tk.W, padx=20, pady=15)
     
