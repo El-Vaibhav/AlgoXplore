@@ -12,6 +12,10 @@ def button_click2():
 # Create the root window
 root = tk.Tk()
 root.configure(bg="black")
+root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
+
+# Optionally, add a bit of delay to ensure that screen information is fully updated
+root.update_idletasks()
 
 # Welcome label
 welcome_label = tk.Label(root, text="Welcome to AlgoXplore", font=("Tahoma", 18, "bold"), fg="white", bg="black")

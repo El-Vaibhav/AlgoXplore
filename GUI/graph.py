@@ -213,6 +213,10 @@ def display_algorithm_explanation(algorithm_name,dialog):
 # Create the root window
 root = tk.Tk()
 root.configure(bg="black")
+root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
+
+# Optionally, add a bit of delay to ensure that screen information is fully updated
+root.update_idletasks()
 
 # Load the image
 image_path = "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\img3.jpg"

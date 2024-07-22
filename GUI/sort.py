@@ -86,7 +86,10 @@ def display_algorithm_explanation(algorithm_name):
 root = tk.Tk()
 root.configure(bg="black")
 root.title("AlgoViz")
+root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
 
+# Optionally, add a bit of delay to ensure that screen information is fully updated
+root.update_idletasks()
 # Message label
 message_label = tk.Label(root, text="Choose any algorithm you want to visualize", font=("Tahoma", 18, "bold"), fg="white", bg="black")
 message_label.pack(side=tk.TOP, padx=10, pady=15)  # Positioned at the top with padding
