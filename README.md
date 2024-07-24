@@ -38,6 +38,7 @@ These algorithms given below are  visualized and interactively demonstrated thro
 
 ![image](https://github.com/El-Vaibhav/AlgoXplore/assets/135622906/f7b7534d-ff88-46e6-929d-b6a95bee847e)
 
+![Uploading image.png…]()
 
 ![Screenshot (54)](https://github.com/El-Vaibhav/AlgoXplore/assets/135622906/a6751999-dc95-4a13-a15d-7df65430b067)
 
