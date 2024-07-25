@@ -71,6 +71,9 @@ def visualize_prims(graph, adj, v, edges):
                     edge_color[(i, j)] = "red"
                 elif (j, i) in edge_color:
                     edge_color[(j, i)] = "red"
+                plt.title(f"Prim's Algorithm Visualization\n\nCurrent Edge: ({i}------{j})",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
 
         nx.draw(
             graph, pos,
@@ -91,10 +94,10 @@ def visualize_prims(graph, adj, v, edges):
             font_color='blue'
         )
 
-        plt.title("Prim's Algorithm Visualization",fontsize=16,
-        fontname='Times New Roman',
-        fontweight='bold')
-        plt.draw()
+        # plt.title("Prim's Algorithm Visualization",fontsize=16,
+        # fontname='Times New Roman',
+        # fontweight='bold')
+        # plt.draw()
         plt.pause(1.5)
 
     # Remove edges that are not in MST

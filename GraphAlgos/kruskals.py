@@ -84,6 +84,9 @@ def visualize_kruskals(graph):
             for u, v in path_edge:
                 edge_colors[(u, v)] = "red"
                 edge_colors[(v, u)] = "red"
+                plt.title(f"Kruskal's Algorithm Visualization\n\nCurrent Edge: ({u}------{v})",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
 
         nx.draw(
             graph, pos,
@@ -104,9 +107,9 @@ def visualize_kruskals(graph):
             font_size=12,
             font_color='blue'
         )
-        plt.title("Kruskal's Algorithm Visualization",fontsize=16,
-        fontname='Times New Roman',
-        fontweight='bold')
+        # plt.title("Kruskal's Algorithm Visualization",fontsize=16,
+        # fontname='Times New Roman',
+        # fontweight='bold')
 
         plt.draw()
         plt.pause(1.5)

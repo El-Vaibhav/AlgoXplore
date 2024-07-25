@@ -78,7 +78,10 @@ def visualize_prims(graph, adj, v):
                     edge_color[(i, j)] = "red"
                 elif (j, i) in edge_color:
                     edge_color[(j, i)] = "red"
-
+                plt.title(f"Prim's Algorithm Visualization\n\nCurrent Edge: ({i}------{j})",fontsize=16,
+        fontname='Times New Roman',
+        fontweight='bold')
+               
         nx.draw(
             graph, pos,
             with_labels=True,
@@ -97,9 +100,9 @@ def visualize_prims(graph, adj, v):
             font_size=12,
             font_color='blue'
         )   
-        plt.title("Prim's Algorithm Visualization",fontsize=16,
-        fontname='Times New Roman',
-        fontweight='bold')
+        # plt.title("Prim's Algorithm Visualization",fontsize=16,
+        # fontname='Times New Roman',
+        # fontweight='bold')
         plt.draw()
         plt.pause(1.5)
 
