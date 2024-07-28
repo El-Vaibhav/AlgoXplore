@@ -73,8 +73,6 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
             else:
                 execute_graph_algorithm(script_path, edges, start, end,vertices)
 
-            
-
         except ValueError:
             messagebox.showerror("Invalid input", "Please enter valid numbers for vertices, edges, start, and end nodes.")
         except Exception as e:

@@ -31,7 +31,7 @@ def bfs(graph, start):
 
 def visualize_bfs(graph, start):
     pos = nx.spring_layout(graph)
-    pos = nx.spring_layout(graph, k = 13.5, scale=5, iterations=100)
+    pos = nx.spring_layout(graph, k=13.5, scale=5, iterations=100)
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
 
@@ -61,7 +61,7 @@ def visualize_bfs(graph, start):
                     node_colors[node] = level_colors[lvl % len(level_colors)]
 
         legend_handles = [plt.Rectangle((1, 1), 1, 1, color='magenta', label='Current node')] 
-        ax.legend(handles=legend_handles, loc='upper left',fontsize=12)
+        ax.legend(handles=legend_handles, loc='upper left', fontsize=12)
 
         # Temporarily color the current node as magenta
         colors = [node_colors[node] if node != current_node else 'magenta' for node in graph.nodes()]
@@ -129,8 +129,6 @@ def visualize_bfs(graph, start):
                      fontname='Times New Roman', fontweight='bold')
         plt.pause(1.7)
     
-    plt.show()
-    
 def show_error(message):
     root = tk.Tk()
     root.withdraw()  # Hide the root window
@@ -166,6 +164,3 @@ else:
         visualize_bfs(G, 0)
     except ValueError as e:
         show_error(str(e))
-
-# Keep the plot open until the user closes it
-plt.show()

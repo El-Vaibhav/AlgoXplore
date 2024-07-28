@@ -60,9 +60,10 @@ def visualize_bellman(graph, v, start, end):
         stop_animation = True
 
     fig.canvas.mpl_connect('close_event', on_close)
-
+    check=1
     for iteration, (node_colors, edge_colors, path_edges) in enumerate(bellman_ford(graph, v, start, end)):
         if stop_animation:
+            check=0
             break
 
         ax.clear()
@@ -101,9 +102,9 @@ def visualize_bellman(graph, v, start, end):
         edge_colors[(u, v)] = 'red'
         edge_colors[(v, u)] = 'red'
     final_node_colors = ['red' if node in {start, end} else node_colors[node] for node in graph.nodes()]
-
-    ax.clear()
-    nx.draw(
+    if check:
+     ax.clear()
+     nx.draw(
         graph, pos,
         with_labels=True,
         node_color=final_node_colors,
@@ -113,17 +114,17 @@ def visualize_bellman(graph, v, start, end):
         edge_color=[edge_colors[edge] for edge in graph.edges()],
         width=2
     )
-    edge_labels = {(u, v): f"{graph.edges[u, v]['weight']}" for u, v in graph.edges()}
-    nx.draw_networkx_edge_labels(
+     edge_labels = {(u, v): f"{graph.edges[u, v]['weight']}" for u, v in graph.edges()}
+     nx.draw_networkx_edge_labels(
         graph, pos,
         edge_labels=edge_labels,
         font_size=12,
         font_color='darkblue'
     )
-    plt.title(f"Final Path: Bellman-Ford Algorithm\nFrom Node {start} to Node {end}",fontsize=15,
+     plt.title(f"Final Path: Bellman-Ford Algorithm\nFrom Node {start} to Node {end}",fontsize=15,
         fontname='Times New Roman',
         fontweight='bold')
-    plt.show()
+     plt.show()
 
 def show_error(message):
     root = tk.Tk()

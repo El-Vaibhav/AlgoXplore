@@ -139,7 +139,7 @@ def visualize_bfs(graph, start):
 
         plt.legend(handles=legend_entries, loc='upper right', fontsize=12,bbox_to_anchor=(1.05, 1))
     
-    plt.show()
+        plt.show()
 
 def show_error(message):
     root = tk.Tk()
