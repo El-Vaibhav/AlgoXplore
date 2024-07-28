@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox,scrolledtext
 from PIL import ImageTk, Image
 import subprocess
 import sys
@@ -59,6 +59,36 @@ def open_input_dialog(file_path, algorithm_name):
     dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
     explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
 
+def display_algorithm_code(algorithm_name):
+    # Create a new window to display the code
+    code_dialog = tk.Toplevel(root)
+    code_dialog.title(f"{algorithm_name} Code")
+    code_dialog.geometry("600x400")  # Adjust size as needed
+    code_dialog.configure(bg="black")
+
+    # Create a scrolled text widget to display the code
+    code_text = scrolledtext.ScrolledText(code_dialog, wrap=tk.WORD, font=("Courier", 12,"bold"), bg="white", fg="darkblue")
+    code_text.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
+
+    # Map algorithm names to file paths
+    code_paths = {
+        "Bubble Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bubble_sort.py",
+        "Insertion Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\insertion_sort.py",
+        "Merge Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\merge_sort.py",
+        "Quick Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\quick_sort.py",
+        "Selection Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bellmann_ford.py",
+    }
+
+    # Get the code path for the selected algorithm
+    code_path = code_paths.get(algorithm_name)
+    if code_path:
+        try:
+            # Read and display the code
+            with open(code_path, 'r') as file:
+                code = file.read()
+                code_text.insert(tk.END, code)
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load code for {algorithm_name}: {str(e)}")
 # Function to display algorithm explanation
 def display_algorithm_explanation(algorithm_name):
     explanations = {
@@ -79,6 +109,10 @@ def display_algorithm_explanation(algorithm_name):
     font_style = ("Helvetica", 15, "bold")
     explanation_label = tk.Label(explanation_dialog, text=explanation, font=font_style, fg="white", bg="red", wraplength=400, justify=tk.LEFT)
     explanation_label.pack(padx=20, pady=20)
+
+    code_button = tk.Button(explanation_dialog, text="Code", command=lambda: display_algorithm_code(algorithm_name),
+                            bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    code_button.pack(pady=10)
 
     return explanation_dialog
 

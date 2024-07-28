@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox,scrolledtext
 from PIL import ImageTk, Image
 import subprocess
 import sys
@@ -169,6 +169,39 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
     
     explanation_dialog =  display_algorithm_explanation(algorithm_name,dialog)
 
+def display_algorithm_code(algorithm_name):
+    # Create a new window to display the code
+    code_dialog = tk.Toplevel(root)
+    code_dialog.title(f"{algorithm_name} Code")
+    code_dialog.geometry("600x400")  # Adjust size as needed
+    code_dialog.configure(bg="black")
+
+    # Create a scrolled text widget to display the code
+    code_text = scrolledtext.ScrolledText(code_dialog, wrap=tk.WORD, font=("Courier", 12,"bold"), bg="white", fg="darkblue")
+    code_text.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
+
+    # Map algorithm names to file paths
+    code_paths = {
+        "DFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\DFS.py",
+        "BFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\BFS.py",
+        "Topo Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\kahns.py",
+        "Dijkstra": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\dijkstra_priori_queue.py",
+        "Bellman Ford": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bellmann_ford.py",
+        "Prims": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\Prims.py",
+        "Kruskals": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\kruskals.py",
+        "Kosaraju": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\strongly_connected_comp.py"
+    }
+
+    # Get the code path for the selected algorithm
+    code_path = code_paths.get(algorithm_name)
+    if code_path:
+        try:
+            # Read and display the code
+            with open(code_path, 'r') as file:
+                code = file.read()
+                code_text.insert(tk.END, code)
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load code for {algorithm_name}: {str(e)}")
 # Function to display algorithm explanation
 def display_algorithm_explanation(algorithm_name,dialog):
     # Mapping from algorithm name to explanation
@@ -193,6 +226,7 @@ def display_algorithm_explanation(algorithm_name,dialog):
     explanation_label = tk.Label(explanation_dialog, text=explanation, font=font_style, fg="white", bg="red", wraplength=400, justify=tk.LEFT)
     explanation_label.pack(padx=20, pady=20)
 
+    
     def close_dialogs():
         explanation_dialog.destroy()
         dialog.destroy()
@@ -204,6 +238,10 @@ def display_algorithm_explanation(algorithm_name,dialog):
     # Bind the window close event (the "X" button) to close both dialogs
     explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
     dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+
+    code_button = tk.Button(explanation_dialog, text="Code", command=lambda: display_algorithm_code(algorithm_name),
+                            bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    code_button.pack(pady=10)
 
     return explanation_dialog
 
