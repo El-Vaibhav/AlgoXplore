@@ -1,0 +1,43 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+
+def bellman_ford(graph, source):
+    distance = {node: float('inf') for node in graph}
+    distance[source] = 0
+
+    for _ in range(len(graph) - 1):
+        for u, v, w in graph.edges(data='weight'):
+            if distance[u] + w < distance[v]:
+                distance[v] = distance[u] + w
+
+    # Check for negative cycles
+    for u, v, w in graph.edges(data='weight'):
+        if distance[u] + w < distance[v]:
+            print("Negative cycle detected!")
+            return None
+
+    return distance
+
+# Create a sample graph
+G = nx.DiGraph()
+G.add_weighted_edges_from([(0, 1, 5), (0, 2, 4), (1, 3, 3), (2, 1, -6), (2, 3, 8)])
+
+# Run Bellman-Ford
+source_node = 0
+distances = bellman_ford(G, source_node)
+
+if distances:
+    # Visualize the graph
+    pos = nx.spring_layout(G)
+    nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray')
+    labels = nx.get_edge_attributes(G, 'weight')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+
+    # Highlight shortest paths
+    for node in G.nodes:
+        if node != source_node:
+            path = nx.shortest_path(G, source=source_node, target=node, weight='weight')
+            nx.draw_networkx_nodes(G, pos, nodelist=path, node_color='pink')
+            nx.draw_networkx_edges(G, pos, edgelist=[(path[i], path[i + 1]) for i in range(len(path) - 1)], edge_color='red')
+
+    plt.show()

@@ -1,15 +1,20 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import random
 import argparse
 import tkinter as tk
 from tkinter import messagebox
+import matplotlib.colors as mcolors
 
-def create_barabasi_albert_weighted_graph(num_nodes, num_edges_per_node, weight_range=(-1, 10)):
-    G = nx.barabasi_albert_graph(num_nodes, num_edges_per_node)
-    for (u, v) in G.edges():
-        weight = random.randint(*weight_range)
-        G[u][v]['weight'] = weight
+def show_error(message):
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    messagebox.showerror("Input Error", message)
+    root.destroy()
+
+def create_custom_graph(edges):
+    G = nx.DiGraph()  # Use a directed graph for Bellman-Ford
+    for edge in edges:
+        G.add_edge(edge[0], edge[1], weight=edge[2])
     return G
 
 def generate_color_palette():
@@ -125,48 +130,47 @@ def visualize_bellman(graph, v, start, end):
         fontweight='bold')
     plt.show()
 
-def show_error(message):
-    root = tk.Tk()
-    root.withdraw()  # Hide the root window
-    messagebox.showerror("Input Error", message)
-    root.destroy()
 
 def main():
     parser = argparse.ArgumentParser(description="Bellman-Ford Algorithm Visualization")
-    parser.add_argument('--edges', type=int, help='Number of edges to attach from a new node to existing nodes (m)')
-    parser.add_argument('--start', type=int, help='Start vertex')
-    parser.add_argument('--end', type=int, help='End vertex')
-    parser.add_argument('--vertices', type=int, help='Number of vertices in the graph')
+    parser.add_argument('--edges', type=str, required=True, help='List of edges in the format [(0,1,2), (1,2,3), ...]')
+    parser.add_argument('--start', type=int, required=True, help='Start vertex')
+    parser.add_argument('--end', type=int, required=True, help='End vertex')
+
     args = parser.parse_args()
 
     # Check if arguments are provided
-    if args.vertices is not None and args.edges is not None and args.start is not None and args.end is not None:
-        v = args.vertices
-        m = args.edges
-        s = args.start
-        e = args.end
+    if args.edges is not None and args.start is not None and args.end is not None:
+        try:
+            edges = eval(args.edges)  # Convert string input to a Python list of tuples
+            s = args.start
+            e = args.end
+        except Exception as ex:
+            show_error(f"Invalid input: {ex}")
+            return
+
     else:
-        v = 9  # Number of nodes
-        m = 2  # Number of edges per node
-        s = 0   # Start vertex
-        e = 2   # End vertex
+        show_error("All arguments --edges, --start, and --end must be provided.")
+        return
 
     # Check for input errors
-    if v <= 0:
-        show_error("The number of vertices must be a positive integer.")
-    elif m < 1 or m >= v:
-        show_error("The number of edges per node must be at least 1 and less than the number of vertices.")
-    elif s < 0 or s >= v or e < 0 or e >= v:
-        show_error("Start and end vertices must be valid node indices within the graph.")
-    else:
-        # Create a random weighted graph using Barabási-Albert model
-        G = create_barabasi_albert_weighted_graph(v, m)
+    num_nodes = max(max(edge[0], edge[1]) for edge in edges) + 1  # Determine the number of nodes
 
-        # Visualize Bellman-Ford algorithm on the random graph
+    if num_nodes <= 0:
+        show_error("The number of vertices must be a positive integer.")
+        return
+    elif s < 0 or s >= num_nodes or e < 0 or e >= num_nodes:
+        show_error("Start and end vertices must be valid node indices within the graph.")
+        return
+    else:
+        # Create a graph from the provided edges
+        G = create_custom_graph(edges)
+
+        # Visualize Bellman-Ford algorithm on the provided graph
         try:
-            visualize_bellman(G, v, s, e)
-        except ValueError as e:
-            show_error(str(e))
+            visualize_bellman(G, num_nodes, s, e)
+        except ValueError as ex:
+            show_error(str(ex))
 
 if __name__ == "__main__":
     main()

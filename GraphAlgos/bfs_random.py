@@ -31,6 +31,7 @@ def bfs(graph, start):
 
 def visualize_bfs(graph, start):
     pos = nx.spring_layout(graph)
+    pos = nx.spring_layout(graph, k = 13.5, scale=5, iterations=100)
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
 
@@ -85,7 +86,7 @@ def visualize_bfs(graph, start):
         for lvl in sorted(unique_levels):
             legend_entries.append(plt.Rectangle((0, 0), 1, 1, color=level_colors[lvl % len(level_colors)], label=f'Level {lvl}'))
 
-        ax.legend(handles=legend_entries, loc='upper right', fontsize=12, bbox_to_anchor=(1.05, 1))
+        ax.legend(handles=legend_entries, loc='upper right', fontsize=9, bbox_to_anchor=(1.05, 1))
         
         plt.draw()
         plt.pause(1.0)  # Short pause to highlight the current node

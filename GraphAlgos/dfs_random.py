@@ -26,6 +26,7 @@ def dfs(graph, node, visited, depth):
 
 def visualize_dfs(graph, start):
     pos = nx.spring_layout(graph)
+    pos = nx.spring_layout(graph, k = 13.5, scale=5, iterations=100)
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
 
@@ -60,7 +61,7 @@ def visualize_dfs(graph, start):
         )
 
         legend_entries = [plt.Rectangle((0, 0), 1, 1, color= 'yellow', label='Current Node') , plt.Rectangle((0, 0), 1, 1, color= 'magenta', label='Backtracking')]
-        ax.legend(handles=legend_entries, loc='upper right', fontsize=12,bbox_to_anchor=(1.05, 1))
+        ax.legend(handles=legend_entries, loc='upper right', fontsize=10,bbox_to_anchor=(1.05, 1))
         
         plt.draw()
         if status == "backtracking":
