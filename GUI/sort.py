@@ -87,6 +87,17 @@ root = tk.Tk()
 root.configure(bg="black")
 root.title("AlgoViz")
 root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
+root.attributes('-fullscreen', True)
+
+# def go_back():
+#     root.destroy()
+#     subprocess.Popen(["python", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\1.py"])
+
+# button_back = tk.Button(root, text="Back", command=go_back, font=("Helvetica", 12, "bold"), bg="lightcoral", fg="black")
+# button_back.place(x=10, y=10)  # Position at top left corner
+
+button_close = tk.Button(root, text="Close", command=root.quit, font=("Helvetica", 12, "bold"), bg="red", fg="black")
+button_close.place(relx=1.0, rely=0.0, anchor="ne")  # Position at top right corner
 
 # Optionally, add a bit of delay to ensure that screen information is fully updated
 root.update_idletasks()

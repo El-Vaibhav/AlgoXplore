@@ -51,7 +51,9 @@ def kahns_topological_sort(graph):
 
 # Function to visualize topological sort
 def visualize_toposort(graph):
-    pos = nx.spring_layout(graph)
+    # Increase the 'k' parameter to increase spacing between nodes
+    pos = nx.spring_layout(graph, k = 13.5, scale=6, iterations=100)
+ 
     stop_animation = False
     fig, ax = plt.subplots(figsize=(8, 8))
     
@@ -118,7 +120,7 @@ if args.vertices is not None and args.edges is not None:
     m = args.edges
 else:
     v = 10
-    m = 1
+    m = 3
 
 # Check for input errors
 if v <= 0:

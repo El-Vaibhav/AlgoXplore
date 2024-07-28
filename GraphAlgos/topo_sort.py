@@ -45,7 +45,7 @@ def kahns_topological_sort(graph):
 
 # Function to visualize topological sort
 def visualize_toposort(graph):
-    pos = nx.spring_layout(graph)
+    pos = nx.spring_layout(graph, k = 13.5, scale=2, iterations=100)
     stop_animation = False
     fig, ax = plt.subplots(figsize=(8, 8))
     

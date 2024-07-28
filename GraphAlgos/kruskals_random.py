@@ -78,6 +78,7 @@ def show_error(message):
 # Function to visualize Kruskal's algorithm
 def visualize_kruskals(graph):
     pos = nx.spring_layout(graph)
+    pos = nx.spring_layout(graph, k = 13.5, scale=5, iterations=100)
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
     mst_edges = []

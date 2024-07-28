@@ -69,6 +69,7 @@ def dijkstra(G, num_nodes, start_node, end_node):
 # Function to visualize Dijkstra's algorithm
 def visualize_dijkstra(graph, s, e):
     pos = nx.spring_layout(graph)
+    pos = nx.spring_layout(graph, k = 9.5, scale=15, iterations=100)
     fig, ax = plt.subplots(figsize=(8, 8))
     stop_animation = False
 

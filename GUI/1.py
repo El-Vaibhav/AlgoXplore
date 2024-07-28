@@ -4,15 +4,19 @@ import subprocess
 
 # Function to handle button click
 def button_click1():
+    # root.withdraw()
     subprocess.Popen(["python", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\graph.py"])
-
+   
 def button_click2():
+    # root.withdraw()
     subprocess.Popen(["python", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\sort.py"])
-
+  
 # Create the root window
 root = tk.Tk()
 root.configure(bg="black")
 root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
+
+root.attributes('-fullscreen', True)
 
 # Optionally, add a bit of delay to ensure that screen information is fully updated
 root.update_idletasks()
@@ -58,6 +62,9 @@ frame_buttons1.place(x=200, y=(image_height_main - new_height1) // 1.2 + new_hei
 button1 = tk.Button(frame_buttons1, text="Explore Graph Algorithms", width=35, height=2, command=button_click1,
                     font=("Helvetica", 15, "bold"), bg="lightgreen", fg="black")
 button1.pack()
+
+button_close = tk.Button(root, text="Close", command=root.quit, font=("Helvetica", 12, "bold"), bg="red", fg="black")
+button_close.place(relx=1.0, rely=0.0, anchor="ne")  # Position at top right corner
 
 # Load the small image 2
 image_path_small2 = "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\small_img2.jpeg"
