@@ -1,15 +1,19 @@
 import tkinter as tk
 from PIL import ImageTk, Image
 import subprocess
+import os
+
+# Get the current script's directory
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Function to handle button click
 def button_click1():
     # root.withdraw()
-    subprocess.Popen(["python", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\graph.py"])
+    subprocess.Popen(["python", os.path.join(base_dir, "graph.py")])
    
 def button_click2():
     # root.withdraw()
-    subprocess.Popen(["python", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\sort.py"])
+    subprocess.Popen(["python", os.path.join(base_dir, "sort.py")])
   
 # Create the root window
 root = tk.Tk()
@@ -26,7 +30,7 @@ welcome_label = tk.Label(root, text="Welcome to AlgoXplore", font=("Tahoma", 18,
 welcome_label.pack(anchor=tk.N, padx=20, pady=20)  # Anchor to the North (top) with padding
 
 # Load the main background image
-image_path_main = "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\img1.jpg"
+image_path_main = os.path.join(base_dir, "img1.jpg")
 image_main = Image.open(image_path_main)
 image_width_main, image_height_main = image_main.size
 
@@ -38,7 +42,7 @@ label_main = tk.Label(root, image=image_tk_main)
 label_main.pack()
 
 # Load the small image 1
-image_path_small1 = "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\small_img1.png"
+image_path_small1 = os.path.join(base_dir, "small_img1.png")
 image_small1 = Image.open(image_path_small1)
 image_width_small1, image_height_small1 = image_small1.size
 
@@ -67,7 +71,7 @@ button_close = tk.Button(root, text="Close", command=root.quit, font=("Helvetica
 button_close.place(relx=1.0, rely=0.0, anchor="ne")  # Position at top right corner
 
 # Load the small image 2
-image_path_small2 = "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\small_img2.jpeg"
+image_path_small2 = os.path.join(base_dir, "small_img2.jpeg")
 image_small2 = Image.open(image_path_small2)
 image_width_small2, image_height_small2 = image_small2.size
 

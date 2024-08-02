@@ -3,6 +3,10 @@ from tkinter import messagebox,scrolledtext
 from PIL import ImageTk, Image
 import subprocess
 import sys
+import os 
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+base_dir1 = os.path.dirname(current_dir)
 
 # Function to execute different sorting algorithms
 def execute_sorting_algorithm(file_path, size=None, value_range=None):
@@ -71,12 +75,14 @@ def display_algorithm_code(algorithm_name):
     code_text.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
 
     # Map algorithm names to file paths
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Codes'))
+
     code_paths = {
-        "Bubble Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bubble_sort.py",
-        "Insertion Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\insertion_sort.py",
-        "Merge Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\merge_sort.py",
-        "Quick Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\quick_sort.py",
-        "Selection Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bellmann_ford.py",
+    "Bubble Sort": os.path.join(base_dir, "bubble_sort.py"),
+    "Insertion Sort": os.path.join(base_dir, "insertion_sort.py"),
+    "Merge Sort": os.path.join(base_dir, "merge_sort.py"),
+    "Quick Sort": os.path.join(base_dir, "quick_sort.py"),
+    "Selection Sort": os.path.join(base_dir, "selection_sort.py"),  # Corrected the filename
     }
 
     # Get the code path for the selected algorithm
@@ -140,7 +146,10 @@ message_label = tk.Label(root, text="Choose any algorithm you want to visualize"
 message_label.pack(side=tk.TOP, padx=10, pady=15)  # Positioned at the top with padding
 
 # Load the image
-image_path = "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\img5.png"
+base_dir = os.path.abspath(os.path.dirname(__file__))
+
+# Construct the image path dynamically
+image_path = os.path.join(base_dir, "img5.png")
 image = Image.open(image_path)
 image_width, image_height = image.size
 
@@ -159,12 +168,14 @@ frame_buttons = tk.Frame(root, bg="black")
 frame_buttons.pack(side=tk.LEFT, padx=50, pady=10)  # Pack to the left side with default anchor
 
 # Button configurations
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Sorting_Algos'))
+
 button_configs = [
-    ("Bubble Sort", "red", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\bubble_sort.py"),
-    ("Insertion Sort", "green", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\insertion_sort.py"),
-    ("Merge Sort", "blue", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\merge_sort.py"),
-    ("Quick Sort", "orange", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\quick_sort.py"),
-    ("Selection Sort", "purple", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\selection_sort.py")
+    ("Bubble Sort", "red", os.path.join(base_dir, "bubble_sort.py")),
+    ("Insertion Sort", "green", os.path.join(base_dir, "insertion_sort.py")),
+    ("Merge Sort", "blue", os.path.join(base_dir, "merge_sort.py")),
+    ("Quick Sort", "orange", os.path.join(base_dir, "quick_sort.py")),
+    ("Selection Sort", "purple", os.path.join(base_dir, "selection_sort.py"))
 ]
 
 # Create buttons dynamically
