@@ -10,16 +10,23 @@ import sys
 def bubble_sort(data, color_data):
     n = len(data)
     for i in range(n):
+
         for j in range(n - 1 - i):
+
             color_data[j] = 'purple'  # Mark the elements being compared
-            yield data.copy(), color_data.copy()
+            yield data.copy(), color_data.copy() # yield to update the visualization
+
             if data[j] > data[j + 1]:
                 data[j], data[j + 1] = data[j + 1], data[j]
                 color_data[j], color_data[j + 1] = 'red', 'red'  # Mark swapped elements
                 yield data.copy(), color_data.copy()
+
             color_data[j], color_data[j + 1] = 'blue', 'blue'  # Reset to default color
+
         color_data[n - 1 - i] = 'green'  # Mark the last sorted element
+
         yield data.copy(), color_data.copy()  # Yield to update the visualization
+
     for k in range(n):
         color_data[k] = 'green'  # Mark all elements as sorted
     yield data.copy(), color_data.copy()  # Final yield to show all elements in green

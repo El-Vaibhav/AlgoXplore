@@ -24,6 +24,9 @@ def open_input_dialog(file_path, algorithm_name):
             value_range = int(range_entry.get())
             close_dialogs()
             execute_sorting_algorithm(file_path, size=size, value_range=value_range)
+            display_algorithm_explanation(algorithm_name)
+            close_dialogs()
+
         except ValueError:
             messagebox.showerror("Invalid input", "Please enter valid numbers for size and range.")
     
@@ -98,12 +101,11 @@ def display_algorithm_code(algorithm_name):
 # Function to display algorithm explanation
 def display_algorithm_explanation(algorithm_name):
     explanations = {
-        "Bubble Sort": "Bubble Sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. The pass through the list is repeated until the list is sorted. The time complexity is O(n^2) for all three cases (Worst , Avg , Best)",
-        "Insertion Sort": "Insertion Sort is a simple sorting algorithm that builds the final sorted array one item at a time. It is much less efficient on large lists than more advanced algorithms such as quicksort, heapsort, or merge sort. The Time complexity for the best case is O(n) when the array is sorted , for the remaining cases it is O(n^2)",
-        "Merge Sort": "Merge Sort is an efficient, stable, comparison-based, divide and conquer sorting algorithm. Most implementations produce a stable sort, meaning that the order of equal elements is the same in the input and output.",
-        "Quick Sort": "Quick Sort is an efficient, in-place sorting algorithm that in practice is faster than MergeSort and HeapSort. However, it is not a stable sort, meaning that the relative order of equal sort items is not preserved.",
-        "Selection Sort": "Selection Sort is an in-place comparison sorting algorithm. It has an O(n^2) time complexity, which makes it inefficient on large lists, and generally performs worse than the similar insertion sort."
-    }
+        "Bubble Sort": "Bubble Sort is a simple brute force sorting algorithm that repeatedly iterates through the list, compares adjacent elements, and swaps them if they are in the wrong order. The iteartion through the list is repeated until the whole list is sorted. On every iteration we get the sorted element of that iteration at the end of the array The time complexity is O(n^2) for all three cases (Worst , Avg , Best)",
+        "Insertion Sort": "Insertion Sort one by one makes the sorted array starting from left most element.The first element is always sorted. It starts from the second element compares it with remaining left array (elemnt 1) , inserts it in it's correct position. Same way now it takes the third element compares it with the left array (element 1 and 2) and insert 3rd element in its sorted position. This way it sorts the array . The best case TC is O(N) when array is sorted , it is O(N^2) for worst and average case",
+        "Quick Sort": "Quick Sort takes one pivot element starting from left or right and finds it's correct position in the array and then recursively apply the same algorithm to both left and right subarray of that pivot element. It's best case time complexity is O(NlogN) when the partion is balanced i.e no. of elements are same in both left and right partition. Its worst case TC is O(N^2) when the partition is like one part has only 1 element , other part has n-1 elements.",
+        "Selection Sort": " Selection Sort one by one selects all elements of the array from left and finds the min element less than the current element in the right half of the array. Once the min is found it swaps it with the current element. It has an O(n^2) time complexity for all three cases (Best,Avg,Worst).",
+        "Merge Sort": "Merge sort is a recursive algorithm which keeps on deviding the array into equal halfs and when maximum limit of partition reaches (1,1 element left in two arrays) it starts its work in the combine step . Starting from the last parition it starts merging the two sorted arrays (as the arrays having only 1,1 element (last possible partition) are sorted by itself) into a single merged sorted array . It does this from bottom to top and in the end we get the full sorted array. It's TC is O(NlogN) for all three cases."}
 
     explanation = explanations.get(algorithm_name, "No explanation available for this algorithm.")
     

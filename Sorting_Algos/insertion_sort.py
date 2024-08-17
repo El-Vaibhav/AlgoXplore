@@ -6,7 +6,7 @@ import sys
 import tkinter as tk
 from tkinter import messagebox
 
-# Insertion sort is a simple and intuitive sorting algorithm. It builds the final sorted array one element at a time. Here’s a step-by-step explanation of how it works:
+# Insertion sort is a simple and intuitive sorting algorithm. It builds the final sorted array one element at a time.
 # Start with the Second Element:
 # The first element of the array is considered sorted. The sorting process begins with the second element.
 # Insert Each Element into the Sorted Portion:
@@ -26,13 +26,10 @@ def insertion_sort(data, color_data):
             data[j + 1] = data[j]
             color_data[j + 1] = 'red'  # Highlight comparison
             yield data.copy(), color_data.copy()
-            color_data[j + 1] = 'blue'  # Reset color after comparison
+            color_data[j + 1] = 'green'  # set color of sorted element
             j -= 1
         data[j + 1] = key
         color_data[j + 1] = 'green'  # Mark as sorted
-        yield data.copy(), color_data.copy()
-    for i in range(len(data)):
-        color_data[i] = 'brown'  # Ensure all elements are brown at the end
         yield data.copy(), color_data.copy()
 
 # Function to display an error message using tkinter
@@ -86,5 +83,5 @@ ax.legend(handles=legend_handles, loc='upper left')
 # Generate frames for animation
 frames = insertion_sort(data, color_data)
 
-ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=300)
+ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=480)
 plt.show()

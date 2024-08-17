@@ -6,42 +6,40 @@ import sys
 import tkinter as tk
 from tkinter import messagebox
 
-# Quick Sort Algorithm
-# Choose a Pivot:
-# Select an element from the array to act as a pivot.
-# Partitioning:
-# Rearrange the array such that all elements less than the pivot come before it,
-# and all elements greater than the pivot come after it. The pivot is now in its
-# correct position in the sorted array.
-# Recursively apply Quick Sort to the left and right subarrays around the pivot.
-
-# Time Complexity:
-#   - Best Case (Balanced Partition): O(n log n)
-#   - Average Case: O(n log n)
-#   - Worst Case (Unbalanced Partition): O(n^2)
-
 # Function to partition the array
 def partition(l, low, high, color_data):
-    pivot = l[high]
-    color_data[high] = 'red'  # Mark pivot as red
-    i = low - 1
+    pivot = l[low]
+    color_data[low] = 'red'  # Mark pivot as red
+    i = low + 1
+    j = high
 
     yield l.copy(), color_data.copy()  # Show initial pivot selection
 
-    for j in range(low, high):
-        color_data[j] = 'yellow'  # Mark elements being compared
-        yield l.copy(), color_data.copy()
+    while True:
 
-        if l[j] < pivot:
+        while i <= j and l[i] <= pivot:
+            color_data[i] = 'brown'  # Show element i moving
+            yield l.copy(), color_data.copy()
             i += 1
+           
+        while i <= j and l[j] > pivot:
+            color_data[j] = 'yellow'  # Show element j moving
+            yield l.copy(), color_data.copy()
+            j -= 1
+            
+        if i <= j:
             l[i], l[j] = l[j], l[i]
             color_data[i] = 'cyan'  # Elements that are moved correctly
+            color_data[j] = 'cyan'  # Elements that are moved correctly
             yield l.copy(), color_data.copy()
+            color_data[i] = 'blue'  # Reset color after swap
+            color_data[j] = 'blue'  # Reset color after swap
+            yield l.copy(), color_data.copy()
+        else:
+            break
 
-        color_data[j] = 'blue'  # Reset color after comparison
-
-    l[i + 1], l[high] = l[high], l[i + 1]
-    color_data[i + 1] = 'green'  # Mark pivot's final position as green
+    l[low], l[j] = l[j], l[low]
+    color_data[j] = 'green'  # Mark pivot's final position as green
     yield l.copy(), color_data.copy()
 
     # Reset pivot color if it's not at the final position
@@ -49,7 +47,7 @@ def partition(l, low, high, color_data):
         if color_data[k] != 'green':
             color_data[k] = 'blue'
 
-    return i + 1
+    return j
 
 # Quick Sort recursive function
 def quicksort(l, low, high, color_data):
@@ -100,9 +98,10 @@ bars = ax.bar(range(len(data)), data, align='edge', color=color_data)
 
 # Define color legend annotations
 legend_handles = [
-    plt.Rectangle((1, 1), 0, 1, color='yellow', label='Comparing with pivot'),
+    plt.Rectangle((0, 0), 1, 1, color='yellow', label='Comparing with pivot from right side'),
+    plt.Rectangle((0, 0), 1, 1, color='brown', label='Comparing with pivot from left side'),
     plt.Rectangle((0, 0), 1, 1, color='red', label='Pivot'),
-    plt.Rectangle((0, 0), 1, 1, color='cyan', label='Correct Partition relative to pivot'),
+    plt.Rectangle((0, 0), 1, 1, color='cyan', label='Swapping i and j pointers'),
     plt.Rectangle((0, 0), 1, 1, color='green', label='Sorted'),
     plt.Rectangle((0, 0), 1, 1, color='blue', label='Unsorted')
 ]
@@ -121,5 +120,5 @@ def update_plot(frame, bars):
 frames = quicksort(data, 0, len(data) - 1, color_data)
 
 # Create animation
-ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=300)
+ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=330)
 plt.show()

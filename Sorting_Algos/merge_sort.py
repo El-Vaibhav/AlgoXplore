@@ -104,8 +104,8 @@ bars = ax.bar(range(len(data)), data, align='edge', color='blue', width=0.6)
 
 # Define color legend annotations
 legend_handles = [
-    plt.Rectangle((0, 0), 1, 1, color='purple', label='Comparing'),
-    plt.Rectangle((0, 0), 1, 1, color='red', label='Merging'),
+    plt.Rectangle((0, 0), 1, 1, color='purple', label='Comparing between two sorted arrays'),
+    plt.Rectangle((0, 0), 1, 1, color='red', label='Merging to form a single sorted array'),
     plt.Rectangle((0, 0), 1, 1, color='green', label='Sorted'),
     plt.Rectangle((0, 0), 1, 1, color='blue', label='Unsorted')
 ]
