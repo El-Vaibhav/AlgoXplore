@@ -67,6 +67,8 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
                 start = int(start_entry.get())
                 end = int(end_entry.get())
 
+            display_algorithm_explanation(algorithm_name,dialog)
+
             dialog.destroy()
 
             explanation_dialog.destroy()
@@ -236,7 +238,7 @@ def display_algorithm_explanation(algorithm_name,dialog):
     def close_dialogs():
         explanation_dialog.destroy()
         dialog.destroy()
-
+        
     # Bind closing of dialogs to the close button
     close_button = tk.Button(explanation_dialog, text="Close", command=close_dialogs, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
     close_button.pack(pady=20)
