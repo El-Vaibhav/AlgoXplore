@@ -10,11 +10,16 @@ base_dir1 = os.path.dirname(current_dir)
 
 # Function to execute different sorting algorithms
 def execute_sorting_algorithm(file_path, size=None, value_range=None):
+
     args = [sys.executable, file_path]
+    # sys.executable: This is the Python interpreter that is currently running your main script. For example, it could be C:\Python39\python.exe on Windows.
+    # file_path: The path to the Python script you want to execute (e.g., "path_to_sort.py").
+
     if size is not None and value_range is not None:
         args += ["--size", str(size), "--range", str(value_range)]
     
-    subprocess.Popen(args)
+    subprocess.Popen(args) 
+    # The subprocess.Popen(args) command runs the code from the file specified in the file_path by launching a new process in the operating system.
 
 # Function to open the input dialog
 def open_input_dialog(file_path, algorithm_name):
@@ -46,7 +51,6 @@ def open_input_dialog(file_path, algorithm_name):
 
     tk.Label(dialog, text="Enter size and range for the random array:", fg="Yellow", bg="brown", font=font_style).pack(anchor=tk.W, padx=20, pady=(40,0))
     tk.Label(dialog, text="(enter upto 30 elements for better understanding)", fg="Yellow", bg="brown", font=font_style2).pack(anchor=tk.W, padx=(15,5) , pady=20)
-
     
     tk.Label(dialog, text="Size:", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
     size_entry = tk.Entry(dialog, width=30, bg="white", font=font_style)
@@ -75,17 +79,27 @@ def display_algorithm_code(algorithm_name):
 
     # Create a scrolled text widget to display the code
     code_text = scrolledtext.ScrolledText(code_dialog, wrap=tk.WORD, font=("Courier", 12,"bold"), bg="white", fg="darkblue")
-    code_text.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
+    # The wrap=tk.WORD argument is specifying that the text should wrap at word boundaries, ensuring that words are not split across lines when wrapping occurs.
+
+    code_text.pack(expand=True, fill=tk.BOTH, padx=10, pady=10) # will make the code_text widget expand to fill the entire space of its container in both dimensions, with 10 pixels of padding on all sides.
 
     # Map algorithm names to file paths
     base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Codes'))
 
+    # code_paths = {
+    # "Bubble Sort": os.path.join(base_dir, "bubble_sort.py"),
+    # "Insertion Sort": os.path.join(base_dir, "insertion_sort.py"),
+    # "Merge Sort": os.path.join(base_dir, "merge_sort.py"),
+    # "Quick Sort": os.path.join(base_dir, "quick_sort.py"),
+    # "Selection Sort": os.path.join(base_dir, "selection_sort.py"),  
+    # }
+
     code_paths = {
-    "Bubble Sort": os.path.join(base_dir, "bubble_sort.py"),
-    "Insertion Sort": os.path.join(base_dir, "insertion_sort.py"),
-    "Merge Sort": os.path.join(base_dir, "merge_sort.py"),
-    "Quick Sort": os.path.join(base_dir, "quick_sort.py"),
-    "Selection Sort": os.path.join(base_dir, "selection_sort.py"),  # Corrected the filename
+    "Bubble Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bubble_sort.py",
+    "Insertion Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\insertion_sort.py",
+    "Merge Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\merge_sort.py",
+    "Quick Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\quick_sort.py",
+    "Selection Sort": "C:\\Users\\HP\OneDrive\\Desktop\\algo_visualizer\\Codes\\selection_sort.py"
     }
 
     # Get the code path for the selected algorithm
@@ -98,6 +112,7 @@ def display_algorithm_code(algorithm_name):
                 code_text.insert(tk.END, code)
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load code for {algorithm_name}: {str(e)}")
+            
 # Function to display algorithm explanation
 def display_algorithm_explanation(algorithm_name):
     explanations = {
@@ -112,7 +127,7 @@ def display_algorithm_explanation(algorithm_name):
     explanation_dialog = tk.Toplevel(root)
     explanation_dialog.title(f"{algorithm_name} Explanation")
     explanation_dialog.geometry("440x440+850+100")  # Set position to open the dialog on the far right side
-    explanation_dialog.configure(bg="red")  # Set the background color to black
+    explanation_dialog.configure(bg="red")  # Set the background color to red
     explanation_dialog.resizable(False, False)  # Disable maximizing
     font_style = ("Helvetica", 15, "bold")
     explanation_label = tk.Label(explanation_dialog, text=explanation, font=font_style, fg="white", bg="red", wraplength=400, justify=tk.LEFT)
@@ -128,21 +143,12 @@ def display_algorithm_explanation(algorithm_name):
 root = tk.Tk()
 root.configure(bg="black")
 root.title("AlgoViz")
-root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
+# root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
 root.attributes('-fullscreen', True)
-
-# def go_back():
-#     root.destroy()
-#     subprocess.Popen(["python", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\1.py"])
-
-# button_back = tk.Button(root, text="Back", command=go_back, font=("Helvetica", 12, "bold"), bg="lightcoral", fg="black")
-# button_back.place(x=10, y=10)  # Position at top left corner
 
 button_close = tk.Button(root, text="Close", command=root.quit, font=("Helvetica", 12, "bold"), bg="red", fg="black")
 button_close.place(relx=1.0, rely=0.0, anchor="ne")  # Position at top right corner
 
-# Optionally, add a bit of delay to ensure that screen information is fully updated
-root.update_idletasks()
 # Message label
 message_label = tk.Label(root, text="Choose any algorithm you want to visualize", font=("Tahoma", 18, "bold"), fg="white", bg="black")
 message_label.pack(side=tk.TOP, padx=10, pady=15)  # Positioned at the top with padding
@@ -172,13 +178,19 @@ frame_buttons.pack(side=tk.LEFT, padx=50, pady=10)  # Pack to the left side with
 # Button configurations
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Sorting_Algos'))
 
-button_configs = [
-    ("Bubble Sort", "red", os.path.join(base_dir, "bubble_sort.py")),
-    ("Insertion Sort", "green", os.path.join(base_dir, "insertion_sort.py")),
-    ("Merge Sort", "blue", os.path.join(base_dir, "merge_sort.py")),
-    ("Quick Sort", "orange", os.path.join(base_dir, "quick_sort.py")),
-    ("Selection Sort", "purple", os.path.join(base_dir, "selection_sort.py"))
-]
+# button_configs = [
+#     ("Bubble Sort", "red", os.path.join(base_dir, "bubble_sort.py")),
+#     ("Insertion Sort", "green", os.path.join(base_dir, "insertion_sort.py")),
+#     ("Merge Sort", "blue", os.path.join(base_dir, "merge_sort.py")),
+#     ("Quick Sort", "orange", os.path.join(base_dir, "quick_sort.py")),
+#     ("Selection Sort", "purple", os.path.join(base_dir, "selection_sort.py"))
+# ]
+
+button_configs=[ ("Bubble Sort","red", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\bubble_sort.py"),
+    ("Insertion Sort","green", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\insertion_sort.py"),
+    ("Merge Sort","blue", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\merge_sort.py"),
+    ("Quick Sort", "orange", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\quick_sort.py"),
+    ("Selection Sort", "purple","C:\\Users\\HP\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\selection_sort.py")]
 
 # Create buttons dynamically
 buttons = []
@@ -186,6 +198,8 @@ for text, bg_color, file_path in button_configs:
     button = tk.Button(frame_buttons, text=text, width=15, height=2,
                        command=lambda path=file_path, name=text: open_input_dialog(path, name),
                        font=("Helvetica", 14, "bold"), bg=bg_color, fg="white")
+    # The lambda function allows you to pass arguments to the open_input_dialog function.
+    #  If you didn't use lambda, the command would execute the function immediately when the button is created, rather than when the button is clicked
     button.pack(side=tk.LEFT, padx=50, pady=5)
     buttons.append(button)
 

@@ -58,6 +58,7 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
                 vertices = int(vertices_entry.get())
             if custom_graph:
                 edges = eval(edges_entry.get())  # Assuming edges are entered as [(0,1,2), (1,2,3)]
+                # edges_entry.get(): This retrieves the text currently present in the edges_entry widget.
             else:
                 edges = int(edges_entry.get())  # Assuming edges are entered as an integer (edges per vertex)
 
@@ -75,7 +76,8 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
 
             if custom_graph:
                 custom_script_name = f"{algorithm_name.lower().replace(' ', '_')}.py"
-                custom_script_path = os.path.join(base_dir, custom_script_name)
+                # custom_script_path = os.path.join(base_dir, custom_script_name)
+                custom_script_path = f"C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\{custom_script_name}"
                 execute_graph_algorithm(custom_script_path, edges,start,end)
             else:
                 execute_graph_algorithm(script_path, edges, start, end,vertices)
@@ -189,16 +191,28 @@ def display_algorithm_code(algorithm_name):
     
     base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Codes'))
 
+    # code_paths = {
+    # "DFS": os.path.join(base_dir,  "DFS.py"),
+    # "BFS": os.path.join(base_dir, "BFS.py"),
+    # "Topo Sort": os.path.join(base_dir,  "kahns.py"),
+    # "Dijkstra": os.path.join(base_dir,  "dijkstra_priori_queue.py"),
+    # "Bellman Ford": os.path.join(base_dir,  "bellmann_ford.py"),
+    # "Prims": os.path.join(base_dir,  "Prims.py"),
+    # "Kruskals": os.path.join(base_dir,  "kruskals.py"),
+    # "Kosaraju": os.path.join(base_dir,  "strongly_connected_comp.py")
+    # }
+
     code_paths = {
-    "DFS": os.path.join(base_dir,  "DFS.py"),
-    "BFS": os.path.join(base_dir, "BFS.py"),
-    "Topo Sort": os.path.join(base_dir,  "kahns.py"),
-    "Dijkstra": os.path.join(base_dir,  "dijkstra_priori_queue.py"),
-    "Bellman Ford": os.path.join(base_dir,  "bellmann_ford.py"),
-    "Prims": os.path.join(base_dir,  "Prims.py"),
-    "Kruskals": os.path.join(base_dir,  "kruskals.py"),
-    "Kosaraju": os.path.join(base_dir,  "strongly_connected_comp.py")
+    "DFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\DFS.py",
+    "BFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\BFS.py",
+    "Topo Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\kahns.py",
+    "Dijkstra": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\dijkstra_priori_queue.py",
+    "Bellman Ford": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bellman_ford.py",
+    "Prims": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\Prims.py",
+    "Kruskals": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\kruskals.py",
+    "Kosaraju": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\strongly_connected_comp.py"
     }
+
 
     # Get the code path for the selected algorithm
     code_path = code_paths.get(algorithm_name)
@@ -260,13 +274,6 @@ root.configure(bg="black")
 root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
 root.attributes('-fullscreen', True)
 
-# def go_back():
-#     root.destroy()
-#     subprocess.Popen(["python", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\1.py"])
-
-# button_back = tk.Button(root, text="Back", command=go_back, font=("Helvetica", 12, "bold"), bg="lightcoral", fg="black")
-# button_back.place(x=10, y=10)  # Position at top left corner
-
 button_close = tk.Button(root, text="Close", command=root.quit, font=("Helvetica", 12, "bold"), bg="red", fg="black")
 button_close.place(relx=1.0, rely=0.0, anchor="ne")  # Position at top right corner
 
@@ -302,15 +309,26 @@ frame_buttons.pack(side=tk.RIGHT, padx=37, pady=72, anchor=tk.NE)
 # Button labels and colors
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'GraphAlgos'))
 
+# button_specs = [
+#     ("DFS", "yellow", os.path.join(base_dir, "dfs_random.py")),
+#     ("BFS", "red", os.path.join(base_dir, "bfs_random.py")),
+#     ("Topo Sort", "lightgreen", os.path.join(base_dir, "topo_sort_random.py")),
+#     ("Dijkstra", "cyan", os.path.join(base_dir, "dijkstra_random.py")),
+#     ("Bellman Ford", "lightblue", os.path.join(base_dir, "bellman_random.py")),
+#     ("Prims", "brown", os.path.join(base_dir, "prims_random.py")),
+#     ("Kruskals", "grey", os.path.join(base_dir, "kruskals_random.py")),
+#     ("Kosaraju", "white", os.path.join(base_dir, "kosaraju_random.py"))
+# ]
+
 button_specs = [
-    ("DFS", "yellow", os.path.join(base_dir, "dfs_random.py")),
-    ("BFS", "red", os.path.join(base_dir, "bfs_random.py")),
-    ("Topo Sort", "lightgreen", os.path.join(base_dir, "topo_sort_random.py")),
-    ("Dijkstra", "cyan", os.path.join(base_dir, "dijkstra_random.py")),
-    ("Bellman Ford", "lightblue", os.path.join(base_dir, "bellman_random.py")),
-    ("Prims", "brown", os.path.join(base_dir, "prims_random.py")),
-    ("Kruskals", "grey", os.path.join(base_dir, "kruskals_random.py")),
-    ("Kosaraju", "white", os.path.join(base_dir, "kosaraju_random.py"))
+    ("DFS", "yellow", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\dfs_random.py"),
+    ("BFS", "red", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\bfs_random.py"),
+    ("Topo Sort", "lightgreen", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\topo_sort_random.py"),
+    ("Dijkstra", "cyan", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\dijkstra_random.py"),
+    ("Bellman Ford", "lightblue", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\bellman_random.py"),
+    ("Prims", "brown", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\prims_random.py"),
+    ("Kruskals", "grey", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\kruskals_random.py"),
+    ("Kosaraju", "white", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\kosaraju_random.py")
 ]
 # Function to create buttons dynamically
 def create_buttons():
