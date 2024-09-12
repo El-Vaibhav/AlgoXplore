@@ -31,7 +31,7 @@ def prims(G, adj, v):
 
         if parent != -1 and not visited[node]:
             mst.append((parent, node, wt))
-            yield node_colors, parent, edge_colors, mst, ans
+            yield node_colors, edge_colors, mst, ans
             ans += wt
 
         visited[node] = 1
@@ -43,7 +43,7 @@ def prims(G, adj, v):
     for i in range(v):
         node_colors[i] = 'red'
 
-    yield node_colors, i, edge_colors, mst, ans
+    yield node_colors, edge_colors, mst, ans
 
 def visualize_prims(graph, adj, v):
     pos = nx.spring_layout(graph)
@@ -60,7 +60,7 @@ def visualize_prims(graph, adj, v):
     fig.canvas.mpl_connect('close_event', on_close)
     
     check=1
-    for node_colors, current_node, edge_color, path_edge, ans in prims(graph, adj, v):
+    for node_colors , edge_color, path_edge, ans in prims(graph, adj, v):
         
         if stop_animation:
             check = 0
@@ -92,8 +92,12 @@ def visualize_prims(graph, adj, v):
             font_color='black',
             edge_color=[edge_color[edge] for edge in graph.edges()],
             linewidths=1,
-            width=2
+            width=3
         )
+        # If you don't include data=True, NetworkX will only return the node pairs (u, v) that define the edges,
+        #  and you'll miss out on any additional information (such as weights) stored in the edge attributes.
+        # d is this dictionary of attributes, so d['weight'] retrieves the value of the 'weight' key from the dictionary.
+
         edge_labels = {(u, v): f"{d['weight']}" for u, v, d in graph.edges(data=True)}
         nx.draw_networkx_edge_labels(
             graph, pos,
@@ -101,13 +105,12 @@ def visualize_prims(graph, adj, v):
             font_size=12,
             font_color='blue'
         )   
-        # plt.title("Prim's Algorithm Visualization",fontsize=16,
-        # fontname='Times New Roman',
-        # fontweight='bold')
         plt.draw()
         plt.pause(1.5)
 
     # Remove edges that are not in MST
+    # As we are working with undirected graphs and we query for an edge, we don't know whether it is stored as (i, j) or (j, i). 
+    # This is why we need to check for both representations.
     mst_set = set((u, v) for u, v, _ in mst_edges) | set((v, u) for u, v, _ in mst_edges)
     edges_to_remove = [(u, v) for u, v in graph.edges() if (u, v) not in mst_set and (v, u) not in mst_set]
     graph.remove_edges_from(edges_to_remove)
@@ -125,7 +128,7 @@ def visualize_prims(graph, adj, v):
         font_color='black',
         edge_color='red',
         linewidths=1,
-        width=2
+        width=3
      )
      edge_labels = {(u, v): f"{d['weight']}" for u, v, d in graph.edges(data=True)}
      nx.draw_networkx_edge_labels(

@@ -7,21 +7,13 @@ from tkinter import messagebox
 
 # Function to create a random graph with random edge weights
 def create_random_graph(v, m):
-    G = nx.Graph()
 
-    # Create nodes
-    G.add_nodes_from(range(v))
-
-    # Create edges
-    for i in range(v):
-        # Connect node `i` with `m` random nodes
-        for _ in range(m):
-            if i == v - 1:  # Ensure last node doesn't exceed index
-                break
-            rand_node = random.randint(i + 1, v - 1)  # Ensure edge goes forward
-            if rand_node not in G[i]:
-                weight = random.randint(1, 20)  # Assign random weight to edge
-                G.add_edge(i, rand_node, weight=weight)
+    G = nx.barabasi_albert_graph(v, m)
+    edges = []
+    for (u, v) in G.edges():
+        weight = random.randint(*(1,15))
+        G[u][v]['weight'] = weight
+        edges.append((u, v, weight))
 
     return G
 
@@ -29,7 +21,6 @@ def create_random_graph(v, m):
 def kruskals(G):
     node_colors = ['skyblue'] * len(G.nodes())
     edge_colors = {edge: 'purple' for edge in G.edges()}
-    node_list = list(G.nodes())
 
     # Convert the graph edges to a list of (node1, node2, weight) tuples
     edges = [(u, v, G.edges[u, v]['weight']) for u, v in G.edges()]
@@ -63,11 +54,11 @@ def kruskals(G):
             union(u, v)
             mst.append((u, v))
             total_weight += weight
-            yield node_colors, u, edge_colors, mst, total_weight
+            yield node_colors, edge_colors, mst, total_weight
 
     print("MST:", mst)
     print("Total weight:", total_weight)
-    yield "red", None, edge_colors, mst, total_weight
+    yield "red", edge_colors, mst, total_weight
 
 def show_error(message):
     root = tk.Tk()
@@ -90,7 +81,8 @@ def visualize_kruskals(graph):
 
     fig.canvas.mpl_connect('close_event', on_close)
     check=1
-    for node_colors, current_node, edge_colors, path_edge, total_weight in kruskals(graph):
+    for node_colors, edge_colors, path_edge, total_weight in kruskals(graph):
+
         if stop_animation:
             check=0
             break
@@ -119,20 +111,16 @@ def visualize_kruskals(graph):
             font_color='black',
             edge_color=[edge_colors[edge] for edge in graph.edges()],
             linewidths=1,
-            width=2
+            width=3
         )
 
         edge_labels = {(u, v): f"{graph[u][v]['weight']}" for u, v in graph.edges()}
         nx.draw_networkx_edge_labels(
             graph, pos,
             edge_labels=edge_labels,
-            font_size=9,
+            font_size=11,
             font_color='blue'
         )
-        # plt.title("Kruskal's Algorithm Visualization",fontsize=16,
-        # fontname='Times New Roman',
-        # fontweight='bold')
-
         plt.draw()
         plt.pause(1.5)
 
@@ -153,19 +141,20 @@ def visualize_kruskals(graph):
         font_color='black',
         edge_color='red',
         linewidths=1,
-        width=2
+        width=3
      )
      edge_labels = {(u, v): f"{graph[u][v]['weight']}" for u, v in graph.edges()}
      nx.draw_networkx_edge_labels(
         graph, pos,
         edge_labels=edge_labels,
-        font_size=9,
+        font_size=11,
         font_color='blue'
      )
 
      plt.title(f"Kruskal's Algorithm - MST Total Weight: {mst_weight}",fontsize=16,
         fontname='Times New Roman',
         fontweight='bold')
+     
      plt.show()
 
 

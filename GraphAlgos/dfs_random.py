@@ -55,7 +55,6 @@ def visualize_dfs(graph, start):
             font_size=10,  
             font_color='black',  
             edge_color='maroon',  
-            linewidths=1,  
             width=2,
             ax=ax
         )
@@ -78,16 +77,17 @@ def visualize_dfs(graph, start):
     if not stop_animation:
         plt.pause(1.7)
         ax.clear()
+        # The ax.clear() function is used to clear the current axes (ax) before re-drawing the plot.
+        # By clearing the axes, you can ensure that the plot is refreshed with only the new drawing elements. 
         node_colors = ['red' for _ in graph.nodes()]
         nx.draw(
             graph, pos, 
-            with_labels=True, 
+            with_labels = True,
             node_color=node_colors,
             node_size=500,  
             font_size=10,  
             font_color='black',  
-            edge_color='maroon',  
-            linewidths=1,  
+            edge_color='maroon',         
             width=2,
             ax=ax
         )

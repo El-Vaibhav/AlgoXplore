@@ -13,7 +13,7 @@ def create_barabasi_albert_weighted_graph(num_nodes, num_edges_per_node, weight_
     return G
 
 def generate_color_palette():
-    """Return a fixed palette of 20 distinct colors."""
+    # Return a fixed palette of 20 distinct colors.
     return [
         "yellow", "blue", "green", "purple", "orange", "pink", "cyan", "magenta", 
         "lime", "turquoise", "violet", "gold", "lightblue", "lightgreen", "salmon", 

@@ -36,8 +36,6 @@ def kahns_topological_sort(graph):
         node = q.get()
         traversal.append(node)
         visited.add(node)
-        # node_colors[node_list.index(node)] = 'yellow'
-        # # yield node_colors, node  # Yield current node colors and node
         
         for neighbor in graph.neighbors(node):
             in_deg[neighbor] -= 1
@@ -51,7 +49,7 @@ def kahns_topological_sort(graph):
 
 # Function to visualize topological sort
 def visualize_toposort(graph):
-    # Increase the 'k' parameter to increase spacing between nodes
+
     pos = nx.spring_layout(graph, k = 13.5, scale=6, iterations=100)
  
     stop_animation = False
@@ -64,6 +62,8 @@ def visualize_toposort(graph):
     fig.canvas.mpl_connect('close_event', on_close)
     
     check=1
+    # Use plt.show() when you want to display a plot and are ready to stop the script until the plot window is closed.
+    # Use plt.draw() when you want to update or refresh a plot that is already displayed, without blocking the script execution.
     for node_colors, current_node ,traversal in kahns_topological_sort(graph):
 
         if stop_animation:
@@ -98,7 +98,6 @@ def visualize_toposort(graph):
         plt.title(f"Kahn's Algorithm Visualization\n\nTopo Sort Order: {traversal}",fontsize=16,
         fontname='Times New Roman',
         fontweight='bold')
-
 
     plt.show()
 

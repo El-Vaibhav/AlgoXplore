@@ -58,7 +58,7 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
                 vertices = int(vertices_entry.get())
             if custom_graph:
                 edges = eval(edges_entry.get())  # Assuming edges are entered as [(0,1,2), (1,2,3)]
-                # edges_entry.get(): This retrieves the text currently present in the edges_entry widget.
+                # edges_entry.get(): get() retrieves the text currently present in the edges_entry widget.
             else:
                 edges = int(edges_entry.get())  # Assuming edges are entered as an integer (edges per vertex)
 
@@ -69,7 +69,7 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
                 end = int(end_entry.get())
 
             display_algorithm_explanation(algorithm_name,dialog)
-
+            
             dialog.destroy()
 
             explanation_dialog.destroy()
@@ -271,7 +271,6 @@ def display_algorithm_explanation(algorithm_name,dialog):
 # Create the root window
 root = tk.Tk()
 root.configure(bg="black")
-root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
 root.attributes('-fullscreen', True)
 
 button_close = tk.Button(root, text="Close", command=root.quit, font=("Helvetica", 12, "bold"), bg="red", fg="black")

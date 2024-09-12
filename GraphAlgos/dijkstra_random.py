@@ -20,6 +20,7 @@ def dijkstra(G, num_nodes, start_node, end_node):
     q = set()
     node_colors = ['skyblue'] * len(G.nodes())
     edge_colors = {edge: 'purple' for edge in G.edges()}
+
     node_list = list(G.nodes())
     q.add((0, start_node))
 
@@ -48,16 +49,21 @@ def dijkstra(G, num_nodes, start_node, end_node):
                         search = my_dict[i]
             
         for neighbor in G.neighbors(node):
+
             weight = G[node][neighbor]['weight']
             if dist[neighbor] == min(dist[neighbor], dist[node] + weight):
                 continue
             else:
-                if (dist[neighbor], neighbor) in q:
-                    q.remove((dist[neighbor], neighbor))
+                # if (dist[neighbor], neighbor) in q:
+                #     q.remove((dist[neighbor], neighbor))
+
                 dist[neighbor] = min(dist[neighbor], dist[node] + weight)
                 my_dict[neighbor] = node
+
                 node_colors[node_list.index(neighbor)] = 'yellow'
+
                 q.add((dist[neighbor], neighbor))
+
                 yield node_colors, neighbor, edge_colors, ans, dist[end_node]
 
     for i in range(len(visited)):
@@ -95,13 +101,14 @@ def visualize_dijkstra(graph, s, e):
             graph, pos,
             with_labels=True,
             node_color=node_colors,
-            node_size=400,
-            font_size=12,
+            node_size=500,
+            font_size=10,
             font_color='black',
             edge_color=[edge_colors[edge] for edge in graph.edges()],
             width=2  # Edge width
         )
         edge_labels = {(u, v): f"{d['weight']}" for u, v, d in graph.edges(data=True)}
+
         nx.draw_networkx_edge_labels(
             graph, pos,
             edge_labels=edge_labels,
@@ -127,25 +134,28 @@ def visualize_dijkstra(graph, s, e):
             graph, pos,
             with_labels=True,
             node_color=node_colors,
-            node_size=400,
-            font_size=12,
+            node_size=500,
+            font_size=10,
             font_color='black',
             edge_color=[edge_colors[edge] for edge in graph.edges()],
             width=2  # Edge width
         )
         edge_labels = {(u, v): f"{d['weight']}" for u, v, d in graph.edges(data=True)}
+
         nx.draw_networkx_edge_labels(
             graph, pos,
             edge_labels=edge_labels,
             font_size=10,
             font_color='blue'
         )
+
         plt.title(
-        f"Dijkstra's Algorithm Visualization\n\nPath Cost: {path_cost}\nNodes in Path: {[s] + [edge[1] for edge in path_edges]}",
+        f"Node {s} to Node {e}\n\nMin Path Cost: {path_cost}\nNodes in Path: {[s] + [edge[1] for edge in path_edges]}",
         fontsize=15,
         fontname='Times New Roman',
         fontweight='bold'
         )
+
         legend_entries = [plt.Rectangle((0, 0), 1, 1, color= 'red', label='Nodes in shortest path')]
         ax.legend(handles=legend_entries, loc='upper right', fontsize=12,bbox_to_anchor=(1.05, 1))
 

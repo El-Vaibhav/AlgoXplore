@@ -51,6 +51,12 @@ def partition(l, low, high, color_data):
 
 # Quick Sort recursive function
 def quicksort(l, low, high, color_data):
+
+    # The yield from expression is used to yield all values from another generator (or iterable) in a single statement. 
+    # This is especially useful when you have a function that generates values, and you want to yield those values from another function.
+    # quicksort is a generator function that is using yield from to call the partition function (which is also a generator). 
+    # This makes the quicksort function yield all frames produced by partition, and then recursively yield frames from the subsequent recursive calls.
+    
     if low < high:
         pi = yield from partition(l, low, high, color_data)
         yield from quicksort(l, low, pi - 1, color_data)
@@ -120,5 +126,5 @@ def update_plot(frame, bars):
 frames = quicksort(data, 0, len(data) - 1, color_data)
 
 # Create animation
-ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=330)
+ani = animation.FuncAnimation(fig, update_plot, fargs=(bars,), frames=frames, repeat=False, interval=400)
 plt.show()

@@ -24,7 +24,7 @@ def insertion_sort(data, color_data):
         j = i - 1
         while j >= 0 and data[j] > key:
             data[j + 1] = data[j]
-            color_data[j + 1] = 'red'  # Highlight comparison
+            color_data[j+1] = 'red'  # Highlight comparison
             yield data.copy(), color_data.copy()
             color_data[j + 1] = 'green'  # set color of sorted element
             j -= 1
@@ -72,9 +72,8 @@ bars = ax.bar(range(len(data)), data, align='edge', color='blue', width=0.6)
 # Define color legend annotations using handles
 legend_handles = [
     plt.Rectangle((0, 0), 1, 1, color='red', label='Comparing with sorted array'),
-    plt.Rectangle((0, 0), 1, 1, color='green', label='Inserted at correct position'),
+    plt.Rectangle((0, 0), 1, 1, color='green', label='Inserted at sorted position'),
     plt.Rectangle((0, 0), 1, 1, color='blue', label='Unsorted'),
-    plt.Rectangle((0, 0), 1, 1, color='brown', label='Sorted')
 ]
 
 # Add legend to the plot

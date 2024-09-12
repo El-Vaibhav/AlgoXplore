@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 def create_random_graph(v, edges_per_node):
+    
     G = nx.DiGraph()
     for i in range(v):
         for _ in range(edges_per_node):
@@ -25,16 +26,16 @@ def kosaraju(G):
     stack = []
     visited = [0] * len(G)
 
-    def sort(node):
+    def topo_sort(node):
         visited[node] = 1
         for i in adj[node]:
             if not visited[i]:
-                sort(i)
+                topo_sort(i)
         stack.append(node)
 
     for i in range(len(G)):
         if not visited[i]:
-            sort(i)
+            topo_sort(i)
 
     stack.reverse()
 
@@ -54,7 +55,13 @@ def kosaraju(G):
                 dfs(i, l)
                 
     count = 0
+
+    # Here, random.randint(0, 0xFFFFFF) generates a random integer between 0 and 0xFFFFFF. 
+    # This range represents all possible colors in the RGB hexadecimal color space.
+
     colors = ['#%06x' % random.randint(0, 0xFFFFFF) for _ in range(len(G))]
+    # '%06x' is a format specifier that converts an integer to a six-digit hexadecimal string, with leading zeros if necessary.
+    # The '#' prefix is added to make it a valid HTML/CSS color code (e.g., #1a2b3c).
 
     k = 0
 
@@ -82,14 +89,17 @@ def visualize_kosaraju(graph):
 
     fig.canvas.mpl_connect('close_event', on_close)
 
-    generator = kosaraju(graph)
     unique_colors = {}
     check=1
-    for node_colors in generator:
+
+    for node_colors in kosaraju(graph):
+
         if stop_animation:
             check=0
             break
-
+        
+        # Integer Check: If node_colors is an integer as in the end we return the count, it means that the current value 
+        # represents the total number of components in the graph. Hence, we store this value in total_components.
         if isinstance(node_colors, int):
             total_components = node_colors
             continue
@@ -99,8 +109,8 @@ def visualize_kosaraju(graph):
             if color !="skyblue" and color not in unique_colors:
                 unique_colors[color] = f'Component {len(unique_colors) + 1}'
 
-        legend_entries = [plt.Rectangle((0, 0), 1, 1, color = color, label=label)
-                          for color, label in unique_colors.items()]
+        legend_entries = [plt.Rectangle((0, 0), 1, 1, color = color, label=label) for color, label in unique_colors.items()]
+        
         ax.legend(handles=legend_entries, loc='upper right', fontsize=9,bbox_to_anchor=(1.05, 1))
 
         nx.draw(
@@ -112,7 +122,7 @@ def visualize_kosaraju(graph):
             font_color='black',
             edge_color='black',
             arrowstyle='-|>',  # Arrow style
-            arrowsize=20,  # Arrow size
+            arrowsize=17,  # Arrow size
             width=2
         )
         plt.title("Kosaraju's Algorithm Visualization",fontsize=16,
