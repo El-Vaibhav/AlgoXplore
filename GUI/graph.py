@@ -267,7 +267,6 @@ def display_algorithm_explanation(algorithm_name,dialog):
 
     return explanation_dialog
 
-
 # Create the root window
 root = tk.Tk()
 root.configure(bg="black")
@@ -283,7 +282,7 @@ root.update_idletasks()
 base_dir1 = os.path.abspath(os.path.dirname(__file__))
 
 # Construct the image path dynamically
-image_path = os.path.join(base_dir1, "img3.jpg")
+image_path = os.path.join(base_dir1, "img2.jpg")
 image = Image.open(image_path)
 image_width, image_height = image.size
 
@@ -293,7 +292,7 @@ title_label.pack(side=tk.TOP, pady=30)  # Center the title at the top
 
 # Create a frame for the image with a border
 frame_image = tk.Frame(root, bd=3, relief=tk.SUNKEN)
-frame_image.pack(side=tk.LEFT, padx=10, pady=70)
+frame_image.pack(side=tk.LEFT, padx=60)
 
 # Create a photoimage object of the image
 image_tk = ImageTk.PhotoImage(image)
@@ -303,7 +302,7 @@ label_image = tk.Label(frame_image, image=image_tk)
 label_image.pack()
 
 frame_buttons = tk.Frame(root, bg="black")
-frame_buttons.pack(side=tk.RIGHT, padx=37, pady=72, anchor=tk.NE)
+frame_buttons.pack(side=tk.RIGHT, padx=17, pady=72, anchor=tk.NE)
 
 # Button labels and colors
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'GraphAlgos'))
