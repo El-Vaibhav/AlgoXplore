@@ -49,6 +49,8 @@ def visualize_prims(graph, adj, v):
     pos = nx.spring_layout(graph)
     pos = nx.spring_layout(graph, k = 13.5, scale=5, iterations=100)  
     fig, ax = plt.subplots(figsize=(8, 8))
+    mng = plt.get_current_fig_manager()
+    mng.window.wm_geometry("+0+0") 
     stop_animation = False
     mst_edges = []
     total_weight = 0

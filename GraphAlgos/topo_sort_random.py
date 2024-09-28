@@ -54,6 +54,8 @@ def visualize_toposort(graph):
  
     stop_animation = False
     fig, ax = plt.subplots(figsize=(8, 8))
+    mng = plt.get_current_fig_manager()
+    mng.window.wm_geometry("+0+0") 
     
     def on_close(event):
         nonlocal stop_animation

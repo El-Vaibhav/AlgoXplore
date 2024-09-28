@@ -50,6 +50,9 @@ def visualize_bfs(graph, start):
 
     fig, ax = plt.subplots(figsize=(8, 8))
 
+    mng = plt.get_current_fig_manager()
+    mng.window.wm_geometry("+0+0") 
+
     stop_animation = False
     
     # on_close(event) is a callback function that gets triggered when the plot window is closed

@@ -51,6 +51,8 @@ def kahns_topological_sort(graph):
 def visualize_toposort(graph):
     pos = nx.spring_layout(graph, k=13.5, scale=2, iterations=100)
     fig, ax = plt.subplots(figsize=(8, 8))
+    mng = plt.get_current_fig_manager()
+    mng.window.wm_geometry("+0+0") 
     
     def on_close(event):
         plt.close(fig)

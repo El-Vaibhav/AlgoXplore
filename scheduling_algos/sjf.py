@@ -106,7 +106,7 @@ print(f"Arrival Times: {arrival_time}")
 print(f"Burst Times: {burst_time}")
 
 # Initialize the plot
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.5, 6), gridspec_kw={'width_ratios': [3, 2]})
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(8, 10), gridspec_kw={'height_ratios': [3, 2, 2]})
 ax1.set_title("SJF Scheduling Visualization")
 ax1.set_xlabel("Processes")
 ax1.set_ylabel("Time")
@@ -117,6 +117,10 @@ ax1.set_xlim(0, processes)  # X-axis covers the number of processes
 
 # Define the update_plot function for animation
 # Update the update_plot function for animation
+colors = [
+    'green', 'blue', 'orange', 'purple', 'red',
+    'cyan', 'magenta', 'yellow', 'lightgreen', 'lightblue'
+]
 def update_plot(gantt_data):
     ax1.clear()  # Clear the current frame before adding new bars
     ax1.set_title("SJF Scheduling Visualization")
@@ -135,7 +139,7 @@ def update_plot(gantt_data):
     for process in gantt_data_list:
         ax1.bar(process['process'] - 1, process['burst_time'], 
                bottom=process['start_time'], 
-               color='green', 
+               color=colors[(process['process'] - 1) % len(colors)], 
                edgecolor='black', 
                width=bar_width)  # Set the width of the bars
         ax1.text(process['process'] - 1, 
@@ -166,6 +170,22 @@ def update_plot(gantt_data):
     # Adjust font size for the table
     table.auto_set_font_size(False)
     table.set_fontsize(10)  # Adjust font size if needed
+
+    # Gantt Chart on ax3
+    ax3.clear()  # Clear previous frame
+    ax3.set_title("Gantt Chart")
+    ax3.set_xlabel("Time")
+    ax3.set_ylabel("Processes")
+
+    for process in gantt_data_list:
+        ax3.barh(f"P{process['process']}", process['burst_time'], left=process['start_time'], 
+                 color=colors[(process['process'] - 1) % len(colors)], edgecolor='black')
+        ax3.text(process['start_time'] + process['burst_time'] / 2, f"P{process['process']}", 
+                 f"P{process['process']}", va='center', ha='center', color='white')
+        
+    mng = plt.get_current_fig_manager()
+    mng.window.wm_geometry("+0+0")  # Set the position to (0,0) which is the top-left of the screen
+
     
     plt.tight_layout()
 

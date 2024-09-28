@@ -35,6 +35,8 @@ def visualize_dfs(graph):
     pos = nx.spring_layout(graph)
     pos = nx.spring_layout(graph, k = 13.5, scale=5, iterations=100)
     fig, ax = plt.subplots(figsize=(8, 8))
+    mng = plt.get_current_fig_manager()
+    mng.window.wm_geometry("+0+0")  # Set the position to (0,0) which is the top-left of the screen
     stop_animation = [False]
 
     def on_close(event):

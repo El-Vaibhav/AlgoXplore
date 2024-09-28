@@ -77,6 +77,8 @@ def visualize_dijkstra(graph, s, e):
     pos = nx.spring_layout(graph)
     pos = nx.spring_layout(graph, k = 9.5, scale=15, iterations=100)
     fig, ax = plt.subplots(figsize=(8, 8))
+    mng = plt.get_current_fig_manager()
+    mng.window.wm_geometry("+0+0") 
     stop_animation = False
 
     def on_close(event):

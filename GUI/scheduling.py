@@ -104,7 +104,7 @@ def display_algorithm_code(algorithm_name):
         "SJF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\sjf.py",
         "SRTF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\srtf.py",
         "RR": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\rr.py",
-        "Priority": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\priority.py"
+        "Priority ": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\priority.py"
     }
 
     code_path = code_paths.get(algorithm_name)
