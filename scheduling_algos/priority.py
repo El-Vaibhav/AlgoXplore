@@ -1,4 +1,4 @@
-import argparse
+import argparse 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import tkinter as tk
@@ -19,78 +19,51 @@ def parse_comma_separated(value):
     except ValueError:
         raise argparse.ArgumentTypeError(f"Invalid input: {value}. Expected a comma-separated list of integers.")
 
-# Priority Scheduling (Non-Preemptive) algorithm generator
+# Priority Scheduling (Non-Preemptive) algorithm generator using the new priority logic
 def priority_scheduling(arrival_time, burst_time, priority):
-    p = len(arrival_time)
-    processes = list(range(p))
+    p = ["P"+str(i+1) for i in range(len(arrival_time))]
+    
+    # Sort based on arrival time, priority, and burst time
+    p, arrival_time, priority, burst_time = zip(*sorted(zip(p, arrival_time, priority, burst_time), key=lambda x: (x[1], x[2], x[3])))
+    
+    curr_time = 0
+    ans = {}
+    visited = set()
 
-    # Sorting based on arrival time, then priority, and then burst time
-    for i in range(p):
-        for j in range(p - 1):
-            if arrival_time[j] > arrival_time[j + 1]:
-                arrival_time[j], arrival_time[j + 1] = arrival_time[j + 1], arrival_time[j]
-                burst_time[j], burst_time[j + 1] = burst_time[j + 1], burst_time[j]
-                priority[j], priority[j + 1] = priority[j + 1], priority[j]
-                processes[j], processes[j + 1] = processes[j + 1], processes[j]
-
-            if arrival_time[j] == arrival_time[j + 1]:
-                if priority[j] < priority[j + 1]:
-                    arrival_time[j], arrival_time[j + 1] = arrival_time[j + 1], arrival_time[j]
-                    burst_time[j], burst_time[j + 1] = burst_time[j + 1], burst_time[j]
-                    priority[j], priority[j + 1] = priority[j + 1], priority[j]
-                    processes[j], processes[j + 1] = processes[j + 1], processes[j]
-
-                elif priority[j] == priority[j + 1]:
-                    if burst_time[j] > burst_time[j + 1]:
-                        burst_time[j], burst_time[j + 1] = burst_time[j + 1], burst_time[j]
-                        processes[j], processes[j + 1] = processes[j + 1], processes[j]
-
-    # Initialization for completion time and start time
-    comp_time = [0] * p
-    start_time = [0] * p
-    turn_around_time = [0] * p
-    sum_time = 0
-    visited = [False] * p
-
-    if arrival_time[0] == 0:
-        sum_time += burst_time[0]
-    else:
-        sum_time += arrival_time[0] + burst_time[0]
-
-    comp_time[0] = sum_time
-    start_time[0] = arrival_time[0]
-    visited[0] = True
-
-    # Iterate through each process
-    for j in range(1, p):
-        if arrival_time[j] > sum_time:
-            sum_time = arrival_time[j]
-
-        k = -1
-        min_priority = float('inf')
-
-        for i in range(p):
-            if not visited[i] and arrival_time[i] <= sum_time and priority[i] < min_priority:
-                k = i
-                min_priority = priority[i]
-
-        if k != -1:
-            start_time[k] = sum_time
-            sum_time += burst_time[k]
-            comp_time[k] = sum_time
-            visited[k] = True
+    while len(ans) != len(p):
+        max_pri = float('-inf')
+        check=1
         
+        for i in range(len(p)):
+            if arrival_time[i] <= curr_time and p[i] not in visited:
+                max_pri = max(max_pri, priority[i])
+
+        for i in range(len(p)):
+            if arrival_time[i] <= curr_time and priority[i] == max_pri and p[i] not in visited:
+                curr_time += burst_time[i]
+                ans[p[i]] = curr_time
+                visited.add(p[i])
+                check=0
+                break
+
+        if check:
+            curr_time+=1
+
+    # Completion time and start time logic
+    comp_time = [ans[proc] for proc in p]
+    start_time = [comp_time[i] - burst_time[i] for i in range(len(p))]
     gantt_data = []
+
     # Yield the state of the Gantt chart for visualization
-    for i in range(p):
+    for i in range(len(p)):
         gantt_data.append({
-            'process': processes[i] + 1,
+            'process': int(p[i][1:]),  # Extract process number
             'start_time': start_time[i],
             'burst_time': burst_time[i],
             'completion_time': comp_time[i],
             'turn_around_time': comp_time[i] - arrival_time[i],
         })
-        yield gantt_data.copy(), comp_time, turn_around_time
+        yield gantt_data.copy(), comp_time, start_time
 
 
 # Parse command-line arguments
@@ -115,7 +88,7 @@ print(f"Burst Times: {burst_time}")
 print(f"Priorities: {priority}")
 
 # Initialize the plot
-fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(8, 10), gridspec_kw={'height_ratios': [3, 2, 2]})
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(9, 10), gridspec_kw={'height_ratios': [3, 2, 2]})
 ax1.set_title("Priority Scheduling Visualization")
 ax1.set_xlabel("Processes")
 ax1.set_ylabel("Time")
@@ -139,7 +112,7 @@ def update_plot(gantt_data):
     ax1.set_xlim(0, processes)
 
     # Unpack the gantt_data tuple
-    gantt_data_list, completion_time, turn_around_time = gantt_data
+    gantt_data_list, completion_time, start_time = gantt_data
 
     # Set bar width
     bar_width = 0.8  # Adjust the width as needed
@@ -191,10 +164,9 @@ def update_plot(gantt_data):
                  color=colors[(process['process'] - 1) % len(colors)], edgecolor='black')
         ax3.text(process['start_time'] + process['burst_time'] / 2, f"P{process['process']}", 
                  f"P{process['process']}", va='center', ha='center', color='white')
-        
+
     mng = plt.get_current_fig_manager()
     mng.window.wm_geometry("+0+0")  # Set the position to (0,0) which is the top-left of the screen
-
 
     plt.tight_layout()
 

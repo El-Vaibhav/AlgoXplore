@@ -76,7 +76,7 @@ def open_input_dialog(file_path, algorithm_name):
 
     # Conditionally add priority entry based on algorithm type
     if algorithm_name in ["Priority"]:
-        tk.Label(dialog, text="Priority (eg 1,2,3,4):", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
+        tk.Label(dialog, text="Priority (Largest number = max priority):", fg="white", bg="brown", font=font_style).pack(anchor=tk.W, padx=20)
         priority_entry = tk.Entry(dialog, width=30, bg="white", font=font_style)
         priority_entry.pack(anchor=tk.W, padx=20, pady=15)
     else:

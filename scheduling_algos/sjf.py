@@ -106,7 +106,7 @@ print(f"Arrival Times: {arrival_time}")
 print(f"Burst Times: {burst_time}")
 
 # Initialize the plot
-fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(8, 10), gridspec_kw={'height_ratios': [3, 2, 2]})
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(9, 10), gridspec_kw={'height_ratios': [3, 2, 2]})
 ax1.set_title("SJF Scheduling Visualization")
 ax1.set_xlabel("Processes")
 ax1.set_ylabel("Time")
