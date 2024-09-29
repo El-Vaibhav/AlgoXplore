@@ -62,6 +62,7 @@ def priority_scheduling(arrival_time, burst_time, priority):
             'burst_time': burst_time[i],
             'completion_time': comp_time[i],
             'turn_around_time': comp_time[i] - arrival_time[i],
+            'priority': priority[i],  # Add priority to the gantt_data
         })
         yield gantt_data.copy(), comp_time, start_time
 
@@ -139,14 +140,17 @@ def update_plot(gantt_data):
     process_info = [[f"P{process['process']}",
                      arrival_time[process['process'] - 1],  # Access by process index
                      process['burst_time'],
-                     process['completion_time'], process['turn_around_time']] for process in gantt_data_list]
+                     process['completion_time'], 
+                     process['turn_around_time'],
+                     process['priority']]  # Add priority to the process info
+                     for process in gantt_data_list]
 
     # Add final table
     table = ax2.table(cellText=process_info,
-                     colLabels=["P", "AT", "BT", "CT", "TAT"],
+                     colLabels=["P", "AT", "BT", "CT", "TAT", "Priority"],  # Add Priority column
                      cellLoc='center',
                      loc='center',
-                     colColours=["lightblue"] * 5,
+                     colColours=["lightblue"] * 6,  # Change length to 6
                      bbox=[0, 0, 1, 1])
 
     # Adjust font size for the table

@@ -100,11 +100,11 @@ def display_algorithm_code(algorithm_name):
     code_text.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
 
     code_paths = {
-        "FCFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\fcfs.py",
-        "SJF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\sjf.py",
-        "SRTF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\srtf.py",
-        "RR": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\rr.py",
-        "Priority ": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\priority.py"
+        "FCFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\FCFS.py",
+        "Priority ": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\Priority_NP.py",
+        "SJF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\SJF.py",
+        "SRTF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\srtf.py",
+        "RR": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\rr.py",
     }
 
     code_path = code_paths.get(algorithm_name)
@@ -122,7 +122,7 @@ def display_algorithm_explanation(algorithm_name):
         "SJF": "Shortest Job First (SJF) is a scheduling algorithm that selects the process with the shortest execution time first. It can be preemptive (Shortest Remaining Time First) or non-preemptive. It minimizes average waiting time but may lead to starvation of longer processes.",
         "SRTF": "Shortest Remaining Time First (SRTF) is the preemptive version of SJF where the process with the shortest remaining time is executed first. It provides optimal scheduling in terms of minimizing average waiting time but can lead to high overhead due to frequent context switches.",
         "RR": "Round Robin (RR) is a preemptive scheduling algorithm where each process is assigned a fixed time slice (quantum) in a cyclic order. It ensures fairness and responsiveness but can lead to high turnaround times for processes if the quantum is too large.",
-        "Priority": "Priority Scheduling is a scheduling algorithm where processes are executed based on their priority. Processes with higher priority are executed before those with lower priority. It can be preemptive or non-preemptive and may lead to starvation of low-priority processes."
+        "Priority": "Priority Scheduling is a Non preemptive scheduling algorithm where processes are executed based on their priority. Processes with higher priority are executed before those with lower priority. It can be preemptive or non-preemptive and may lead to starvation of low-priority processes."
     }
 
     explanation = explanations.get(algorithm_name, "No explanation available for this algorithm.")
