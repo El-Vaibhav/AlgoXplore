@@ -29,7 +29,7 @@ def open_input_dialog(file_path, algorithm_name):
             value_range = int(range_entry.get())
             close_dialogs()
             execute_sorting_algorithm(file_path, size=size, value_range=value_range)
-            display_algorithm_explanation(algorithm_name)
+            display_algorithm_explanation(algorithm_name,dialog)
             close_dialogs()
 
         except ValueError:
@@ -64,7 +64,7 @@ def open_input_dialog(file_path, algorithm_name):
     submit_button.pack(pady=20)
 
     # Display algorithm explanation
-    explanation_dialog = display_algorithm_explanation(algorithm_name)
+    explanation_dialog = display_algorithm_explanation(algorithm_name,dialog)
 
     # Bind close events to close both dialogs
     dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
@@ -114,7 +114,7 @@ def display_algorithm_code(algorithm_name):
             messagebox.showerror("Error", f"Failed to load code for {algorithm_name}: {str(e)}")
             
 # Function to display algorithm explanation
-def display_algorithm_explanation(algorithm_name):
+def display_algorithm_explanation(algorithm_name,dialog):
     explanations = {
         "Bubble Sort": "Bubble Sort is a simple brute force sorting algorithm that repeatedly iterates through the list, compares adjacent elements, and swaps them if they are in the wrong order. The iteartion through the list is repeated until the whole list is sorted. On every iteration we get the sorted element of that iteration at the end of the array The time complexity is O(n^2) for all three cases (Worst , Avg , Best)",
         "Insertion Sort": "Insertion Sort one by one makes the sorted array starting from left most element.The first element is always sorted. It starts from the second element compares it with remaining left array (elemnt 1) , inserts it in it's correct position. Same way now it takes the third element compares it with the left array (element 1 and 2) and insert 3rd element in its sorted position. This way it sorts the array . The best case TC is O(N) when array is sorted , it is O(N^2) for worst and average case",
@@ -133,9 +133,35 @@ def display_algorithm_explanation(algorithm_name):
     explanation_label = tk.Label(explanation_dialog, text=explanation, font=font_style, fg="white", bg="red", wraplength=400, justify=tk.LEFT)
     explanation_label.pack(padx=20, pady=20)
 
-    code_button = tk.Button(explanation_dialog, text="Code", command=lambda: display_algorithm_code(algorithm_name),
-                            bg="grey", fg="black", font=("Helvetica", 12, "bold"))
-    code_button.pack(pady=10)
+    def close_dialogs():
+        explanation_dialog.destroy()
+        dialog.destroy()
+
+    # Bind the window close event (the "X" button) to close both dialogs
+    explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+    dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+    
+    button_frame = tk.Frame(explanation_dialog,bg="red")
+    button_frame.pack(pady=20)
+
+# Close button
+    close_button = tk.Button(button_frame, text="Close", command=close_dialogs, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    close_button.pack(side=tk.LEFT, padx=30)
+
+# Code button
+    code_button = tk.Button(button_frame, text="Code", command=lambda: display_algorithm_code(algorithm_name),
+                        bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    code_button.pack(side=tk.LEFT, padx=10)
+        
+    # # Bind closing of dialogs to the close button
+    # close_button = tk.Button(explanation_dialog, text="Close", command=close_dialogs, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    # close_button.pack(padx=100,pady=20)
+
+
+
+    # code_button = tk.Button(explanation_dialog, text="Code", command=lambda: display_algorithm_code(algorithm_name),
+    #                         bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    # code_button.pack(pady=10)
 
     return explanation_dialog
 
@@ -150,7 +176,7 @@ button_close = tk.Button(root, text="Close", command=root.quit, font=("Helvetica
 button_close.place(relx=1.0, rely=0.0, anchor="ne")  # Position at top right corner
 
 # Message label
-message_label = tk.Label(root, text="Choose any algorithm you want to visualize", font=("Tahoma", 18, "bold"), fg="white", bg="black")
+message_label = tk.Label(root, text="Choose any algorithm you want to visualize", font=("Georgia", 23, "bold"), fg="white", bg="black")
 message_label.pack(side=tk.TOP, padx=10, pady=15)  # Positioned at the top with padding
 
 # Load the image

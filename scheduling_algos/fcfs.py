@@ -148,7 +148,7 @@ def update_plot(gantt_data):
 frames = fcfs_scheduling(arrival_time, burst_time)
 
 # Create animation
-ani = animation.FuncAnimation(fig, update_plot, frames=frames, repeat=False, interval=1300)
+ani = animation.FuncAnimation(fig, update_plot, frames=frames, repeat=False, interval=1300, cache_frame_data=False)
 
 # Display the plot
 plt.show()

@@ -29,7 +29,7 @@ def open_input_dialog(file_path, algorithm_name):
             time_quantum = time_quant_entry.get() if time_quant_entry else None
             close_dialogs()
             execute_scheduling_algorithm(file_path, arrival_time=arrival_time, burst_time=burst_time, priority=priority,time_quantum=time_quantum)
-            display_algorithm_explanation(algorithm_name)
+            display_algorithm_explanation(algorithm_name,dialog)
         except ValueError:
             messagebox.showerror("Invalid input", "Please enter valid input values.")
     
@@ -85,7 +85,7 @@ def open_input_dialog(file_path, algorithm_name):
     submit_button = tk.Button(dialog, text="Submit", command=submit, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
     submit_button.pack(pady=20)
 
-    explanation_dialog = display_algorithm_explanation(algorithm_name)
+    explanation_dialog = display_algorithm_explanation(algorithm_name,dialog)
 
     dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
     explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
@@ -101,7 +101,7 @@ def display_algorithm_code(algorithm_name):
 
     code_paths = {
         "FCFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\FCFS.py",
-        "Priority ": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\Priority_NP.py",
+        "Priority": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\Priority_NP.py",
         "SJF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\SJF.py",
         "SRTF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\srtf.py",
         "RR": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\rr.py",
@@ -116,7 +116,7 @@ def display_algorithm_code(algorithm_name):
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load code for {algorithm_name}: {str(e)}")
 
-def display_algorithm_explanation(algorithm_name):
+def display_algorithm_explanation(algorithm_name,dialog):
     explanations = {
         "FCFS": "First-Come, First-Served (FCFS) is a scheduling algorithm where processes are executed in the order they arrive in the ready queue. It is simple but can lead to long waiting times for some processes if a long process arrives before shorter ones.",
         "SJF": "Shortest Job First (SJF) is a scheduling algorithm that selects the process with the shortest execution time first. It can be preemptive (Shortest Remaining Time First) or non-preemptive. It minimizes average waiting time but may lead to starvation of longer processes.",
@@ -136,9 +136,26 @@ def display_algorithm_explanation(algorithm_name):
     explanation_label = tk.Label(explanation_dialog, text=explanation, font=font_style, fg="white", bg="red", wraplength=400, justify=tk.LEFT)
     explanation_label.pack(padx=20, pady=20)
 
-    code_button = tk.Button(explanation_dialog, text="Code", command=lambda: display_algorithm_code(algorithm_name),
-                            bg="grey", fg="black", font=("Helvetica", 12, "bold"))
-    code_button.pack(pady=10)
+    def close_dialogs():
+        explanation_dialog.destroy()
+        dialog.destroy()
+
+    # Bind the window close event (the "X" button) to close both dialogs
+    explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+    dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+
+    button_frame = tk.Frame(explanation_dialog,bg="red")
+    button_frame.pack(pady=20)
+
+# Close button
+    close_button = tk.Button(button_frame, text="Close", command=close_dialogs, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    close_button.pack(side=tk.LEFT, padx=30)
+
+# Code button
+    code_button = tk.Button(button_frame, text="Code", command=lambda: display_algorithm_code(algorithm_name),
+                        bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    code_button.pack(side=tk.LEFT, padx=10)
+
 
     return explanation_dialog
 
@@ -179,7 +196,7 @@ frame_buttons.pack(pady=10)  # Add padding from the top
 
 # Create buttons for each scheduling algorithm
 for idx, (name, color, file_path) in enumerate(button_configs):
-    button = tk.Button(frame_buttons, text=name, bg=color, font=("Helvetica", 18, "bold"), 
+    button = tk.Button(frame_buttons, text=name, bg=color, font=("Helvetica", 17, "bold"), 
                        command=lambda n=name, p=file_path: open_input_dialog(p, n),width=7,bd=6,  # Set border width
                        highlightbackground="black",  # Set border color
                        highlightthickness=1)

@@ -252,18 +252,23 @@ def display_algorithm_explanation(algorithm_name,dialog):
     def close_dialogs():
         explanation_dialog.destroy()
         dialog.destroy()
-        
-    # Bind closing of dialogs to the close button
-    close_button = tk.Button(explanation_dialog, text="Close", command=close_dialogs, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
-    close_button.pack(pady=20)
 
     # Bind the window close event (the "X" button) to close both dialogs
     explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
     dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
 
-    code_button = tk.Button(explanation_dialog, text="Code", command=lambda: display_algorithm_code(algorithm_name),
-                            bg="grey", fg="black", font=("Helvetica", 12, "bold"))
-    code_button.pack(pady=10)
+    button_frame = tk.Frame(explanation_dialog,bg="red")
+    button_frame.pack(pady=20)
+
+# Close button
+    close_button = tk.Button(button_frame, text="Close", command=close_dialogs, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    close_button.pack(side=tk.LEFT, padx=30)
+
+# Code button
+    code_button = tk.Button(button_frame, text="Code", command=lambda: display_algorithm_code(algorithm_name),
+                        bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    code_button.pack(side=tk.LEFT, padx=10)
+
 
     return explanation_dialog
 
@@ -282,12 +287,13 @@ root.update_idletasks()
 base_dir1 = os.path.abspath(os.path.dirname(__file__))
 
 # Construct the image path dynamically
-image_path = os.path.join(base_dir1, "img2.jpg")
+# image_path = os.path.join(base_dir1, "img2.jpg")
+image_path = "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\img2.jpg"
 image = Image.open(image_path)
 image_width, image_height = image.size
 
 # Text label at the top
-title_label = tk.Label(root, text="Choose any algorithm you want to visualize", font=("Tahoma", 18, "bold"), fg="white", bg="black")
+title_label = tk.Label(root, text="Choose any algorithm you want to visualize", font=("Georgia", 23, "bold"), fg="white", bg="black")
 title_label.pack(side=tk.TOP, pady=30)  # Center the title at the top
 
 # Create a frame for the image with a border
