@@ -90,6 +90,27 @@ def open_input_dialog(file_path, algorithm_name):
     dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
     explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
 
+def display_algo_tc(algorithm_name):
+    # Mapping algorithm names to their corresponding time complexity script paths
+    tc_code_paths = {
+        "FCFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+        "Priority": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_log.py",
+        "SJF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+        "SRTF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+        "RR": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+    }
+
+    # Get the code path for the selected algorithm
+    code_path = tc_code_paths.get(algorithm_name)
+    if code_path:
+        try:
+            # Execute the time complexity script for the selected algorithm
+            subprocess.Popen([sys.executable, code_path])  # Run the corresponding time complexity script
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to run time complexity code for {algorithm_name}: {str(e)}")
+    else:
+        messagebox.showerror("Error", "No time complexity script found for this algorithm.")
+
 def display_algorithm_code(algorithm_name):
     code_dialog = tk.Toplevel(root)
     code_dialog.title(f"{algorithm_name} Code")
@@ -147,14 +168,14 @@ def display_algorithm_explanation(algorithm_name,dialog):
     button_frame = tk.Frame(explanation_dialog,bg="red")
     button_frame.pack(pady=20)
 
-# Close button
-    close_button = tk.Button(button_frame, text="Close", command=close_dialogs, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
-    close_button.pack(side=tk.LEFT, padx=30)
+    tc_button = tk.Button(button_frame, text="Time Complexity", command= lambda: display_algo_tc(algorithm_name), bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    tc_button.pack(side=tk.LEFT, padx=30)
 
 # Code button
     code_button = tk.Button(button_frame, text="Code", command=lambda: display_algorithm_code(algorithm_name),
                         bg="grey", fg="black", font=("Helvetica", 12, "bold"))
     code_button.pack(side=tk.LEFT, padx=10)
+
 
 
     return explanation_dialog

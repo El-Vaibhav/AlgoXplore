@@ -224,6 +224,32 @@ def display_algorithm_code(algorithm_name):
                 code_text.insert(tk.END, code)
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load code for {algorithm_name}: {str(e)}")
+
+def display_algo_tc(algorithm_name):
+    # Mapping algorithm names to their corresponding time complexity script paths
+    tc_code_paths = {
+   
+        "DFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
+        "BFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
+        "Topo Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
+        "Dijkstra": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_log_v.py",
+        "Bellman Ford": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\ev.py",
+        "Prims": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_log_v.py",
+        "Kruskals": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_log_v.py",
+        "Kosaraju": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
+    }
+
+    # Get the code path for the selected algorithm
+    code_path = tc_code_paths.get(algorithm_name)
+    if code_path:
+        try:
+            # Execute the time complexity script for the selected algorithm
+            subprocess.Popen([sys.executable, code_path])  # Run the corresponding time complexity script
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to run time complexity code for {algorithm_name}: {str(e)}")
+    else:
+        messagebox.showerror("Error", "No time complexity script found for this algorithm.")
+
 # Function to display algorithm explanation
 def display_algorithm_explanation(algorithm_name,dialog):
     # Mapping from algorithm name to explanation
@@ -260,9 +286,8 @@ def display_algorithm_explanation(algorithm_name,dialog):
     button_frame = tk.Frame(explanation_dialog,bg="red")
     button_frame.pack(pady=20)
 
-# Close button
-    close_button = tk.Button(button_frame, text="Close", command=close_dialogs, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
-    close_button.pack(side=tk.LEFT, padx=30)
+    tc_button = tk.Button(button_frame, text="Time Complexity", command= lambda: display_algo_tc(algorithm_name), bg="grey", fg="black", font=("Helvetica", 12, "bold"))
+    tc_button.pack(side=tk.LEFT, padx=30)
 
 # Code button
     code_button = tk.Button(button_frame, text="Code", command=lambda: display_algorithm_code(algorithm_name),
