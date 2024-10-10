@@ -22,12 +22,18 @@ These algorithms given below are  visualized and interactively demonstrated thro
 4) Quick Sort
 5) Selection Sort
 
+# CPU Scheduling Algorithms
+
+1) FCFS
+2) RR
+3) Priority
+4) SJF
+5) SRTF
+
 # ScreenShots
+![image](https://github.com/user-attachments/assets/f8ad6611-c762-4aa3-a494-1245aced9b7a)
 
-![Screenshot (51)](https://github.com/El-Vaibhav/AlgoXplore/assets/135622906/166f557b-ac9d-4eb3-81f9-97c217c7cef6)
-
-
-![Screenshot (52)](https://github.com/El-Vaibhav/AlgoXplore/assets/135622906/2996932c-ccb2-40bb-b49e-a79fcc92a48a)
+![image](https://github.com/user-attachments/assets/43e9e972-a675-4724-b866-ee11eb7eda3f)
 
 ![image](https://github.com/user-attachments/assets/df558230-b32f-4158-998c-22bf6f5f7ea6)
 
@@ -46,6 +52,10 @@ These algorithms given below are  visualized and interactively demonstrated thro
 
 ![image](https://github.com/user-attachments/assets/7600ed98-9d75-499c-b4fa-7f44dfea1e75)
 
+
+![image](https://github.com/user-attachments/assets/34c69484-5f96-42e6-9947-12d7b2f54413)
+
+![image](https://github.com/user-attachments/assets/d04f4951-8ce2-4263-bcba-0cd0343dc79c)
 
 
 
