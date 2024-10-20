@@ -299,7 +299,7 @@ def display_algorithm_explanation(algorithm_name,dialog):
 
 # Create the root window
 root = tk.Tk()
-root.configure(bg="black")
+root.configure(bg="lightgreen")
 root.attributes('-fullscreen', True)
 
 button_close = tk.Button(root, text="Close", command=root.quit, font=("Helvetica", 12, "bold"), bg="red", fg="black")
@@ -318,7 +318,7 @@ image = Image.open(image_path)
 image_width, image_height = image.size
 
 # Text label at the top
-title_label = tk.Label(root, text="Choose any algorithm you want to visualize", font=("Georgia", 23, "bold"), fg="white", bg="black")
+title_label = tk.Label(root, text="Choose any algorithm you want to visualize", font=("Georgia", 23, "bold"), fg="black", bg="lightgreen")
 title_label.pack(side=tk.TOP, pady=30)  # Center the title at the top
 
 # Create a frame for the image with a border
@@ -332,8 +332,8 @@ image_tk = ImageTk.PhotoImage(image)
 label_image = tk.Label(frame_image, image=image_tk)
 label_image.pack()
 
-frame_buttons = tk.Frame(root, bg="black")
-frame_buttons.pack(side=tk.RIGHT, padx=17, pady=72, anchor=tk.NE)
+frame_buttons = tk.Frame(root, bg="lightblue")
+frame_buttons.pack(side=tk.RIGHT, padx=5, pady=88, anchor=tk.NE)
 
 # Button labels and colors
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'GraphAlgos'))
@@ -365,6 +365,9 @@ def create_buttons():
         row = i // 2
         col = i % 2
         button = tk.Button(frame_buttons, text=text, width=15, height=2, command=lambda p=script_path, name=text: open_initial_dialog(p, name),
+                           bd=6,  # Set border width
+                           highlightbackground="black",  # Set border color
+                           highlightthickness=1,
                            font=("Helvetica", 14, "bold"), bg=color, fg="black")
         button.grid(row=row, column=col, padx=37, pady=34)
 

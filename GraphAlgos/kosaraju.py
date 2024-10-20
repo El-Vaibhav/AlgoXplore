@@ -11,8 +11,8 @@ def create_graph(edges):
     return G
 
 def kosaraju(G, V):
-    node_colors = ['skyblue'] * (V + 1)
-    node_list = list(G.nodes())
+    node_colors = ['skyblue'] * len(G.nodes())  # Set color for each node in the graph
+    node_list = list(G.nodes())  # Get all nodes
 
     adj = [[] for _ in range(V + 1)]
     for u, v in G.edges():
@@ -48,17 +48,16 @@ def kosaraju(G, V):
                 dfs(i, l)
 
     count = 0
-    colors = ['#%06x' % random.randint(0, 0xFFFFFF) for _ in range(V + 1)]
+    colors = ['#%06x' % random.randint(0, 0xFFFFFF) for _ in range(V + 1)]  # Adjust color length to match nodes
 
     k = 0
-
     for i in stack:
         l = []
         if not visited[i]:
             dfs(i, l)
             for m in l:
                 if m in node_list:
-                    node_colors[node_list.index(m)] = colors[k]
+                    node_colors[node_list.index(m)] = colors[k]  # Color for the component
             yield node_colors
             count += 1
             k += 1
@@ -118,7 +117,7 @@ def visualize_kosaraju(graph, V):
         plt.pause(1.5)
 
     if total_components is not None and check:
-        plt.title(f"Kosaraju's Algorithm Visualization\nTotal Number of Connected Components: {total_components}",fontsize=16,
+        plt.title(f"Kosaraju's Algorithm Visualization\nTotal Number of Connected Components: {total_components-1}",fontsize=16,
         fontname='Times New Roman',
         fontweight='bold')
         plt.pause(1.5)
@@ -131,6 +130,8 @@ def show_error(message):
     messagebox.showerror("Input Error", message)
     root.destroy()
 
+import ast
+
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Kosaraju's Algorithm")
 parser.add_argument('--edges', type=str, help='List of edges in the format [(u, v), (u, v), ...]')
@@ -138,18 +139,23 @@ args = parser.parse_args()
 
 # Check if arguments are provided
 if args.edges is not None:
-    edges = eval(args.edges)  # Convert string input to a Python list of tuples
-    v = 0
-    for u, v in edges:
-        v = max(v, u, v)
+    try:
+        edges = ast.literal_eval(args.edges)  # Safely convert string input to a Python list of tuples
+        if not isinstance(edges, list):
+            raise ValueError("Edges must be provided as a list of tuples.")
+        
+        # Validate that each edge is a tuple of length 2
+        for edge in edges:
+            if not isinstance(edge, tuple) or len(edge) != 2:
+                raise ValueError("Each edge must be a tuple of two elements: (u, v).")
+        
+        # Get the maximum vertex count from the edges
+        v = max(max(u, v) for u, v in edges)
 
-    if not isinstance(edges, list):
-        show_error("Edges must be provided as a list of tuples.")
+    except (ValueError, SyntaxError) as e:
+        show_error(f"Error parsing edges: {e}")
         exit()
-    for edge in edges:
-        if not isinstance(edge, tuple) or len(edge) != 2:
-            show_error("Each edge must be a tuple of two elements: (u, v).")
-            exit()
+
 else:
     v = 8  # Default number of vertices
     edges = [(0, 1), (1, 2), (2, 0), (2, 3), (3, 4), (4, 7), (4, 5), (5, 6), (6, 4), (4, 7), (6, 7)]  # Default edges

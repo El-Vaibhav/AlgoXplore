@@ -152,7 +152,7 @@ def display_algorithm_explanation(algorithm_name,dialog):
     explanation_dialog.geometry("440x440+850+100")  # Set position to open the dialog on the far right side
     explanation_dialog.configure(bg="red")  # Set the background color to red
     explanation_dialog.resizable(False, False)  # Disable maximizing
-    font_style = ("Helvetica", 15, "bold")
+    font_style = ("Helvetica", 14, "bold")
     explanation_label = tk.Label(explanation_dialog, text=explanation, font=font_style, fg="white", bg="red", wraplength=400, justify=tk.LEFT)
     explanation_label.pack(padx=20, pady=20)
 
@@ -175,22 +175,12 @@ def display_algorithm_explanation(algorithm_name,dialog):
     code_button = tk.Button(button_frame, text="Code", command=lambda: display_algorithm_code(algorithm_name),
                         bg="grey", fg="black", font=("Helvetica", 12, "bold"))
     code_button.pack(side=tk.LEFT, padx=10)
-        
-    # # Bind closing of dialogs to the close button
-    # close_button = tk.Button(explanation_dialog, text="Close", command=close_dialogs, bg="grey", fg="black", font=("Helvetica", 12, "bold"))
-    # close_button.pack(padx=100,pady=20)
-
-
-
-    # code_button = tk.Button(explanation_dialog, text="Code", command=lambda: display_algorithm_code(algorithm_name),
-    #                         bg="grey", fg="black", font=("Helvetica", 12, "bold"))
-    # code_button.pack(pady=10)
-
+    
     return explanation_dialog
 
 # Create the root window
 root = tk.Tk()
-root.configure(bg="black")
+root.configure(bg="#8DB8B8")
 root.title("AlgoViz")
 # root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
 root.attributes('-fullscreen', True)
@@ -199,7 +189,7 @@ button_close = tk.Button(root, text="Close", command=root.quit, font=("Helvetica
 button_close.place(relx=1.0, rely=0.0, anchor="ne")  # Position at top right corner
 
 # Message label
-message_label = tk.Label(root, text="Choose any algorithm you want to visualize", font=("Georgia", 23, "bold"), fg="white", bg="black")
+message_label = tk.Label(root, text="Choose any algorithm you want to visualize", font=("Georgia", 23, "bold"), fg="black", bg="#8DB8B8")
 message_label.pack(side=tk.TOP, padx=10, pady=15)  # Positioned at the top with padding
 
 # Load the image
@@ -221,7 +211,7 @@ label = tk.Label(frame_image, image=image_tk)
 label.pack(side=tk.TOP, padx=10, pady=30)  # Positioned below the message label
 
 # Create a frame for the buttons
-frame_buttons = tk.Frame(root, bg="black")
+frame_buttons = tk.Frame(root, bg="#8DB8B8")
 frame_buttons.pack(side=tk.LEFT, padx=50, pady=10)  # Pack to the left side with default anchor
 
 # Button configurations
@@ -245,11 +235,14 @@ button_configs=[ ("Bubble Sort","red", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_v
 buttons = []
 for text, bg_color, file_path in button_configs:
     button = tk.Button(frame_buttons, text=text, width=15, height=2,
-                       command=lambda path=file_path, name=text: open_input_dialog(path, name),
+                       command=lambda path=file_path, name=text: open_input_dialog(path, name),bd=6,  # Set border width
+                       highlightbackground="black",  # Set border color
+                       highlightthickness=1,
                        font=("Helvetica", 14, "bold"), bg=bg_color, fg="white")
     # The lambda function allows you to pass arguments to the open_input_dialog function.
     #  If you didn't use lambda, the command would execute the function immediately when the button is created, rather than when the button is clicked
     button.pack(side=tk.LEFT, padx=50, pady=5)
     buttons.append(button)
+
 
 root.mainloop()

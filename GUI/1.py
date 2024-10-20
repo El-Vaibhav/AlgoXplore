@@ -22,13 +22,13 @@ def button_click3():
   
 # Create the root window
 root = tk.Tk()
-root.configure(bg="black")
+root.configure(bg="#072B29")
 # root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}+0+0")
 
 root.attributes('-fullscreen', True)
 
 # Welcome label , a Label is a widget used to display text or images
-welcome_label = tk.Label(root, text="Welcome to AlgoXplore", font=("Tahoma", 18, "bold"), fg="white", bg="black")
+welcome_label = tk.Label(root, text="Welcome to AlgoXplore", font=("Tahoma", 18, "bold"), fg="white", bg="#072B29")
 
 # pack() is one of Tkinter's geometry managers, which control the layout of widgets in a window. It arranges widgets in blocks before placing them in the parent widget.
 welcome_label.pack(anchor=tk.N, padx=20, pady=20)  # Anchor to the North (tk.N) (top) with padding
@@ -103,7 +103,7 @@ frame_buttons2.place(x=620, y=(image_height_main - new_height2) // 1.1 + new_hei
 
 # Button 2: Explore Sorting Algorithms
 button2 = tk.Button(frame_buttons2, text="Explore Scheduling Algorithms", width=25, height=2, command=button_click2,
-                    font=("Helvetica", 15, "bold"), bg="lightgrey", fg="black")
+                    font=("Helvetica", 15, "bold"), bg="#FFE79E", fg="black")
 button2.pack()
 
 # Load the small image 3
