@@ -37,21 +37,17 @@ These algorithms given below are  visualized and interactively demonstrated thro
 
 ![image](https://github.com/user-attachments/assets/df558230-b32f-4158-998c-22bf6f5f7ea6)
 
+![image](https://github.com/user-attachments/assets/0f53b6cb-ad90-4089-9cc5-1c7584686003)
 
 ![image](https://github.com/user-attachments/assets/25640a43-c32f-4a27-ba65-9389cac25b4d)
 
-
 ![image](https://github.com/El-Vaibhav/AlgoXplore/assets/135622906/f7b7534d-ff88-46e6-929d-b6a95bee847e)
-
 
 ![Screenshot (54)](https://github.com/El-Vaibhav/AlgoXplore/assets/135622906/a6751999-dc95-4a13-a15d-7df65430b067)
 
-
 ![image](https://github.com/user-attachments/assets/4733d554-3bfa-4c67-bb83-2a5c901bc43a)
 
-
 ![image](https://github.com/user-attachments/assets/7600ed98-9d75-499c-b4fa-7f44dfea1e75)
-
 
 ![image](https://github.com/user-attachments/assets/34c69484-5f96-42e6-9947-12d7b2f54413)
 
