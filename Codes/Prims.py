@@ -27,7 +27,7 @@ while q and len(mst)!=v-1:
     # print(wt,node,parent)
     
     if parent!=-1 and not visited[node]:
-        mst.append((parent,node)) # child,parent,weight
+        mst.append((parent,node)) 
         ans+=wt
 
     visited[node]=1
