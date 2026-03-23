@@ -6,16 +6,27 @@ import sys
 import os
 
 
-# Get the current script's directory
-current_dir = os.path.dirname(os.path.abspath(__file__))
-base_dir = os.path.dirname(current_dir)
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS   # PyInstaller temp folder
+    except Exception:
+        base_path = os.path.abspath(os.path.dirname(__file__))
+
+    return os.path.join(base_path, relative_path)
+
 
 # Function to execute different graph algorithms
-def execute_graph_algorithm(script_path, edges, start=None, end=None,vertices=None):
+def execute_graph_algorithm(script_path, edges, start=None, end=None, vertices=None):
+
+    # Resolve script path again inside PyInstaller temp directory
+    script_path = resource_path(script_path)
+
     args = [sys.executable, script_path, "--edges", str(edges)]
 
     if vertices:
         args.extend(["--vertices", str(vertices)])
+
     if start is not None and end is not None:
         args.extend(["--start", str(start), "--end", str(end)])
 
@@ -76,8 +87,8 @@ def open_input_dialog(script_path, algorithm_name, custom_graph=False):
 
             if custom_graph:
                 custom_script_name = f"{algorithm_name.lower().replace(' ', '_')}.py"
-                # custom_script_path = os.path.join(base_dir, custom_script_name)
-                custom_script_path = f"C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\{custom_script_name}"
+                custom_script_path = f"GraphAlgos/{custom_script_name}"
+                # custom_script_path = f"C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\{custom_script_name}"
                 execute_graph_algorithm(custom_script_path, edges,start,end)
             else:
                 execute_graph_algorithm(script_path, edges, start, end,vertices)
@@ -189,29 +200,27 @@ def display_algorithm_code(algorithm_name):
     code_text = scrolledtext.ScrolledText(code_dialog, wrap=tk.WORD, font=("Courier", 12,"bold"), bg="white", fg="darkblue")
     code_text.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
     
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Codes'))
+    code_paths = {
+    "DFS": resource_path("Codes/DFS.py"),
+    "BFS": resource_path("Codes/BFS.py"),
+    "Topo Sort": resource_path("Codes/kahns.py"),
+    "Dijkstra": resource_path("Codes/dijkstra_priori_queue.py"),
+    "Bellman Ford": resource_path("Codes/bellmann_ford.py"),
+    "Prims": resource_path("Codes/Prims.py"),
+    "Kruskals": resource_path("Codes/kruskals.py"),
+    "Kosaraju": resource_path("Codes/strongly_connected_comp.py")
+    }
 
     # code_paths = {
-    # "DFS": os.path.join(base_dir,  "DFS.py"),
-    # "BFS": os.path.join(base_dir, "BFS.py"),
-    # "Topo Sort": os.path.join(base_dir,  "kahns.py"),
-    # "Dijkstra": os.path.join(base_dir,  "dijkstra_priori_queue.py"),
-    # "Bellman Ford": os.path.join(base_dir,  "bellmann_ford.py"),
-    # "Prims": os.path.join(base_dir,  "Prims.py"),
-    # "Kruskals": os.path.join(base_dir,  "kruskals.py"),
-    # "Kosaraju": os.path.join(base_dir,  "strongly_connected_comp.py")
+    # "DFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\DFS.py",
+    # "BFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\BFS.py",
+    # "Topo Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\kahns.py",
+    # "Dijkstra": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\dijkstra_priori_queue.py",
+    # "Bellman Ford": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bellman_ford.py",
+    # "Prims": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\Prims.py",
+    # "Kruskals": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\kruskals.py",
+    # "Kosaraju": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\strongly_connected_comp.py"
     # }
-
-    code_paths = {
-    "DFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\DFS.py",
-    "BFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\BFS.py",
-    "Topo Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\kahns.py",
-    "Dijkstra": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\dijkstra_priori_queue.py",
-    "Bellman Ford": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bellman_ford.py",
-    "Prims": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\Prims.py",
-    "Kruskals": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\kruskals.py",
-    "Kosaraju": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\strongly_connected_comp.py"
-    }
 
 
     # Get the code path for the selected algorithm
@@ -224,31 +233,156 @@ def display_algorithm_code(algorithm_name):
                 code_text.insert(tk.END, code)
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load code for {algorithm_name}: {str(e)}")
-
 def display_algo_tc(algorithm_name):
-    # Mapping algorithm names to their corresponding time complexity script paths
+    import subprocess
+    import tkinter as tk
+    from tkinter import messagebox, scrolledtext
+    import sys
+
+
     tc_code_paths = {
-   
-        "DFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
-        "BFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
-        "Topo Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
-        "Dijkstra": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_log_v.py",
-        "Bellman Ford": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\ev.py",
-        "Prims": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_log_v.py",
-        "Kruskals": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_log_v.py",
-        "Kosaraju": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
+    "DFS": resource_path("Time_Complexity/e_plus_v.py"),
+    "BFS": resource_path("Time_Complexity/e_plus_v.py"),
+    "Topo Sort": resource_path("Time_Complexity/e_plus_v.py"),
+    "Dijkstra": resource_path("Time_Complexity/e_log_v.py"),
+    "Bellman Ford": resource_path("Time_Complexity/ev.py"),
+    "Prims": resource_path("Time_Complexity/e_log_v.py"),
+    "Kruskals": resource_path("Time_Complexity/e_log_v.py"),
+    "Kosaraju": resource_path("Time_Complexity/e_plus_v.py")
     }
 
-    # Get the code path for the selected algorithm
+
+    # # Time complexity script paths
+    # tc_code_paths = {
+    #     "DFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
+    #     "BFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
+    #     "Topo Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
+    #     "Dijkstra": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_log_v.py",
+    #     "Bellman Ford": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\ev.py",
+    #     "Prims": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_log_v.py",
+    #     "Kruskals": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_log_v.py",
+    #     "Kosaraju": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\e_plus_v.py",
+    # }
+
+    # Detailed explanations
+    complexity_explanations = {
+        "DFS": (
+            "Depth First Search (DFS) - Time Complexity Analysis:\n"
+            "1. DFS visits each vertex exactly once.\n"
+            "2. Each edge is considered once during traversal.\n"
+            "3. Operations:\n"
+            "   - Vertex processing: O(V)\n"
+            "   - Edge processing: O(E)\n"
+            "4. Total Time Complexity: O(V + E)\n"
+            "5. Space Complexity: O(V) for recursion stack or explicit stack.\n"
+        ),
+        "BFS": (
+            "Breadth First Search (BFS) - Time Complexity Analysis:\n"
+            "1. Every vertex is enqueued and dequeued exactly once.\n"
+            "2. Each edge is checked once when visiting neighbors.\n"
+            "3. Operations:\n"
+            "   - Queue operations for V vertices: O(V)\n"
+            "   - Edge checks for E edges: O(E)\n"
+            "4. Total Time Complexity: O(V + E)\n"
+            "5. Space Complexity: O(V) for queue and visited list.\n"
+        ),
+        "Topo Sort": (
+            "Topological Sorting - Time Complexity Analysis:\n"
+            "1. Uses DFS traversal, similar to DFS complexity.\n"
+            "2. Vertex processing: O(V)\n"
+            "3. Edge processing: O(E)\n"
+            "4. Total Time Complexity: O(V + E)\n"
+            "5. Space Complexity: O(V) for recursion stack and result stack.\n"
+        ),
+        "Dijkstra": (
+            "Dijkstra’s Algorithm - Time Complexity Analysis:\n"
+            "1. Initialization of distances: O(V)\n"
+            "2. Priority Queue (Min Heap):\n"
+            "   - Insert/Extract Min: O(log V)\n"
+            "   - Performed for each vertex: O(V log V)\n"
+            "3. Edge Relaxation:\n"
+            "   - Relaxed once per edge: O(E)\n"
+            "   - Each relaxation involves heap operation: O(log V)\n"
+            "   - Total: O(E log V)\n"
+            "4. Total Time Complexity: O((V + E) log V)\n"
+            "5. Space Complexity: O(V) for distances, O(V) for heap.\n"
+        ),
+        "Bellman Ford": (
+            "Bellman-Ford Algorithm - Time Complexity Analysis:\n"
+            "1. Initialization of distances: O(V)\n"
+            "2. Relaxation of all edges (V-1) times:\n"
+            "   - Each pass: O(E)\n"
+            "   - Total for (V-1) passes: O(VE)\n"
+            "3. Optional Negative Cycle Check: O(E)\n"
+            "4. Total Time Complexity: O(VE)\n"
+            "5. Space Complexity: O(V) for distances.\n"
+        ),
+        "Prims": (
+            "Prim’s Algorithm (Min Heap) - Time Complexity Analysis:\n"
+            "1. Initialization: O(V) for keys.\n"
+            "2. Min Heap operations:\n"
+            "   - Extract Min V times: O(V log V)\n"
+            "   - Decrease Key for edges: O(E log V)\n"
+            "3. Total Time Complexity: O(E log V)\n"
+            "4. Space Complexity: O(V) for key array and heap.\n"
+        ),
+        "Kruskals": (
+            "Kruskal’s Algorithm - Time Complexity Analysis:\n"
+            "1. Sorting edges: O(E log E) ≈ O(E log V)\n"
+            "2. Union-Find (Disjoint Set):\n"
+            "   - Nearly constant time using path compression and union by rank.\n"
+            "   - Performed for E edges: O(E α(V)), where α(V) ≈ 1\n"
+            "3. Total Time Complexity: O(E log V)\n"
+            "4. Space Complexity: O(V) for disjoint set.\n"
+        ),
+        "Kosaraju": (
+            "Kosaraju’s Algorithm - Time Complexity Analysis:\n"
+            "1. First DFS traversal: O(V + E)\n"
+            "2. Transposing the graph: O(V + E)\n"
+            "3. Second DFS traversal: O(V + E)\n"
+            "4. Total Time Complexity: O(V + E)\n"
+            "5. Space Complexity: O(V) for stack and visited list.\n"
+        ),
+    }
+
     code_path = tc_code_paths.get(algorithm_name)
+    explanation_text = complexity_explanations.get(algorithm_name, "No explanation available.")
+
     if code_path:
         try:
-            # Execute the time complexity script for the selected algorithm
-            subprocess.Popen([sys.executable, code_path])  # Run the corresponding time complexity script
+            # Open TC graph window to far left
+            tc_process = subprocess.Popen([sys.executable, code_path])
+
+            # Open explanation window on right
+            explanation_window = tk.Toplevel()
+            explanation_window.title(f"{algorithm_name} - Time Complexity Analysis")
+            explanation_window.geometry("520x450+900+100")  # Right of TC graph
+            explanation_window.configure(bg="black")
+            explanation_window.resizable(False, False)
+
+            # Scrollable text widget
+            scroll_text = scrolledtext.ScrolledText(explanation_window, wrap=tk.WORD, font=("Courier", 12, "bold"),
+                                                    bg="black", fg="white")
+            scroll_text.insert(tk.END, explanation_text)
+            scroll_text.config(state=tk.DISABLED)
+            scroll_text.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+            def close_both():
+                explanation_window.destroy()
+                try:
+                    tc_process.terminate()
+                except Exception:
+                    pass  # Already closed
+
+            explanation_window.protocol("WM_DELETE_WINDOW", close_both)
+
+            # Close handler
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to run time complexity code for {algorithm_name}: {str(e)}")
+            messagebox.showerror("Error", f"Failed to run TC visualization: {str(e)}")
     else:
-        messagebox.showerror("Error", "No time complexity script found for this algorithm.")
+        messagebox.showerror("Error", "No TC script found for this algorithm.")
+
+
 
 # Function to display algorithm explanation
 def display_algorithm_explanation(algorithm_name,dialog):
@@ -308,12 +442,10 @@ button_close.place(relx=1.0, rely=0.0, anchor="ne")  # Position at top right cor
 # Optionally, add a bit of delay to ensure that screen information is fully updated
 root.update_idletasks()
 
-# Load the image
-base_dir1 = os.path.abspath(os.path.dirname(__file__))
 
 # Construct the image path dynamically
-# image_path = os.path.join(base_dir1, "img2.jpg")
-image_path = "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\img2.jpg"
+image_path = resource_path("img2.jpg")
+# image_path = "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\img2.jpg"
 image = Image.open(image_path)
 image_width, image_height = image.size
 
@@ -336,29 +468,28 @@ frame_buttons = tk.Frame(root, bg="lightblue")
 frame_buttons.pack(side=tk.RIGHT, padx=5, pady=88, anchor=tk.NE)
 
 # Button labels and colors
-base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'GraphAlgos'))
-
-# button_specs = [
-#     ("DFS", "yellow", os.path.join(base_dir, "dfs_random.py")),
-#     ("BFS", "red", os.path.join(base_dir, "bfs_random.py")),
-#     ("Topo Sort", "lightgreen", os.path.join(base_dir, "topo_sort_random.py")),
-#     ("Dijkstra", "cyan", os.path.join(base_dir, "dijkstra_random.py")),
-#     ("Bellman Ford", "lightblue", os.path.join(base_dir, "bellman_random.py")),
-#     ("Prims", "brown", os.path.join(base_dir, "prims_random.py")),
-#     ("Kruskals", "grey", os.path.join(base_dir, "kruskals_random.py")),
-#     ("Kosaraju", "white", os.path.join(base_dir, "kosaraju_random.py"))
-# ]
 
 button_specs = [
-    ("DFS", "yellow", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\dfs_random.py"),
-    ("BFS", "red", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\bfs_random.py"),
-    ("Topo Sort", "lightgreen", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\topo_sort_random.py"),
-    ("Dijkstra", "cyan", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\dijkstra_random.py"),
-    ("Bellman Ford", "lightblue", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\bellman_random.py"),
-    ("Prims", "brown", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\prims_random.py"),
-    ("Kruskals", "grey", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\kruskals_random.py"),
-    ("Kosaraju", "white", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\kosaraju_random.py")
+    ("DFS", "yellow", "GraphAlgos/dfs_random.py"),
+    ("BFS", "red", "GraphAlgos/bfs_random.py"),
+    ("Topo Sort", "lightgreen", "GraphAlgos/topo_sort_random.py"),
+    ("Dijkstra", "cyan", "GraphAlgos/dijkstra_random.py"),
+    ("Bellman Ford", "lightblue", "GraphAlgos/bellman_random.py"),
+    ("Prims", "brown", "GraphAlgos/prims_random.py"),
+    ("Kruskals", "grey", "GraphAlgos/kruskals_random.py"),
+    ("Kosaraju", "white", "GraphAlgos/kosaraju_random.py")
 ]
+
+# button_specs = [
+#     ("DFS", "yellow", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\dfs_random.py"),
+#     ("BFS", "red", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\bfs_random.py"),
+#     ("Topo Sort", "lightgreen", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\topo_sort_random.py"),
+#     ("Dijkstra", "cyan", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\dijkstra_random.py"),
+#     ("Bellman Ford", "lightblue", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\bellman_random.py"),
+#     ("Prims", "brown", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\prims_random.py"),
+#     ("Kruskals", "grey", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\kruskals_random.py"),
+#     ("Kosaraju", "white", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GraphAlgos\\kosaraju_random.py")
+# ]
 # Function to create buttons dynamically
 def create_buttons():
     for i, (text, color, script_path) in enumerate(button_specs):

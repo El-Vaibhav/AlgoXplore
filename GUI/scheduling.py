@@ -5,9 +5,23 @@ import subprocess
 import sys
 import os
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(os.path.dirname(__file__))
+
+    return os.path.join(base_path, relative_path)
+
+
 # Function to execute different scheduling algorithms
-def execute_scheduling_algorithm(file_path, arrival_time=None, burst_time=None, priority=None,time_quantum=None):
+def execute_scheduling_algorithm(file_path, arrival_time=None, burst_time=None, priority=None, time_quantum=None):
+
+    # Resolve path inside PyInstaller temp directory
+    file_path = resource_path(file_path)
+
     args = [sys.executable, file_path]
+
     if burst_time is not None:
         args += ["--burst_time", str(burst_time)]
     if arrival_time is not None:
@@ -15,7 +29,8 @@ def execute_scheduling_algorithm(file_path, arrival_time=None, burst_time=None, 
     if priority is not None:
         args += ["--priority", str(priority)]
     if time_quantum is not None:
-        args += ["--time_quantum", str(time_quantum)]  
+        args += ["--time_quantum", str(time_quantum)]
+
     subprocess.Popen(args)
 
 # Function to open the input dialog
@@ -91,25 +106,116 @@ def open_input_dialog(file_path, algorithm_name):
     explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
 
 def display_algo_tc(algorithm_name):
-    # Mapping algorithm names to their corresponding time complexity script paths
+    import subprocess
+    import tkinter as tk
+    from tkinter import messagebox, scrolledtext
+    import sys
+
+    # Time complexity script paths for scheduling algorithms
+
+
     tc_code_paths = {
-        "FCFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
-        "Priority": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_log.py",
-        "SJF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
-        "SRTF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
-        "RR": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+    "FCFS": resource_path("Time_Complexity/N_sq.py"),
+    "Priority": resource_path("Time_Complexity/N_log.py"),
+    "SJF": resource_path("Time_Complexity/N_sq.py"),
+    "SRTF": resource_path("Time_Complexity/N_sq.py"),
+    "RR": resource_path("Time_Complexity/N_sq.py"),
     }
 
-    # Get the code path for the selected algorithm
+    # tc_code_paths = {
+    #     "FCFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+    #     "Priority": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_log.py",
+    #     "SJF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+    #     "SRTF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+    #     "RR": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+    # }
+
+    # Detailed explanations for scheduling algorithms
+    complexity_explanations = {
+        "FCFS": (
+            "First Come First Serve (FCFS) - Time Complexity Analysis:\n"
+            "1. All processes are scheduled in the order they arrive.\n"
+            "2. Sorting is not required.\n"
+            "3. Processing N processes in order: O(N)\n"
+            "4. In worst-case implementations (using lists improperly), it can take O(N^2).\n"
+            "5. Time Complexity: O(N) or O(N^2) based on implementation.\n"
+            "6. Space Complexity: O(N).\n"
+        ),
+        "Priority": (
+            "Priority Scheduling - Time Complexity Analysis:\n"
+            "1. Sorting processes by priority: O(N log N)\n"
+            "2. Each process may be selected based on highest/lowest priority.\n"
+            "3. Insertion in a priority queue: O(log N) per process.\n"
+            "4. Total Time Complexity:\n"
+            "   - With sorting: O(N log N)\n"
+            "   - With PQ: O(N log N)\n"
+            "5. Space Complexity: O(N).\n"
+        ),
+        "SJF": (
+            "Shortest Job First (SJF) - Time Complexity Analysis:\n"
+            "1. Requires sorting by burst time: O(N log N)\n"
+            "2. If precomputed, execution is linear: O(N)\n"
+            "3. Worst-case if unsorted and selected each time: O(N^2)\n"
+            "4. Total Time Complexity: O(N log N) or O(N^2)\n"
+            "5. Space Complexity: O(N).\n"
+        ),
+        "SRTF": (
+            "Shortest Remaining Time First (SRTF) - Time Complexity Analysis:\n"
+            "1. Requires checking remaining time at every unit time.\n"
+            "2. Can use priority queue/min-heap for efficient selection: O(log N)\n"
+            "3. Total Time Complexity:\n"
+            "   - Without PQ: O(N^2)\n"
+            "   - With PQ: O(N log N)\n"
+            "4. Space Complexity: O(N).\n"
+        ),
+        "RR": (
+            "Round Robin (RR) - Time Complexity Analysis:\n"
+            "1. Each process gets time quantum in cyclic order.\n"
+            "2. Worst-case: each process runs multiple times.\n"
+            "3. Let K = average number of cycles per process.\n"
+            "4. Total Time Complexity: O(N * K)\n"
+            "5. For large K, can be O(N^2)\n"
+            "6. Space Complexity: O(N).\n"
+        ),
+    }
+
     code_path = tc_code_paths.get(algorithm_name)
+    explanation_text = complexity_explanations.get(algorithm_name, "No explanation available.")
+
     if code_path:
         try:
-            # Execute the time complexity script for the selected algorithm
-            subprocess.Popen([sys.executable, code_path])  # Run the corresponding time complexity script
+            # Launch TC graph window on far left
+            tc_process =subprocess.Popen([sys.executable, code_path])
+
+            # Launch explanation window on right
+            explanation_window = tk.Toplevel()
+            explanation_window.title(f"{algorithm_name} - Time Complexity Analysis")
+            explanation_window.geometry("520x450+900+100")  # Right side
+            explanation_window.configure(bg="black")
+            explanation_window.resizable(False, False)
+
+            # Scrollable detailed text
+            scroll_text = scrolledtext.ScrolledText(explanation_window, wrap=tk.WORD,
+                                                    font=("Courier", 12, "bold"),
+                                                    bg="black", fg="white")
+            scroll_text.insert(tk.END, explanation_text)
+            scroll_text.config(state=tk.DISABLED)
+            scroll_text.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+            def close_both():
+                explanation_window.destroy()
+                try:
+                    tc_process.terminate()
+                except Exception:
+                    pass  # Already closed
+
+            explanation_window.protocol("WM_DELETE_WINDOW", close_both)
+            
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to run time complexity code for {algorithm_name}: {str(e)}")
+            messagebox.showerror("Error", f"Failed to run TC visualization: {str(e)}")
     else:
         messagebox.showerror("Error", "No time complexity script found for this algorithm.")
+
 
 def display_algorithm_code(algorithm_name):
     code_dialog = tk.Toplevel(root)
@@ -120,13 +226,23 @@ def display_algorithm_code(algorithm_name):
     code_text = scrolledtext.ScrolledText(code_dialog, wrap=tk.WORD, font=("Courier", 12,"bold"), bg="white", fg="darkblue")
     code_text.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
 
+
     code_paths = {
-        "FCFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\FCFS.py",
-        "Priority": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\Priority_NP.py",
-        "SJF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\SJF.py",
-        "SRTF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\srtf.py",
-        "RR": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\rr.py",
+    "FCFS": resource_path("Codes/FCFS.py"),
+    "Priority": resource_path("Codes/Priority_NP.py"),
+    "SJF": resource_path("Codes/SJF.py"),
+    "SRTF": resource_path("Codes/SRTF.py"),
+    "RR": resource_path("Codes/RR.py"),
     }
+
+
+    # code_paths = {
+    #     "FCFS": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\FCFS.py",
+    #     "Priority": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\Priority_NP.py",
+    #     "SJF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\SJF.py",
+    #     "SRTF": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\srtf.py",
+    #     "RR": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\rr.py",
+    # }
 
     code_path = code_paths.get(algorithm_name)
     if code_path:
@@ -158,12 +274,17 @@ def display_algorithm_explanation(algorithm_name,dialog):
     explanation_label.pack(padx=20, pady=20)
 
     def close_dialogs():
-        explanation_dialog.destroy()
+     if dialog.winfo_exists():
         dialog.destroy()
+     if explanation_dialog.winfo_exists():
+        explanation_dialog.destroy()
 
     # Bind the window close event (the "X" button) to close both dialogs
-    explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
-    dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+    if dialog.winfo_exists():
+     dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
+
+    if explanation_dialog.winfo_exists():
+     explanation_dialog.protocol("WM_DELETE_WINDOW", close_dialogs)
 
     button_frame = tk.Frame(explanation_dialog,bg="red")
     button_frame.pack(pady=20)
@@ -187,10 +308,13 @@ root.title("AlgoViz")
 root.attributes('-fullscreen', True)
 
 # Load the image and use it as a background
-base_dir = os.path.abspath(os.path.dirname(__file__))
-image_path = os.path.join(base_dir, "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\GUI\\laptop-infographic-online-6087062.png")
+
+
+image_path = resource_path("laptop-infographic-online-6087062.png")
+
 image = Image.open(image_path)
-image = image.resize((root.winfo_screenwidth(), root.winfo_screenheight()))  # Resize the image to fit the screen
+image = image.resize((root.winfo_screenwidth(), root.winfo_screenheight()))
+
 image_tk = ImageTk.PhotoImage(image)
 
 # Create a label to hold the background image
@@ -203,12 +327,20 @@ instruction_label = tk.Label(root, text="Select any algorithm you want to visual
 instruction_label.pack(pady=55)  # Add padding to position it nicely at the top
 
 button_configs = [
-    ("FCFS", "red", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\fcfs.py"),
-    ("SJF", "lightblue", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\sjf.py"),
-    ("SRTF", "yellow", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\srtf.py"),
-    ("RR", "lightgreen", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\rr.py"),
-    ("Priority", "cyan", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\priority.py")
+    ("FCFS", "red", "scheduling_algos/FCFS.py"),
+    ("Priority", "cyan", "scheduling_algos/priority.py"),
+    ("SJF", "lightblue", "scheduling_algos/SJF.py"),
+    ("SRTF", "yellow", "scheduling_algos/SRTF.py"),
+    ("RR", "lightgreen", "scheduling_algos/RR.py"),
 ]
+
+# button_configs = [
+#     ("FCFS", "red", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\fcfs.py"),
+#     ("SJF", "lightblue", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\sjf.py"),
+#     ("SRTF", "yellow", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\srtf.py"),
+#     ("RR", "lightgreen", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\rr.py"),
+#     ("Priority", "cyan", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\scheduling_algos\\priority.py")
+# ]
 
 frame_buttons = tk.Frame(root, bg="#ffc94d")  # Use quotes around the hex color code 
 

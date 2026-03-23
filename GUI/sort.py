@@ -5,21 +5,26 @@ import subprocess
 import sys
 import os 
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-base_dir1 = os.path.dirname(current_dir)
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(os.path.dirname(__file__))
+
+    return os.path.join(base_path, relative_path)
 
 # Function to execute different sorting algorithms
 def execute_sorting_algorithm(file_path, size=None, value_range=None):
 
+    # Resolve path inside PyInstaller temp directory
+    file_path = resource_path(file_path)
+
     args = [sys.executable, file_path]
-    # sys.executable: This is the Python interpreter that is currently running your main script. For example, it could be C:\Python39\python.exe on Windows.
-    # file_path: The path to the Python script you want to execute (e.g., "path_to_sort.py").
 
     if size is not None and value_range is not None:
         args += ["--size", str(size), "--range", str(value_range)]
-    
-    subprocess.Popen(args) 
-    # The subprocess.Popen(args) command runs the code from the file specified in the file_path by launching a new process in the operating system.
+
+    subprocess.Popen(args)
 
 # Function to open the input dialog
 def open_input_dialog(file_path, algorithm_name):
@@ -84,23 +89,22 @@ def display_algorithm_code(algorithm_name):
     code_text.pack(expand=True, fill=tk.BOTH, padx=10, pady=10) # will make the code_text widget expand to fill the entire space of its container in both dimensions, with 10 pixels of padding on all sides.
 
     # Map algorithm names to file paths
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Codes'))
-
-    # code_paths = {
-    # "Bubble Sort": os.path.join(base_dir, "bubble_sort.py"),
-    # "Insertion Sort": os.path.join(base_dir, "insertion_sort.py"),
-    # "Merge Sort": os.path.join(base_dir, "merge_sort.py"),
-    # "Quick Sort": os.path.join(base_dir, "quick_sort.py"),
-    # "Selection Sort": os.path.join(base_dir, "selection_sort.py"),  
-    # }
 
     code_paths = {
-    "Bubble Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bubble_sort.py",
-    "Insertion Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\insertion_sort.py",
-    "Merge Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\merge_sort.py",
-    "Quick Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\quick_sort.py",
-    "Selection Sort": "C:\\Users\\HP\OneDrive\\Desktop\\algo_visualizer\\Codes\\selection_sort.py"
+    "Bubble Sort": resource_path("Codes/bubble_sort.py"),
+    "Insertion Sort": resource_path("Codes/insertion_sort.py"),
+    "Merge Sort": resource_path("Codes/merge_sort.py"),
+    "Quick Sort": resource_path("Codes/quick_sort.py"),
+    "Selection Sort": resource_path("Codes/selection_sort.py"),  
     }
+
+    # code_paths = {
+    # "Bubble Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\bubble_sort.py",
+    # "Insertion Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\insertion_sort.py",
+    # "Merge Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\merge_sort.py",
+    # "Quick Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Codes\\quick_sort.py",
+    # "Selection Sort": "C:\\Users\\HP\OneDrive\\Desktop\\algo_visualizer\\Codes\\selection_sort.py"
+    # }
 
     # Get the code path for the selected algorithm
     code_path = code_paths.get(algorithm_name)
@@ -114,24 +118,112 @@ def display_algorithm_code(algorithm_name):
             messagebox.showerror("Error", f"Failed to load code for {algorithm_name}: {str(e)}")
 
 def display_algo_tc(algorithm_name):
-    # Mapping algorithm names to their corresponding time complexity script paths
+    import subprocess
+    import tkinter as tk
+    from tkinter import messagebox, scrolledtext
+    import sys
+
+    # Time complexity script paths for sorting algorithms
+
     tc_code_paths = {
-   
-        "Bubble Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
-        "Insertion Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
-        "Quick Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_log.py",
-        "Merge Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_log.py",
-        "Selection Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+        "Bubble Sort": resource_path("Time_Complexity/N_sq.py"),
+        "Insertion Sort": resource_path("Time_Complexity/N_sq.py"),
+        "Quick Sort": resource_path("Time_Complexity/N_log.py"),
+        "Merge Sort": resource_path("Time_Complexity/N_log.py"),
+        "Selection Sort": resource_path("Time_Complexity/N_sq.py"),}
+
+    # tc_code_paths = {
+    #     "Bubble Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+    #     "Insertion Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+    #     "Quick Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_log.py",
+    #     "Merge Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_log.py",
+    #     "Selection Sort": "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Time_Complexity\\N_sq.py",
+    # }
+
+    # Detailed explanations for sorting algorithms
+    complexity_explanations = {
+        "Bubble Sort": (
+            "Bubble Sort - Time Complexity Analysis:\n"
+            "1. Repeatedly compare adjacent elements and swap if needed.\n"
+            "2. Outer loop runs N times, inner loop runs N-1 times on average.\n"
+            "3. Total comparisons in worst case: N*(N-1)/2 = O(N^2)\n"
+            "4. Best case (already sorted) with optimized check: O(N)\n"
+            "5. Average and Worst Case: O(N^2)\n"
+            "6. Space Complexity: O(1) (In-place sort).\n"
+        ),
+        "Insertion Sort": (
+            "Insertion Sort - Time Complexity Analysis:\n"
+            "1. Builds the sorted array one item at a time.\n"
+            "2. For each element, compares it with previous elements and inserts it.\n"
+            "3. Worst case: Reversely sorted array → O(N^2) comparisons and shifts.\n"
+            "4. Best case: Already sorted array → O(N) time.\n"
+            "5. Average Case: O(N^2)\n"
+            "6. Space Complexity: O(1) (In-place sort).\n"
+        ),
+        "Quick Sort": (
+            "Quick Sort - Time Complexity Analysis:\n"
+            "1. Picks a pivot and partitions the array into two subarrays.\n"
+            "2. Recursively applies the same to subarrays.\n"
+            "3. Best/Average Case: Balanced partition → O(N log N)\n"
+            "4. Worst Case: Unbalanced (sorted/reverse sorted) → O(N^2)\n"
+            "5. Using randomized pivot reduces chance of worst case.\n"
+            "6. Space Complexity: O(log N) due to recursion stack.\n"
+        ),
+        "Merge Sort": (
+            "Merge Sort - Time Complexity Analysis:\n"
+            "1. Divides the array into two halves recursively until size 1.\n"
+            "2. Merges two sorted halves in O(N) time.\n"
+            "3. Total levels of recursion: log N\n"
+            "4. At each level, merging cost is O(N)\n"
+            "5. Total Time Complexity: O(N log N) for all cases.\n"
+            "6. Space Complexity: O(N) for temporary arrays.\n"
+        ),
+        "Selection Sort": (
+            "Selection Sort - Time Complexity Analysis:\n"
+            "1. Finds the minimum element and swaps with current index.\n"
+            "2. N-1 passes to select and place min elements.\n"
+            "3. Comparisons: N*(N-1)/2 → O(N^2)\n"
+            "4. Swaps: Exactly N-1\n"
+            "5. Best, Worst, and Average Case: O(N^2)\n"
+            "6. Space Complexity: O(1) (In-place sort).\n"
+        ),
     }
 
-    # Get the code path for the selected algorithm
     code_path = tc_code_paths.get(algorithm_name)
+    explanation_text = complexity_explanations.get(algorithm_name, "No explanation available.")
+
     if code_path:
         try:
-            # Execute the time complexity script for the selected algorithm
-            subprocess.Popen([sys.executable, code_path])  # Run the corresponding time complexity script
+            # Launch TC graph window (using subprocess)
+            tc_process = subprocess.Popen([sys.executable, code_path])
+
+            # Create explanation window
+            explanation_window = tk.Toplevel()
+            explanation_window.title(f"{algorithm_name} - Time Complexity")
+            explanation_window.geometry("520x450+1000+100")
+            explanation_window.configure(bg="black")
+            explanation_window.resizable(False, False)
+
+            # Scrollable detailed text
+            scroll_text = scrolledtext.ScrolledText(explanation_window, wrap=tk.WORD,
+                                                    font=("Courier", 12, "bold"),
+                                                    bg="black", fg="white")
+            scroll_text.insert(tk.END, explanation_text)
+            scroll_text.config(state=tk.DISABLED)
+            scroll_text.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+            # Close both TC windows when one is closed
+            def close_both():
+                explanation_window.destroy()
+                try:
+                    tc_process.terminate()
+                except Exception:
+                    pass  # Already closed
+
+            explanation_window.protocol("WM_DELETE_WINDOW", close_both)
+
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to run time complexity code for {algorithm_name}: {str(e)}")
+            messagebox.showerror("Error", f"Failed to run TC visualization: {str(e)}")
     else:
         messagebox.showerror("Error", "No time complexity script found for this algorithm.")
 
@@ -193,10 +285,9 @@ message_label = tk.Label(root, text="Choose any algorithm you want to visualize"
 message_label.pack(side=tk.TOP, padx=10, pady=15)  # Positioned at the top with padding
 
 # Load the image
-base_dir = os.path.abspath(os.path.dirname(__file__))
 
 # Construct the image path dynamically
-image_path = os.path.join(base_dir, "img5.png")
+image_path = resource_path("img5.png")
 image = Image.open(image_path)
 image_width, image_height = image.size
 
@@ -215,21 +306,20 @@ frame_buttons = tk.Frame(root, bg="#8DB8B8")
 frame_buttons.pack(side=tk.LEFT, padx=50, pady=10)  # Pack to the left side with default anchor
 
 # Button configurations
-base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Sorting_Algos'))
 
-# button_configs = [
-#     ("Bubble Sort", "red", os.path.join(base_dir, "bubble_sort.py")),
-#     ("Insertion Sort", "green", os.path.join(base_dir, "insertion_sort.py")),
-#     ("Merge Sort", "blue", os.path.join(base_dir, "merge_sort.py")),
-#     ("Quick Sort", "orange", os.path.join(base_dir, "quick_sort.py")),
-#     ("Selection Sort", "purple", os.path.join(base_dir, "selection_sort.py"))
-# ]
+button_configs = [
+    ("Bubble Sort", "red", "Sorting_Algos/bubble_sort.py"),
+    ("Insertion Sort", "green", "Sorting_Algos/insertion_sort.py"),
+    ("Merge Sort", "blue", "Sorting_Algos/merge_sort.py"),
+    ("Quick Sort", "orange", "Sorting_Algos/quick_sort.py"),
+    ("Selection Sort", "purple", "Sorting_Algos/selection_sort.py")
+]
 
-button_configs=[ ("Bubble Sort","red", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\bubble_sort.py"),
-    ("Insertion Sort","green", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\insertion_sort.py"),
-    ("Merge Sort","blue", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\merge_sort.py"),
-    ("Quick Sort", "orange", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\quick_sort.py"),
-    ("Selection Sort", "purple","C:\\Users\\HP\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\selection_sort.py")]
+# button_configs=[ ("Bubble Sort","red", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\bubble_sort.py"),
+#     ("Insertion Sort","green", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\insertion_sort.py"),
+#     ("Merge Sort","blue", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\merge_sort.py"),
+#     ("Quick Sort", "orange", "C:\\Users\\HP\\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\quick_sort.py"),
+#     ("Selection Sort", "purple","C:\\Users\\HP\OneDrive\\Desktop\\algo_visualizer\\Sorting_Algos\\selection_sort.py")]
 
 # Create buttons dynamically
 buttons = []
