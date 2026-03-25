@@ -32,7 +32,10 @@ These algorithms given below are visualized and interactively demonstrated throu
 4) SJF
 5) SRTF
 
-# ScreenShots
+#ScreenShots  (Website)
+<img width="1792" height="892" alt="image" src="https://github.com/user-attachments/assets/af3486c8-666d-4754-91f9-cfdd9b1df2e6" />
+
+# ScreenShots (GUI)
 ![image](https://github.com/user-attachments/assets/f8ad6611-c762-4aa3-a494-1245aced9b7a)
 
 ![image](https://github.com/user-attachments/assets/43e9e972-a675-4724-b866-ee11eb7eda3f)
