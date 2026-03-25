@@ -1,6 +1,9 @@
 # AlgoXplore
 Download and try the .exe application now :) 
 
+Try our website now 
+https://algoxplore.vercel.app/
+
 Algorithm Visualizer GUI, AlgoXplore, is an interactive tool designed for exploring and visualizing a diverse range of popular graph and sorting algorithms. By providing intuitive controls and dynamic visual representations, AlgoXplore offers users a hands-on experience in understanding the intricacies of algorithms. Whether you're a beginner learning the fundamentals or an advanced user refining your knowledge, AlgoXplore facilitates an engaging learning journey. Dive into algorithms such as Dijkstra's for shortest paths, BFS and DFS for traversing graphs, or classic sorting methods like Bubble Sort and Quick Sort. With AlgoXplore, learning becomes immersive, empowering users to grasp complex concepts with clarity and confidence.
 
 These algorithms given below are visualized and interactively demonstrated through the AlgoXplore tool, providing users with insights into their workings and efficiencies.
@@ -33,7 +36,17 @@ These algorithms given below are visualized and interactively demonstrated throu
 5) SRTF
 
 #ScreenShots  (Website)
+
+<img width="1826" height="886" alt="image" src="https://github.com/user-attachments/assets/ac5a2ef2-aee5-46f4-84a4-d4ec78e8f180" />
+
+<img width="1769" height="801" alt="image" src="https://github.com/user-attachments/assets/3bb0ddec-5d85-403a-ae9c-cafb13502322" />
+
+<img width="1786" height="885" alt="image" src="https://github.com/user-attachments/assets/8691a146-ac1a-410d-be42-02ebd24e1cf9" />
+
 <img width="1792" height="892" alt="image" src="https://github.com/user-attachments/assets/af3486c8-666d-4754-91f9-cfdd9b1df2e6" />
+
+<img width="1808" height="839" alt="image" src="https://github.com/user-attachments/assets/48ffa0b9-b89c-4a6c-9c35-8a1defdc7870" />
+
 
 # ScreenShots (GUI)
 ![image](https://github.com/user-attachments/assets/f8ad6611-c762-4aa3-a494-1245aced9b7a)
