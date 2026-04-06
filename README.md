@@ -35,19 +35,6 @@ These algorithms given below are visualized and interactively demonstrated throu
 4) SJF
 5) SRTF
 
-#ScreenShots  (Website)
-
-<img width="1826" height="886" alt="image" src="https://github.com/user-attachments/assets/ac5a2ef2-aee5-46f4-84a4-d4ec78e8f180" />
-
-<img width="1769" height="801" alt="image" src="https://github.com/user-attachments/assets/3bb0ddec-5d85-403a-ae9c-cafb13502322" />
-
-<img width="1786" height="885" alt="image" src="https://github.com/user-attachments/assets/8691a146-ac1a-410d-be42-02ebd24e1cf9" />
-
-<img width="1792" height="892" alt="image" src="https://github.com/user-attachments/assets/af3486c8-666d-4754-91f9-cfdd9b1df2e6" />
-
-<img width="1808" height="839" alt="image" src="https://github.com/user-attachments/assets/48ffa0b9-b89c-4a6c-9c35-8a1defdc7870" />
-
-
 # ScreenShots (GUI)
 ![image](https://github.com/user-attachments/assets/f8ad6611-c762-4aa3-a494-1245aced9b7a)
 
@@ -70,6 +57,19 @@ These algorithms given below are visualized and interactively demonstrated throu
 ![image](https://github.com/user-attachments/assets/34c69484-5f96-42e6-9947-12d7b2f54413)
 
 ![image](https://github.com/user-attachments/assets/d04f4951-8ce2-4263-bcba-0cd0343dc79c)
+
+
+# ScreenShots  (Website)
+
+<img width="1826" height="886" alt="image" src="https://github.com/user-attachments/assets/ac5a2ef2-aee5-46f4-84a4-d4ec78e8f180" />
+
+<img width="1769" height="801" alt="image" src="https://github.com/user-attachments/assets/3bb0ddec-5d85-403a-ae9c-cafb13502322" />
+
+<img width="1786" height="885" alt="image" src="https://github.com/user-attachments/assets/8691a146-ac1a-410d-be42-02ebd24e1cf9" />
+
+<img width="1792" height="892" alt="image" src="https://github.com/user-attachments/assets/af3486c8-666d-4754-91f9-cfdd9b1df2e6" />
+
+<img width="1808" height="839" alt="image" src="https://github.com/user-attachments/assets/48ffa0b9-b89c-4a6c-9c35-8a1defdc7870" />
 
 
 
